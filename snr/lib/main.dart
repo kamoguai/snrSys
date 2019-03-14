@@ -51,7 +51,7 @@ class SnrReduxApp extends StatelessWidget {
           locale: store.state.locale,
           supportedLocales: [store.state.locale],
           theme: store.state.themeData,
-          routes: {
+          routes: { 
             // 設定route path,app一開始先進入welcome page
               WelcomePage.sName: (context) {
                 store.state.platfromLocale = Localizations.localeOf(context);

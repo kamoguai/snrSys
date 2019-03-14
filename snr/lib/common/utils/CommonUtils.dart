@@ -136,6 +136,7 @@ class CommonUtils {
     }
   }
 
+  ///loading用
   static Future<Null> showLoadingDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -169,7 +170,7 @@ class CommonUtils {
   }
 
  
-
+  ///包含輸入可submit的alert
   static Future<Null> showCommitOptionDialog(
     BuildContext context,
     List<String> commitMaps,
@@ -236,6 +237,27 @@ class CommonUtils {
             ],
           );
         }
+    );
+  }
+
+  ///一般需要點取消的alert
+  static Future<Null> showMessageDialog(BuildContext context, String titleStr, String contentStr) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(titleStr),
+          content: new Text(contentStr),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text(CommonUtils.getLocale(context).app_cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      }
     );
   }
 }

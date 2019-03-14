@@ -106,6 +106,9 @@ class HttpManager {
       }
     } catch (e) {
       print(e.toString() + url);
+      if (response.toString().length < 1) {
+        return new ResultData(null, false, response.statusCode, headers: response.headers);
+      }
       Map<String, dynamic> jsonStr = jsonDecode(response.data);
       return new ResultData(jsonStr, false, response.statusCode, headers: response.headers);
     }

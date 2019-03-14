@@ -14,14 +14,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class UserDao {
   static login(account, password, store) async {
+    
     await LocalStorage.save(Config.USER_NAME_KEY, account);
-    Map requestParams = {
-      "accNo":account,
-      "passWord":password,
-    };
     HttpManager.clearAuthorization();
 
-    var res = await HttpManager.netFetch(Address.ssoLoginAPI(account, password), json.encode(requestParams), null, new Options(method: "post"));
+    var res = await HttpManager.netFetch(Address.ssoLoginAPI(account, password), null, null, new Options(method: "post"));
     var resultData = null;
     if (res != null && res.result) {
       if (res.data["retCode"] != "00") {
@@ -31,14 +28,22 @@ class UserDao {
       await LocalStorage.save(Config.PW_KEY, password);
       var serviceUrl = res.data["serverURL"];
       var ssoKey = res.data["ssoKey"];
-      var resultData = await getUserInfo(serviceUrl, account, ssoKey);
+      var snrUserInfo = await getUserInfo(serviceUrl, account, ssoKey);
       if (Config.DEBUG) {
-        print(resultData.data);
+        print(snrUserInfo.data);
         print(res.data.toString());
       }
-      store.dispatch(new UpdateUserAction(resultData.data));
+      store.dispatch(new UpdateUserAction(snrUserInfo.data));
     }
     return new DataResult(resultData, res.result);
+  }
+
+  ///初始化用戶信息
+  static initUserInfo(Store store) async {
+    var res = await getUserInfoLocal();
+    if (res != null && res.result) {
+      store.dispatch(UpdateUserAction(res.data));
+    }
   }
 
    ///獲取本地登入用戶信息
@@ -59,19 +64,16 @@ class UserDao {
     Map<String, dynamic> mainDataArray = {};
     next() async {
       var res;
-      if (account == null) {
-        print("account不可能為null吧？");
-        // res = await HttpManager.netFetch(Address.getMyUserInfo(), null, null, null);
-      } else {
-        res = await HttpManager.netFetch(Address.snrLoginAPI(serviceURL, account, ssoKey), null, null, null);
-      }
+      
+      res = await HttpManager.netFetch(Address.snrLoginAPI(serviceURL, account, ssoKey), null, null, null);
+      
       if (res != null && res.result) {
         print("returnCode -> "+res.data['Response']['ReturnCode']);
 
         if (res.data['Response']['ReturnCode'] == "0") {
           mainDataArray = res.data["ReturnData"];
         }
-        // if (mainDataArray.length > 0 ) {
+        if (mainDataArray.length > 0 ) {
           User user = User.fromJson(mainDataArray);
           if (account == null) {
             LocalStorage.save(Config.USER_INFO, json.encode(user.toJson()));
@@ -82,26 +84,10 @@ class UserDao {
             }
           }
           return new DataResult(user, true);
-        // }
-        /*
-        String starred = "---";
-        if (res.data["type"] != "Organization") {
-          var countRes = await getUserStaredCountNet(res.data["login"]);
-          if (countRes.result) {
-            starred = countRes.data;
-          }
         }
-        User user = User.fromJson(res.data);
-        user.starred = starred;
-        if (userName == null) {
-          LocalStorage.save(Config.USER_INFO, json.encode(user.toJson()));
-        } else {
-          if (needDb) {
-            provider.insert(userName, json.encode(user.toJson()));
-          }
+        else {
+          return new DataResult(res.data, false);
         }
-        return new DataResult(user, true);
-        */
       } else {
         return new DataResult(res.data, false);
       }
@@ -117,13 +103,5 @@ class UserDao {
     }
     return await next();
     
-  }
-
-  static initUserInfo(Store store) async {
-    var res = await getUserInfoLocal();
-    if (res != null && res.result) {
-      store.dispatch(UpdateUserAction(res.data));
-    }
-    return new DataResult(res.data, (res.result));
   }
 }

@@ -60,4 +60,12 @@ abstract class MyStringBase {
   String load_more_text;
 
   String search_sort;
+
+  String sysTitle_text;
+
+  String copyRight_text;
+
+  String appVerNo_text;
+
+  String welcome_text;
 }

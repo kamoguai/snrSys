@@ -61,4 +61,12 @@ class MyStringZh extends MyStringBase {
   String load_more_text = "正在加載更多";
   @override
   String search_sort = "排序";
+  @override
+  String sysTitle_text = "SNR預警3.0";
+  @override
+  String copyRight_text = "Copyright © 2015 DigiDom Cable TV CO., Ltd. All Rights Reserved. 全國數位有線電視股份有限公司 版權所有";
+  @override
+  String appVerNo_text = "版號: 3.0.0311";
+  @override
+  String welcome_text = "歡迎使用SNR預警系統";
 }

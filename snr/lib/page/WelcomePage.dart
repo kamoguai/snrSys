@@ -7,6 +7,7 @@ import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/dao/UserDao.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
+import 'package:snr/common/style/MyStyle.dart';
 
 class WelcomePage extends StatefulWidget {
   static final String sName = "/";
@@ -30,6 +31,7 @@ class _WelcomePageState extends State<WelcomePage> {
     CommonUtils.initStatusBarHeight(context);
     //計算bar高度
     new Future.delayed(const Duration(seconds: 2), () {
+      //延遲2秒跳轉
       UserDao.initUserInfo(store).then((res) {
          // 將使用者信息去db查詢
          if (res != null && res.result) {
@@ -41,7 +43,6 @@ class _WelcomePageState extends State<WelcomePage> {
          return true;
       });
     });
-    
   }
 
   @override
@@ -49,16 +50,9 @@ class _WelcomePageState extends State<WelcomePage> {
     return StoreBuilder<SysState>(
       builder: (context, store){
         return new Container(
-          color: Colors.white,
+          color: Color(MyColors.hexFromStr("#eeeeee")),
           child: new Center(
-            child: new Column(
-              children: <Widget>[
-                Text('SNR預警系統'),
-                new Padding(padding: new EdgeInsets.all(10.0)),
-                new Image(image: new AssetImage('static/images/logo.png')),
-              ],
-            ),
-            // child: new Image(image: new AssetImage('static/images/logo.png')),
+            child: new Image(image: new AssetImage('static/images/welcomePic.png')),
           )
         );
       },
