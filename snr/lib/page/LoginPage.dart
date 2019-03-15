@@ -33,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    UserDao.validNewVersion(context);
     initParams();
   }
 
@@ -137,12 +138,24 @@ class _LoginPageState extends State<LoginPage> {
                                     return;
                                   }
                                   CommonUtils.showLoadingDialog(context);
-                                  UserDao.login(_account.trim(), _password.trim(),store).then((res) {
+                                  UserDao.login(_account.trim(), _password.trim(),store, context).then((res) {
                                     print("res ---- ");
                                     Navigator.pop(context);
                                     if (res != null && res.result) {
                                       print("call api resp => " +
                                           res.result.toString());
+                                      if (res.data.data != null) {
+
+                                      }
+                                      else {
+                                        if (res.data['retCode'] == "14") {
+                                           UserDao.updateDummyApp(context, res.data['blankURL']);
+                                        }
+                                        else {
+                                           print('go to home page');
+                                        }
+                                      }
+                                     
                                     } else {
                                       print("holy 喵喵喵");
                                     }

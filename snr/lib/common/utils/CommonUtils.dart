@@ -215,7 +215,28 @@ class CommonUtils {
   }
 
   ///版本更新
-  static Future<Null> showUpdateDialog(BuildContext context, String contentMsg) {
+  static Future<Null> showUpdateAppDialog(BuildContext context, String contentMsg, String updateUrl) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text(CommonUtils.getLocale(context).app_version_title),
+            content: new Text(contentMsg),
+            actions: <Widget>[
+              new FlatButton(
+                  onPressed: () {
+                    launch(updateUrl);
+                    Navigator.pop(context);
+                  },
+                  child: new Text(CommonUtils.getLocale(context).app_ok)),
+            ],
+          );
+        }
+    );
+  }
+
+  ///更新為不能使的app
+  static Future<Null> showDummuAppDialog(BuildContext context, String contentMsg, String updateUrl) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -230,7 +251,7 @@ class CommonUtils {
                   child: new Text(CommonUtils.getLocale(context).app_cancel)),
               new FlatButton(
                   onPressed: () {
-                    launch(Address.getValidateVersionAPI());
+                    launch(updateUrl);
                     Navigator.pop(context);
                   },
                   child: new Text(CommonUtils.getLocale(context).app_ok)),

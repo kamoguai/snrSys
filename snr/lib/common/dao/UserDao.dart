@@ -11,9 +11,11 @@ import 'package:snr/common/dao/DaoResult.dart';
 import 'package:snr/common/model/User.dart';
 import 'package:snr/common/ab/provider/user/UserInfoDbProvider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:snr/common/utils/CommonUtils.dart';
+
 
 class UserDao {
-  static login(account, password, store) async {
+  static login(account, password, store, context) async {
     
     await LocalStorage.save(Config.USER_NAME_KEY, account);
     HttpManager.clearAuthorization();
@@ -22,18 +24,21 @@ class UserDao {
     var resultData = null;
     if (res != null && res.result) {
       if (res.data["retCode"] != "00") {
+        if (res.data["retCode"] == "14") {
+          return new DataResult(res.data, true);
+        }
         Fluttertoast.showToast(msg: res.data["retMSG"]);
         return new DataResult(null, false);
       }
       await LocalStorage.save(Config.PW_KEY, password);
       var serviceUrl = res.data["serverURL"];
       var ssoKey = res.data["ssoKey"];
-      var snrUserInfo = await getUserInfo(serviceUrl, account, ssoKey);
+      resultData = await getUserInfo(serviceUrl, account, ssoKey);
       if (Config.DEBUG) {
-        print(snrUserInfo.data);
+        print(resultData.data);
         print(res.data.toString());
       }
-      store.dispatch(new UpdateUserAction(snrUserInfo.data));
+      store.dispatch(new UpdateUserAction(resultData.data));
     }
     return new DataResult(resultData, res.result);
   }
@@ -103,5 +108,29 @@ class UserDao {
     }
     return await next();
     
+  }
+
+  ///登入者被註銷更新APP
+  static updateDummyApp(context, blankURL) async {
+    next() async {
+  
+      if (blankURL != null && blankURL != "") {
+        CommonUtils.showDummuAppDialog(context, CommonUtils.getLocale(context).login_noMan_text, blankURL);
+      }  
+    }
+    return await next();
+  }
+
+  ///檢查更新app版本
+  static validNewVersion(context) async {
+    var res = await HttpManager.netFetch(Address.getValidateVersionAPI(), null, null, null);
+    if (res != null && res.result && res.data.length > 0) {
+      if (res.data['ReturnCode'] == "00") {
+        CommonUtils.showUpdateAppDialog(context, res.data['MSG'], res.data['UpdateUrl']);
+      }
+      else {
+        Fluttertoast.showToast(msg: res.data['MSG']);
+      }
+    }
   }
 }

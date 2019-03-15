@@ -68,4 +68,6 @@ abstract class MyStringBase {
   String appVerNo_text;
 
   String welcome_text;
+
+  String login_noMan_text;
 }

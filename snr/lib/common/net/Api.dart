@@ -106,7 +106,8 @@ class HttpManager {
       }
     } catch (e) {
       print(e.toString() + url);
-      if (response.toString().length < 1) {
+      String respData = response.data.toString().replaceAll("\r", "").replaceAll("\n", "");
+      if (respData.length < 1) {
         return new ResultData(null, false, response.statusCode, headers: response.headers);
       }
       Map<String, dynamic> jsonStr = jsonDecode(response.data);

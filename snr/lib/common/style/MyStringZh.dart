@@ -69,4 +69,6 @@ class MyStringZh extends MyStringBase {
   String appVerNo_text = "版號: 3.0.0311";
   @override
   String welcome_text = "歡迎使用SNR預警系統";
+  @override
+  String login_noMan_text = "此登入者信息已註銷";
 }
