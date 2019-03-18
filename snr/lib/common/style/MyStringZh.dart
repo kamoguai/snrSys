@@ -32,7 +32,7 @@ class MyStringZh extends MyStringBase {
   @override
   String Login_out = "退出登入";
   @override
-  String home_check_update = "檢測更新";
+  String common_check_update = "檢測更新";
   @override
   String login_userAccount_hint_text = "請輸入帳號";
   @override
@@ -71,4 +71,23 @@ class MyStringZh extends MyStringBase {
   String welcome_text = "歡迎使用SNR預警系統";
   @override
   String login_noMan_text = "此登入者信息已註銷";
+  @override
+  String common_toolBar_refresh = "刷新";
+  @override
+  String common_toolBar_analyze = "分析";
+  @override
+  String common_toolBar_set = "設定";
+  @override
+  String common_toolBar_back = "返回";
+  ///首頁四按鈕
+  @override
+  String home_btn_bigbad = "重大";
+  @override
+  String home_btn_upP = "上P";
+  @override
+  String home_btn_publicwork = "工務";
+  @override
+  String home_btn_problem = "問題";
+  @override
+  String home_btn_assignFix = "派修";
 }

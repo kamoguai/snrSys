@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:snr/page/LoginPage.dart';
+import 'package:snr/page/HomePage.dart';
 
 /**
  * 導航欄
@@ -23,8 +24,13 @@ class NavigatorUtils {
     return Navigator.push(context, new CupertinoPageRoute(builder: (context) => widget));
   }
 
-  ///登录页
+  ///登入頁
   static goLogin(BuildContext context) {
     Navigator.pushReplacementNamed(context, LoginPage.sName);
+  }
+
+  ///首頁
+  static goHome(BuildContext context) {
+    Navigator.pushReplacementNamed(context, HomePage.sName);
   }
 }

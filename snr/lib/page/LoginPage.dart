@@ -9,6 +9,8 @@ import 'package:snr/common//utils/CommonUtils.dart';
 import 'package:snr/widget/MyFlexButton.dart';
 import 'package:snr/common/dao/UserDao.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:snr/common/utils/NavigatorUtils.dart';
 
 /**
  * 登入頁面
@@ -138,24 +140,28 @@ class _LoginPageState extends State<LoginPage> {
                                     return;
                                   }
                                   CommonUtils.showLoadingDialog(context);
-                                  UserDao.login(_account.trim(), _password.trim(),store, context).then((res) {
-                                    print("res ---- ");
+                                  UserDao.login(_account.trim(), _password.trim(),store, context).then((res) {                                
                                     Navigator.pop(context);
-                                    if (res != null && res.result) {
-                                      print("call api resp => " +
-                                          res.result.toString());
-                                      if (res.data.data != null) {
-
+                                    if (res != null && res.result) {                                 
+                                      if (res.data.retCode == "14") {
+                                          UserDao.updateDummyApp(context, res.data.blankURL);
+                                      }
+                                      else if (res.data.retCode == "00"){
+                                          CommonUtils.showLoadingDialog(context);
+                                          UserDao.getUserInfo(res.data.serverURL, res.data.ssoKey, _account, _password, store).then((res) {
+                                            Navigator.pop(context);
+                                            if (res != null && res.result) {
+                                                print('go to home page');
+                                                new Future.delayed(const Duration(seconds: 1),() {
+                                                  NavigatorUtils.goHome(context);
+                                                  return true;
+                                                });
+                                            }
+                                          });
                                       }
                                       else {
-                                        if (res.data['retCode'] == "14") {
-                                           UserDao.updateDummyApp(context, res.data['blankURL']);
-                                        }
-                                        else {
-                                           print('go to home page');
-                                        }
-                                      }
-                                     
+                                        Fluttertoast.showToast(msg: res.data.retMSG);
+                                      }                                     
                                     } else {
                                       print("holy 喵喵喵");
                                     }

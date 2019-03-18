@@ -31,7 +31,7 @@ abstract class MyStringBase {
 
   String Login_out;
 
-  String home_check_update;
+  String common_check_update;
 
   String login_userAccount_hint_text;
 
@@ -70,4 +70,22 @@ abstract class MyStringBase {
   String welcome_text;
 
   String login_noMan_text;
+
+  String common_toolBar_refresh;
+
+  String common_toolBar_analyze;
+
+  String common_toolBar_set;
+
+  String common_toolBar_back;
+
+  String home_btn_bigbad;
+
+  String home_btn_upP;
+
+  String home_btn_publicwork;
+
+  String home_btn_problem;
+
+  String home_btn_assignFix;
 }

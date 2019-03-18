@@ -4,6 +4,7 @@ import 'package:snr/common/localization/DefaultLocalizations.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
+import 'package:snr/widget/MyTabBarWidget.dart';
 
 /**
  * 主頁
@@ -29,11 +30,39 @@ class HomePage extends StatelessWidget {
             ));
   }
 
+  /// tool bar 
+  _renderTab(text) {
+    return new Tab(
+      child: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text(text)
+        ],
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+    List<Widget> tabs = [
+      _renderTab(CommonUtils.getLocale(context).common_toolBar_refresh),
+      _renderTab(CommonUtils.getLocale(context).common_toolBar_analyze),
+      _renderTab(CommonUtils.getLocale(context).common_toolBar_set),
+      _renderTab(CommonUtils.getLocale(context).common_toolBar_back),
+    ];
+    return WillPopScope(
+      onWillPop: () {
+        return _dialogExitApp(context);
+      },
+      child: new MyTabBarWidget(
+        type: MyTabBarWidget.BOTTOM_TAB,
+        tabItems: tabs,
+        tabViews: <Widget>[
+
+        ],
+        backgroundColor: MyColors.primarySwatch,
+        indicatorColor: Color(MyColors.white),
+      ),      
     );
   }
 }

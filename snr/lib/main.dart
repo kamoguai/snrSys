@@ -15,6 +15,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:snr/common/event/HttpErrorEvent.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:snr/common/localization/MyLocalizationsDelegate.dart';
+import 'package:snr/page/HomePage.dart';
 void main() {
   runApp(new SnrReduxApp());
   PaintingBinding.instance.imageCache.maximumSize = 100;
@@ -28,7 +29,7 @@ class SnrReduxApp extends StatelessWidget {
     ///初始化數據
     initialState: new SysState(
       userInfo: User.empty(),
-      themeData: CommonUtils.getThemeData(MyColors.primarySwatch),
+      themeData: CommonUtils.getThemeData(Color(MyColors.hexFromStr("#358cb0"))),
       locale: Locale('zh','CH'),
       
     )
@@ -61,7 +62,13 @@ class SnrReduxApp extends StatelessWidget {
                 return new SNRLocalizations(
                   child: new LoginPage(),
                 );
+              },
+              HomePage.sName: (context) {//主頁
+                return new SNRLocalizations(
+                  child: new HomePage(),
+                );
               }
+
           },
         );
       }),
