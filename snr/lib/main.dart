@@ -29,7 +29,7 @@ class SnrReduxApp extends StatelessWidget {
     ///初始化數據
     initialState: new SysState(
       userInfo: User.empty(),
-      themeData: CommonUtils.getThemeData(Color(MyColors.hexFromStr("#358cb0"))),
+      themeData: CommonUtils.getThemeData(Colors.blue),
       locale: Locale('zh','CH'),
       
     )
