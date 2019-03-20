@@ -88,4 +88,20 @@ abstract class MyStringBase {
   String home_btn_problem;
 
   String home_btn_assignFix;
+
+  String home_cmtsTitle_major;
+
+  String home_cmtsTitle_lhp;
+
+  String home_cmtsTitle_hp;
+
+  String home_cmtsTitle_dowP;
+
+  String home_cmtsTitle_watch;
+
+  String home_cmtsTitle_cut;
+
+  String home_cmtsTitle_fix2;
+
+  String home_cmtsTitle_fix;
 }

@@ -77,6 +77,8 @@ class MyConstant {
   static const middleTextWhiteSize = 16.0;
   static const smallTextSize = 14.0;
   static const minTextSize = 12.0;
+  static const miniTextSize = 10.0;
+  static const tinyTextSize = 10.0;
 
   static const minText = TextStyle(
     color: Color(MyColors.subLightTextColor),
@@ -233,7 +235,7 @@ class MyConstant {
 class MyICons {
   static const String FONT_FAMILY = 'wxcIconFont';
 
-  static const String DEFAULT_USER_ICON = 'static/images/logo.png';
+  static const String DEFAULT_USER_ICON = 'static/images/logo_small.png';
   static const String DEFAULT_IMAGE = 'static/images/default_img.png';
   static const String DEFAULT_REMOTE_PIC =
       'https://raw.githubusercontent.com/CarGuo/MyGithubAppFlutter/master/static/images/logo.png';

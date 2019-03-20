@@ -18,7 +18,8 @@ class Address {
   static const String getVersion = "ValidataVersion/json/index!checkVersion.action?";
   static const String loginAPI = "WorkOrder/json/wok!login.action?";
   static final String bundleID = "com.dc.SNR";
-  static final String verNo = "3.0.0311";
+  // static final String verNo = "3.0.0311";
+  static final String verNo = "2.19.0226";
 
   ///檢查是否有更新app
   static getValidateVersionAPI() {

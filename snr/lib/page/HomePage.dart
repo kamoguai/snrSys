@@ -7,13 +7,45 @@ import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyTabBarWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/MyFlexButton.dart';
+import 'package:snr/common/dao/HomeDao.dart';
+import 'package:snr/common/model/HomeCmtsTitleInfo.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 /**
  * 主頁
  * Date: 2018-03-14
  */
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static final String sName = "home";
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+var _major = "0";
+
+class _HomePageState extends State<HomePage> {
+  CmtsTitleInfo ctInfo;
+  cmtsTitleData() {
+    HomeDao.getQueryCMTSMainTitleInfoAPI().then((res) {
+      if (res != null && res.result) {
+        setState(() {
+          ctInfo = res.data;
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cmtsTitleData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   ///提示退出app
   Future<bool> _dialogExitApp(BuildContext context) {
@@ -78,7 +110,13 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
+  ///分隔線
+  _buildLine() {
+    return new Container(
+      height: 1.0,
+      color: Colors.grey,
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
@@ -267,7 +305,7 @@ class HomePage extends StatelessWidget {
                 height: 10,
               ),
               new Card(
-                  color: Colors.yellow,
+                  color: Colors.white,
                   child: Table(
                     columnWidths: const <int, TableColumnWidth>{
                       0: FixedColumnWidth(100.0),
@@ -276,36 +314,84 @@ class HomePage extends StatelessWidget {
                       3: FixedColumnWidth(70.0),
                     },
                     border: TableBorder.all(
-                        color: Colors.red,
+                        color: Colors.grey,
                         width: 1.0,
                         style: BorderStyle.solid),
-                    children: const <TableRow>[
+                    children: <TableRow>[
                       TableRow(
                         children: <Widget>[
-                          Text('A1'),
-                          Text('B1'),
-                          Text('C1'),
-                          Text('D1'),
+                          new AutoSizeText(
+                            CommonUtils.getLocale(context).home_cmtsTitle_lhp +
+                                ': ${ctInfo.LHP}',
+                            style: TextStyle(fontSize: MyConstant.tinyTextSize),
+                            minFontSize: 1.0,
+                          ),
+                          new AutoSizeText(
+                            CommonUtils.getLocale(context).home_cmtsTitle_dowP +
+                                ': ',
+                            style: TextStyle(
+                                fontSize: MyConstant.tinyTextSize,
+                                color: Colors.purple),
+                            minFontSize: 1.0,
+                          ),
+                          new AutoSizeText(
+                            CommonUtils.getLocale(context).home_cmtsTitle_cut +
+                                ': ',
+                            style: TextStyle(fontSize: MyConstant.tinyTextSize),
+                            minFontSize: 1.0,
+                          ),
+                          new AutoSizeText(
+                            CommonUtils.getLocale(context)
+                                    .home_cmtsTitle_major +
+                                ': ${ctInfo.MAJOR}',
+                            style: TextStyle(
+                                fontSize: MyConstant.tinyTextSize,
+                                color: Colors.red),
+                            minFontSize: 1.0,
+                          ),
                         ],
                       ),
                       TableRow(
                         children: <Widget>[
-                          Text('A2'),
-                          Text('B2'),
-                          Text('C2'),
-                          Text('D2'),
-                        ],
-                      ),
-                      TableRow(
-                        children: <Widget>[
-                          Text('A3'),
-                          Text('B3'),
-                          Text('C3'),
-                          Text('D3'),
+                          new AutoSizeText(
+                            CommonUtils.getLocale(context).home_cmtsTitle_hp +
+                                ': ${ctInfo.HP}',
+                            style: TextStyle(
+                                fontSize: MyConstant.tinyTextSize,
+                                color: Colors.orange),
+                            minFontSize: 1.0,
+                          ),
+                          new AutoSizeText(
+                            CommonUtils.getLocale(context)
+                                    .home_cmtsTitle_watch +
+                                ': ',
+                            style: TextStyle(
+                                fontSize: MyConstant.tinyTextSize,
+                                color: Colors.blue),
+                            minFontSize: 1.0,
+                          ),
+                          new AutoSizeText(
+                            CommonUtils.getLocale(context).home_cmtsTitle_fix2 +
+                                ': ',
+                            style: TextStyle(
+                                fontSize: MyConstant.tinyTextSize,
+                                color: Colors.pink),
+                            minFontSize: 1.0,
+                          ),
+                          new AutoSizeText(
+                            CommonUtils.getLocale(context).home_cmtsTitle_fix +
+                                ': ${ctInfo.FIX}',
+                            style: TextStyle(
+                                fontSize: MyConstant.tinyTextSize,
+                                color: Colors.red),
+                            minFontSize: 1.0,
+                          ),
                         ],
                       ),
                     ],
-                  ))
+                  )),
+                
+          _buildLine(),
             ],
           ),
         ),

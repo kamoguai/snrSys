@@ -31,12 +31,12 @@ class HttpManager {
     }
 
     //授權碼
-    if (optionParams["authorizationCode"] == null) {
-      var authorizationCode = await getAuthorization();
-      if (authorizationCode != null) {
-        optionParams["authorizationCode"] = authorizationCode;
-      }
-    }
+    // if (optionParams["authorizationCode"] == null) {
+    //   var authorizationCode = await getAuthorization();
+    //   if (authorizationCode != null) {
+    //     optionParams["authorizationCode"] = authorizationCode;
+    //   }
+    // }
 
     headers["Authorization"] = optionParams["authorizationCode"];
 
@@ -89,20 +89,21 @@ class HttpManager {
       }
     }
     try {
-      if (option.contentType != null && option.contentType.primaryType == "text") {
-        Map<String, dynamic> jsonStr = jsonDecode(response.data);
-        return new ResultData(jsonStr, true, Code.SUCCESS);
-      } else {
-        Map<String, dynamic> jsonStr = jsonDecode(response.data);
-        var responseJson = jsonStr;
-        if (response.statusCode == 201 && responseJson["token"] != null) {
-          optionParams["authorizationCode"] = 'token ' + responseJson["token"];
-          await LocalStorage.save(Config.TOKEN_KEY, optionParams["authorizationCode"]);
-        }
-      }
+      // if (option.contentType != null && option.contentType.primaryType == "text") {
+      //   Map<String, dynamic> jsonStr = jsonDecode(response.data);
+      //   return new ResultData(jsonStr, true, Code.SUCCESS);
+      // } else {
+      //   Map<String, dynamic> jsonStr = jsonDecode(response.data);
+      //   var responseJson = jsonStr;
+      //   if (response.statusCode == 201 && responseJson["token"] != null) {
+      //     optionParams["authorizationCode"] = 'token ' + responseJson["token"];
+      //     await LocalStorage.save(Config.TOKEN_KEY, optionParams["authorizationCode"]);
+      //   }
+      // }
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Map<String, dynamic> jsonStr = jsonDecode(response.data);
-        return new ResultData(jsonStr, true, Code.SUCCESS, headers: response.headers);
+        var jsonStr = jsonDecode(response.toString());
+        Map<String, dynamic> map = jsonStr;
+        return new ResultData(map, true, Code.SUCCESS, headers: response.headers);
       }
     } catch (e) {
       print(e.toString() + url);

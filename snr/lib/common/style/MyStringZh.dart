@@ -90,4 +90,20 @@ class MyStringZh extends MyStringBase {
   String home_btn_problem = "問題";
   @override
   String home_btn_assignFix = "派修";
+  @override
+  String home_cmtsTitle_major = "重大";
+  @override
+  String home_cmtsTitle_lhp = "低HP";
+  @override
+  String home_cmtsTitle_hp = "HP";
+  @override
+  String home_cmtsTitle_dowP = "下P";
+  @override
+  String home_cmtsTitle_watch = "觀察";
+  @override
+  String home_cmtsTitle_cut = "派拆";
+  @override
+  String home_cmtsTitle_fix2 = "再修";
+  @override
+  String home_cmtsTitle_fix = "派修";
 }
