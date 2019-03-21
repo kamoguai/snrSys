@@ -106,4 +106,16 @@ class MyStringZh extends MyStringBase {
   String home_cmtsTitle_fix2 = "再修";
   @override
   String home_cmtsTitle_fix = "派修";
+  @override
+  String home_signal_area = "區域";
+  @override
+  String home_signal_online = "上線";
+  @override
+  String home_sinal_bad = "異常";
+  @override
+  String home_signal_upP = "上P";
+  @override
+  String home_signal_problem = "問題";
+  @override
+  String home_signal_percent = "%";
 }

@@ -10,6 +10,7 @@ import 'package:snr/widget/MyFlexButton.dart';
 import 'package:snr/common/dao/HomeDao.dart';
 import 'package:snr/common/model/HomeCmtsTitleInfo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:snr/common/model/HomeSignal.dart';
 
 /**
  * 主頁
@@ -24,22 +25,36 @@ class HomePage extends StatefulWidget {
 
 var _major = "0";
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   CmtsTitleInfo ctInfo;
-  cmtsTitleData() {
-    HomeDao.getQueryCMTSMainTitleInfoAPI().then((res) {
-      if (res != null && res.result) {
-        setState(() {
-          ctInfo = res.data;
-        });
-      }
-    });
+  List<SignalData> sd;
+
+  ///取得cmts表資料
+  _cmtsTitleData() async {
+    var res = await HomeDao.getQueryCMTSMainTitleInfoAPI();
+    if (res != null && res.result) {
+      setState(() {
+        ctInfo = res.data;
+      });
+    }
+    ;
+  }
+
+  ///取得signal資料
+  _signalData() async {
+    var res = await HomeDao.getQueryAllSNRSignalAPI();
+    if (res != null && res.result) {
+      setState(() {
+        sd = res.data;
+      });
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    cmtsTitleData();
+    _cmtsTitleData();
+    _signalData();
   }
 
   @override
@@ -110,6 +125,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   ///分隔線
   _buildLine() {
     return new Container(
@@ -117,6 +133,29 @@ class _HomePageState extends State<HomePage> {
       color: Colors.grey,
     );
   }
+
+  _buildTextFontColor(String text, Color color) {
+    return AutoSizeText(
+      text,
+      style: TextStyle(color: color, fontSize: MyConstant.minTextSize),
+      minFontSize: 9.0,
+    );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    ///通過state判斷app前後台切換
+    if (state == AppLifecycleState.resumed) {
+      print('resumed');
+    } else if (state == AppLifecycleState.inactive) {
+      print('inactive');
+    } else if (state == AppLifecycleState.paused) {
+      print('paused');
+    } else if (state == AppLifecycleState.suspending) {
+      print('suspending');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
@@ -133,346 +172,411 @@ class _HomePageState extends State<HomePage> {
       _renderTab(CommonUtils.getLocale(context).common_toolBar_set),
       _renderTab(CommonUtils.getLocale(context).common_toolBar_back),
     ];
-    _getListData() {
-      List<Widget> widgets = [];
-      for (int i = 0; i < 100; i++) {
-        widgets
-            .add(Padding(padding: EdgeInsets.all(10.0), child: Text("Row $i")));
-      }
-      return widgets;
-    }
 
     return WillPopScope(
-      onWillPop: () {
-        return _dialogExitApp(context);
-      },
-      child: new Scaffold(
-        ///appBar
-        appBar: new AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          actions: <Widget>[
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                ButtonTheme(
-                  minWidth: 60.0,
-                  child: new MyToolButton(
-                    text: "新北市",
-                    textColor: Colors.white,
-                    color: Colors.transparent,
-                    fontSize: fontSize,
-                    onPress: () {
-                      print("123");
-                    },
-                  ),
-                ),
-                ButtonTheme(
-                  minWidth: 60.0,
-                  child: new MyToolButton(
-                    text: "自移",
-                    textColor: Colors.white,
-                    color: Colors.transparent,
-                    fontSize: fontSize,
-                    onPress: () {
-                      print("123");
-                    },
-                  ),
-                ),
-                ButtonTheme(
-                  minWidth: 60.0,
-                  child: new MyToolButton(
-                    text: "點數",
-                    textColor: Colors.white,
-                    color: Colors.transparent,
-                    fontSize: fontSize,
-                    onPress: () {
-                      print("123");
-                    },
-                  ),
-                ),
-                ButtonTheme(
-                  minWidth: 60.0,
-                  child: new MyToolButton(
-                    text: "鎖HP",
-                    textColor: Colors.white,
-                    color: Colors.transparent,
-                    fontSize: fontSize,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    onPress: () {
-                      print("123");
-                    },
-                  ),
-                ),
-                ButtonTheme(
-                  minWidth: 60.0,
-                  child: new MyToolButton(
-                    text: "資料",
-                    textColor: Colors.white,
-                    color: Colors.transparent,
-                    fontSize: fontSize,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    onPress: () {
-                      print("123");
-                    },
-                  ),
+        onWillPop: () {
+          return _dialogExitApp(context);
+        },
+        child: SafeArea(
+          top: true,
+          bottom: true,
+          child: new Scaffold(
+            ///appBar
+            appBar: new AppBar(
+              backgroundColor: Theme.of(context).primaryColor,
+              actions: <Widget>[
+                new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    ButtonTheme(
+                      minWidth: 60.0,
+                      child: new MyToolButton(
+                        text: "新北市",
+                        textColor: Colors.white,
+                        color: Colors.transparent,
+                        fontSize: fontSize,
+                        onPress: () {
+                          _signalData();
+                        },
+                      ),
+                    ),
+                    ButtonTheme(
+                      minWidth: 60.0,
+                      child: new MyToolButton(
+                        text: "自移",
+                        textColor: Colors.white,
+                        color: Colors.transparent,
+                        fontSize: fontSize,
+                        onPress: () {
+                          print("123");
+                        },
+                      ),
+                    ),
+                    ButtonTheme(
+                      minWidth: 60.0,
+                      child: new MyToolButton(
+                        text: "點數",
+                        textColor: Colors.white,
+                        color: Colors.transparent,
+                        fontSize: fontSize,
+                        onPress: () {
+                          print("123");
+                        },
+                      ),
+                    ),
+                    ButtonTheme(
+                      minWidth: 60.0,
+                      child: new MyToolButton(
+                        text: "鎖HP",
+                        textColor: Colors.white,
+                        color: Colors.transparent,
+                        fontSize: fontSize,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        onPress: () {
+                          print("123");
+                        },
+                      ),
+                    ),
+                    ButtonTheme(
+                      minWidth: 60.0,
+                      child: new MyToolButton(
+                        text: "資料",
+                        textColor: Colors.white,
+                        color: Colors.transparent,
+                        fontSize: fontSize,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        onPress: () {
+                          print("123");
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
 
-        ///body
-        body: new SingleChildScrollView(
-          child: new Column(
-            children: <Widget>[
-              new Row(
-                ///裝button的row
+            ///body
+            body: new SingleChildScrollView(
+              child: new Column(
+                children: <Widget>[
+                  new Row(
+                    ///裝button的row
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      ButtonTheme(
+                        minWidth: 60,
+                        height: 35,
+                        child: new MyToolButton(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.grey)),
+                          text: CommonUtils.getLocale(context).home_btn_bigbad,
+                          color: Color(MyColors.hexFromStr("#fee9fa")),
+                          fontSize: MyConstant.smallTextSize,
+                          textColor: Colors.black,
+                        ),
+                      ),
+                      ButtonTheme(
+                        minWidth: 60,
+                        height: 35,
+                        child: new MyToolButton(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.grey)),
+                          text: CommonUtils.getLocale(context).home_btn_upP,
+                          color: Color(MyColors.hexFromStr("#f5ffe9")),
+                          fontSize: MyConstant.smallTextSize,
+                          textColor: Colors.black,
+                        ),
+                      ),
+                      ButtonTheme(
+                        minWidth: 60,
+                        height: 35,
+                        child: new MyToolButton(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.grey)),
+                          text: CommonUtils.getLocale(context)
+                              .home_btn_publicwork,
+                          color: Color(MyColors.hexFromStr("#e8fcff")),
+                          fontSize: MyConstant.smallTextSize,
+                          textColor: Colors.black,
+                        ),
+                      ),
+                      ButtonTheme(
+                        minWidth: 60,
+                        height: 35,
+                        child: new MyToolButton(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.grey)),
+                          text: CommonUtils.getLocale(context).home_btn_problem,
+                          color: Color(MyColors.hexFromStr("#fff7dc")),
+                          fontSize: MyConstant.smallTextSize,
+                          textColor: Colors.black,
+                        ),
+                      ),
+                      ButtonTheme(
+                        minWidth: 60,
+                        height: 35,
+                        child: new MyToolButton(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.grey)),
+                          text:
+                              CommonUtils.getLocale(context).home_btn_assignFix,
+                          color: Color(MyColors.hexFromStr("#fee6f7")),
+                          fontSize: MyConstant.smallTextSize,
+                          textColor: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  new Card(
+                      color: Colors.white,
+                      child: Table(
+                        defaultVerticalAlignment:
+                            TableCellVerticalAlignment.middle,
+                        // defaultColumnWidth: IntrinsicColumnWidth(),
+                        columnWidths: const <int, TableColumnWidth>{
+                          // 0: FractionColumnWidth(1),
+                          1: FractionColumnWidth(.2),
+                          2: FractionColumnWidth(.2),
+                          3: FractionColumnWidth(.2),
+                        },
+                        border: TableBorder.all(
+                            color: Colors.grey,
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                        children: <TableRow>[
+                          TableRow(
+                            children: <Widget>[
+                              new AutoSizeText(
+                                ctInfo == null
+                                    ? CommonUtils.getLocale(context)
+                                        .home_cmtsTitle_lhp
+                                    : CommonUtils.getLocale(context)
+                                            .home_cmtsTitle_lhp +
+                                        ': ${ctInfo.LHP}',
+                                style: TextStyle(
+                                    fontSize: MyConstant.tinyTextSize),
+                                minFontSize: 8.0,
+                              ),
+                              new AutoSizeText(
+                                ctInfo == null
+                                    ? CommonUtils.getLocale(context)
+                                        .home_cmtsTitle_dowP
+                                    : CommonUtils.getLocale(context)
+                                            .home_cmtsTitle_dowP +
+                                        ': ',
+                                style: TextStyle(
+                                    fontSize: MyConstant.tinyTextSize,
+                                    color: Colors.purple),
+                                minFontSize: 1.0,
+                              ),
+                              new AutoSizeText(
+                                ctInfo == null
+                                    ? CommonUtils.getLocale(context)
+                                        .home_cmtsTitle_cut
+                                    : CommonUtils.getLocale(context)
+                                            .home_cmtsTitle_cut +
+                                        ': ',
+                                style: TextStyle(
+                                    fontSize: MyConstant.tinyTextSize),
+                                minFontSize: 1.0,
+                              ),
+                              new AutoSizeText(
+                                ctInfo == null
+                                    ? CommonUtils.getLocale(context)
+                                        .home_cmtsTitle_major
+                                    : CommonUtils.getLocale(context)
+                                            .home_cmtsTitle_major +
+                                        ': ${ctInfo.MAJOR}',
+                                style: TextStyle(
+                                    fontSize: MyConstant.tinyTextSize,
+                                    color: Colors.red),
+                                minFontSize: 1.0,
+                              ),
+                            ],
+                          ),
+                          TableRow(
+                            children: <Widget>[
+                              new AutoSizeText(
+                                ctInfo == null
+                                    ? CommonUtils.getLocale(context)
+                                        .home_cmtsTitle_hp
+                                    : CommonUtils.getLocale(context)
+                                            .home_cmtsTitle_hp +
+                                        ': ${ctInfo.HP}',
+                                style: TextStyle(
+                                    fontSize: MyConstant.tinyTextSize,
+                                    color: Colors.orange),
+                                minFontSize: 1.0,
+                              ),
+                              new AutoSizeText(
+                                ctInfo == null
+                                    ? CommonUtils.getLocale(context)
+                                        .home_cmtsTitle_watch
+                                    : CommonUtils.getLocale(context)
+                                            .home_cmtsTitle_watch +
+                                        ': ',
+                                style: TextStyle(
+                                    fontSize: MyConstant.tinyTextSize,
+                                    color: Colors.blue),
+                                minFontSize: 1.0,
+                              ),
+                              new AutoSizeText(
+                                ctInfo == null
+                                    ? CommonUtils.getLocale(context)
+                                        .home_cmtsTitle_fix2
+                                    : CommonUtils.getLocale(context)
+                                            .home_cmtsTitle_fix2 +
+                                        ': ',
+                                style: TextStyle(
+                                    fontSize: MyConstant.tinyTextSize,
+                                    color: Colors.pink),
+                                minFontSize: 1.0,
+                              ),
+                              new AutoSizeText(
+                                ctInfo == null
+                                    ? CommonUtils.getLocale(context)
+                                        .home_cmtsTitle_fix
+                                    : CommonUtils.getLocale(context)
+                                            .home_cmtsTitle_fix +
+                                        ': ${ctInfo.FIX}',
+                                style: TextStyle(
+                                    fontSize: MyConstant.tinyTextSize,
+                                    color: Colors.red),
+                                minFontSize: 1.0,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                  _buildLine(),
+
+                  /// 高度1的分隔線
+                  new Container(
+                    height: 40.0,
+                    color: Color(MyColors.hexFromStr('#f5ffe9')),
+                    child: new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        _buildTextFontColor(
+                            CommonUtils.getLocale(context).home_signal_area,
+                            Colors.black),
+                        _buildTextFontColor(
+                            CommonUtils.getLocale(context).home_signal_online,
+                            Colors.blue),
+                        _buildTextFontColor(
+                            CommonUtils.getLocale(context).home_sinal_bad,
+                            Colors.red),
+                        _buildTextFontColor(
+                            CommonUtils.getLocale(context).home_signal_upP,
+                            Colors.black),
+                        _buildTextFontColor(
+                            CommonUtils.getLocale(context).home_signal_problem,
+                            Colors.pink),
+                        _buildTextFontColor(
+                            CommonUtils.getLocale(context).home_signal_percent,
+                            Colors.blue[300]),
+                      ],
+                    ),
+                  ),
+                  _buildLine(),
+
+                  /// 高度1的分隔線
+                ],
+              ),
+            ),
+
+            ///toolBar
+            bottomNavigationBar: new Material(
+              color: Theme.of(context).primaryColor,
+              child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   ButtonTheme(
-                    minWidth: 60,
-                    height: 35,
+                    minWidth: 60.0,
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0),
-                          side: BorderSide(color: Colors.grey)),
-                      text: CommonUtils.getLocale(context).home_btn_bigbad,
-                      color: Color(MyColors.hexFromStr("#fee9fa")),
+                      text: "刷新",
+                      textColor: Colors.white,
+                      color: Colors.transparent,
                       fontSize: fontSize,
-                      textColor: Colors.black,
+                      onPress: () {
+                        print("123");
+                      },
                     ),
                   ),
                   ButtonTheme(
-                    minWidth: 60,
-                    height: 35,
+                    minWidth: 60.0,
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0),
-                          side: BorderSide(color: Colors.grey)),
-                      text: CommonUtils.getLocale(context).home_btn_upP,
-                      color: Color(MyColors.hexFromStr("#f5ffe9")),
+                      text: "分析",
+                      textColor: Colors.white,
+                      color: Colors.transparent,
                       fontSize: fontSize,
-                      textColor: Colors.black,
+                      onPress: () {
+                        print("123");
+                      },
                     ),
                   ),
                   ButtonTheme(
-                    minWidth: 60,
-                    height: 35,
+                    minWidth: 60.0,
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0),
-                          side: BorderSide(color: Colors.grey)),
-                      text: CommonUtils.getLocale(context).home_btn_publicwork,
-                      color: Color(MyColors.hexFromStr("#e8fcff")),
+                      text: "PING",
+                      textColor: Colors.white,
+                      color: Colors.transparent,
                       fontSize: fontSize,
-                      textColor: Colors.black,
+                      onPress: () {
+                        print("123");
+                      },
                     ),
                   ),
                   ButtonTheme(
-                    minWidth: 60,
-                    height: 35,
+                    minWidth: 60.0,
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0),
-                          side: BorderSide(color: Colors.grey)),
-                      text: CommonUtils.getLocale(context).home_btn_problem,
-                      color: Color(MyColors.hexFromStr("#fff7dc")),
+                      text: "設定",
+                      textColor: Colors.white,
+                      color: Colors.transparent,
                       fontSize: fontSize,
-                      textColor: Colors.black,
+                      onPress: () {
+                        print("123");
+                      },
                     ),
                   ),
                   ButtonTheme(
-                    minWidth: 60,
-                    height: 35,
+                    minWidth: 60.0,
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0),
-                          side: BorderSide(color: Colors.grey)),
-                      text: CommonUtils.getLocale(context).home_btn_assignFix,
-                      color: Color(MyColors.hexFromStr("#fee6f7")),
+                      text: "返回",
+                      textColor: Colors.white,
+                      color: Colors.transparent,
                       fontSize: fontSize,
-                      textColor: Colors.black,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      onPress: () {
+                        print("123");
+                      },
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: 10,
-              ),
-              new Card(
-                  color: Colors.white,
-                  child: Table(
-                    columnWidths: const <int, TableColumnWidth>{
-                      0: FixedColumnWidth(100.0),
-                      1: FixedColumnWidth(70.0),
-                      2: FixedColumnWidth(70.0),
-                      3: FixedColumnWidth(70.0),
-                    },
-                    border: TableBorder.all(
-                        color: Colors.grey,
-                        width: 1.0,
-                        style: BorderStyle.solid),
-                    children: <TableRow>[
-                      TableRow(
-                        children: <Widget>[
-                          new AutoSizeText(
-                            CommonUtils.getLocale(context).home_cmtsTitle_lhp +
-                                ': ${ctInfo.LHP}',
-                            style: TextStyle(fontSize: MyConstant.tinyTextSize),
-                            minFontSize: 1.0,
-                          ),
-                          new AutoSizeText(
-                            CommonUtils.getLocale(context).home_cmtsTitle_dowP +
-                                ': ',
-                            style: TextStyle(
-                                fontSize: MyConstant.tinyTextSize,
-                                color: Colors.purple),
-                            minFontSize: 1.0,
-                          ),
-                          new AutoSizeText(
-                            CommonUtils.getLocale(context).home_cmtsTitle_cut +
-                                ': ',
-                            style: TextStyle(fontSize: MyConstant.tinyTextSize),
-                            minFontSize: 1.0,
-                          ),
-                          new AutoSizeText(
-                            CommonUtils.getLocale(context)
-                                    .home_cmtsTitle_major +
-                                ': ${ctInfo.MAJOR}',
-                            style: TextStyle(
-                                fontSize: MyConstant.tinyTextSize,
-                                color: Colors.red),
-                            minFontSize: 1.0,
-                          ),
-                        ],
-                      ),
-                      TableRow(
-                        children: <Widget>[
-                          new AutoSizeText(
-                            CommonUtils.getLocale(context).home_cmtsTitle_hp +
-                                ': ${ctInfo.HP}',
-                            style: TextStyle(
-                                fontSize: MyConstant.tinyTextSize,
-                                color: Colors.orange),
-                            minFontSize: 1.0,
-                          ),
-                          new AutoSizeText(
-                            CommonUtils.getLocale(context)
-                                    .home_cmtsTitle_watch +
-                                ': ',
-                            style: TextStyle(
-                                fontSize: MyConstant.tinyTextSize,
-                                color: Colors.blue),
-                            minFontSize: 1.0,
-                          ),
-                          new AutoSizeText(
-                            CommonUtils.getLocale(context).home_cmtsTitle_fix2 +
-                                ': ',
-                            style: TextStyle(
-                                fontSize: MyConstant.tinyTextSize,
-                                color: Colors.pink),
-                            minFontSize: 1.0,
-                          ),
-                          new AutoSizeText(
-                            CommonUtils.getLocale(context).home_cmtsTitle_fix +
-                                ': ${ctInfo.FIX}',
-                            style: TextStyle(
-                                fontSize: MyConstant.tinyTextSize,
-                                color: Colors.red),
-                            minFontSize: 1.0,
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
-                
-          _buildLine(),
-            ],
+            ),
           ),
-        ),
+        )
 
-        ///toolBar
-        bottomNavigationBar: new Material(
-          color: Theme.of(context).primaryColor,
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              ButtonTheme(
-                minWidth: 60.0,
-                child: new MyToolButton(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                  text: "刷新",
-                  textColor: Colors.white,
-                  color: Colors.transparent,
-                  fontSize: fontSize,
-                  onPress: () {
-                    print("123");
-                  },
-                ),
-              ),
-              ButtonTheme(
-                minWidth: 60.0,
-                child: new MyToolButton(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                  text: "分析",
-                  textColor: Colors.white,
-                  color: Colors.transparent,
-                  fontSize: fontSize,
-                  onPress: () {
-                    print("123");
-                  },
-                ),
-              ),
-              ButtonTheme(
-                minWidth: 60.0,
-                child: new MyToolButton(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                  text: "PING",
-                  textColor: Colors.white,
-                  color: Colors.transparent,
-                  fontSize: fontSize,
-                  onPress: () {
-                    print("123");
-                  },
-                ),
-              ),
-              ButtonTheme(
-                minWidth: 60.0,
-                child: new MyToolButton(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                  text: "設定",
-                  textColor: Colors.white,
-                  color: Colors.transparent,
-                  fontSize: fontSize,
-                  onPress: () {
-                    print("123");
-                  },
-                ),
-              ),
-              ButtonTheme(
-                minWidth: 60.0,
-                child: new MyToolButton(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                  text: "返回",
-                  textColor: Colors.white,
-                  color: Colors.transparent,
-                  fontSize: fontSize,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  onPress: () {
-                    print("123");
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      /*
+        /*
       child: new MyTabBarWidget(
         type: MyTabBarWidget.BOTTOM_TAB,
         tabItems: tabs,
@@ -483,6 +587,6 @@ class _HomePageState extends State<HomePage> {
         indicatorColor: Color(MyColors.white),
       ), 
       */
-    );
+        );
   }
 }

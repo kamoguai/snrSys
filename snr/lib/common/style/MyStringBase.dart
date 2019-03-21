@@ -104,4 +104,16 @@ abstract class MyStringBase {
   String home_cmtsTitle_fix2;
 
   String home_cmtsTitle_fix;
+
+  String home_signal_area;
+
+  String home_signal_online;
+
+  String home_sinal_bad;
+
+  String home_signal_upP;
+
+  String home_signal_problem;
+
+  String home_signal_percent;
 }
