@@ -142,6 +142,71 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
+  _buildSignalTable() {
+    return Container(
+      height: 40.0,
+      color: Colors.yellow,
+      child: DataTable(
+      columns: <DataColumn>[
+        DataColumn(
+          label: Text('data', style: TextStyle(color: Colors.black),),
+          numeric: false,
+          tooltip: 'To display '
+        ),
+        DataColumn(
+          label: Text('data'),
+          numeric: false,
+          tooltip: 'To display '
+        ),
+        DataColumn(
+          label: Text('data'),
+          numeric: false,
+          tooltip: 'To display '
+        ),
+        DataColumn(
+          label: Text('data'),
+          numeric: false,
+          tooltip: 'To display '
+        ),
+      ],
+      rows: <DataRow>[],
+    ),
+    //   child: new Column(
+    //     children: <Widget>[
+    //         DataTable(
+    //   columns: <DataColumn>[
+    //     DataColumn(
+    //       label: Text('data', style: TextStyle(color: Colors.black),),
+    //       numeric: false,
+    //       tooltip: 'To display '
+    //     ),
+    //     DataColumn(
+    //       label: Text('data'),
+    //       numeric: false,
+    //       tooltip: 'To display '
+    //     ),
+    //     DataColumn(
+    //       label: Text('data'),
+    //       numeric: false,
+    //       tooltip: 'To display '
+    //     ),
+    //     DataColumn(
+    //       label: Text('data'),
+    //       numeric: false,
+    //       tooltip: 'To display '
+    //     ),
+    //   ],
+    //   rows: <DataRow>[],
+    // ),
+   
+    //     ],
+    //   ),
+       
+    );
+    
+    
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     ///通過state判斷app前後台切換
@@ -491,9 +556,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       ],
                     ),
                   ),
-                  _buildLine(),
-
                   /// 高度1的分隔線
+                  _buildLine(),
+                  _buildSignalTable(),
                 ],
               ),
             ),
