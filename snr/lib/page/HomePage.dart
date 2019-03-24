@@ -92,32 +92,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return fontSize;
   }
 
-  /// tool bar
-  _renderTab(text) {
-    return new Tab(
-        child: new Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[new Text(text)],
-    ));
-  }
-
-  _renderIconTab(text) {
-    return new Tab(
-      child: new Row(
-        children: <Widget>[
-          Container(
-            child: new Image(
-              image: new AssetImage('static/images/logo_small.png'),
-              width: 10.0,
-              height: 10.0,
-            ),
-          ),
-          new Text(text)
-        ],
-      ),
-    );
-  }
-
   _buildButtonItem(String title, var value, String color, onPressed) {
     return new Center(
       child: new RaisedButton(
@@ -307,7 +281,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               ? []
               : sdList
                   .map((dic) => DataRow(cells: [
-                        DataCell(Text(dic.Name),
+                         DataCell(Text(dic.Name),
                             showEditIcon: false, placeholder: false),
                         DataCell(Text(dic.OnLine),
                             showEditIcon: false, placeholder: false),
