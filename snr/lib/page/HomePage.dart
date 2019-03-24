@@ -27,7 +27,7 @@ var _major = "0";
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   CmtsTitleInfo ctInfo;
-  List<SignalData> sd;
+  List<SignalData> sdList;
 
   ///取得cmts表資料
   _cmtsTitleData() async {
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     var res = await HomeDao.getQueryAllSNRSignalAPI();
     if (res != null && res.result) {
       setState(() {
-        sd = res.data;
+        sdList = res.data;
       });
     }
   }
@@ -79,6 +79,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     child: new Text(CommonUtils.getLocale(context).app_ok))
               ],
             ));
+  }
+
+  _fontSize() {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double fontSize = 0.0;
+    if (deviceHeight < 570) {
+      fontSize = 10.0;
+    } else {
+      fontSize = 16.0;
+    }
+    return fontSize;
   }
 
   /// tool bar
@@ -142,69 +153,214 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
-  _buildSignalTable() {
-    return Container(
-      height: 40.0,
-      color: Colors.yellow,
-      child: DataTable(
-      columns: <DataColumn>[
-        DataColumn(
-          label: Text('data', style: TextStyle(color: Colors.black),),
-          numeric: false,
-          tooltip: 'To display '
+  /// cmts talbe
+  _buildCmtsTable() {
+    return Table(
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      // defaultColumnWidth: IntrinsicColumnWidth(),
+      columnWidths: const <int, TableColumnWidth>{
+        // 0: FractionColumnWidth(1),
+        1: FractionColumnWidth(.2),
+        2: FractionColumnWidth(.2),
+        3: FractionColumnWidth(.2),
+      },
+      border: TableBorder.all(
+          color: Colors.grey, width: 1.0, style: BorderStyle.solid),
+      children: <TableRow>[
+        TableRow(
+          children: <Widget>[
+            new AutoSizeText(
+              ctInfo == null
+                  ? CommonUtils.getLocale(context).home_cmtsTitle_lhp
+                  : CommonUtils.getLocale(context).home_cmtsTitle_lhp +
+                      ': ${ctInfo.LHP}',
+              style: TextStyle(fontSize: _fontSize()),
+              minFontSize: 8.0,
+            ),
+            new AutoSizeText(
+              ctInfo == null
+                  ? CommonUtils.getLocale(context).home_cmtsTitle_dowP
+                  : CommonUtils.getLocale(context).home_cmtsTitle_dowP + ': ',
+              style: TextStyle(fontSize: _fontSize(), color: Colors.purple),
+              minFontSize: 1.0,
+            ),
+            new AutoSizeText(
+              ctInfo == null
+                  ? CommonUtils.getLocale(context).home_cmtsTitle_cut
+                  : CommonUtils.getLocale(context).home_cmtsTitle_cut + ': ',
+              style: TextStyle(fontSize: _fontSize()),
+              minFontSize: 1.0,
+            ),
+            new AutoSizeText(
+              ctInfo == null
+                  ? CommonUtils.getLocale(context).home_cmtsTitle_major
+                  : CommonUtils.getLocale(context).home_cmtsTitle_major +
+                      ': ${ctInfo.MAJOR}',
+              style: TextStyle(fontSize: _fontSize(), color: Colors.red),
+              minFontSize: 1.0,
+            ),
+          ],
         ),
-        DataColumn(
-          label: Text('data'),
-          numeric: false,
-          tooltip: 'To display '
-        ),
-        DataColumn(
-          label: Text('data'),
-          numeric: false,
-          tooltip: 'To display '
-        ),
-        DataColumn(
-          label: Text('data'),
-          numeric: false,
-          tooltip: 'To display '
+        TableRow(
+          children: <Widget>[
+            new AutoSizeText(
+              ctInfo == null
+                  ? CommonUtils.getLocale(context).home_cmtsTitle_hp
+                  : CommonUtils.getLocale(context).home_cmtsTitle_hp +
+                      ': ${ctInfo.HP}',
+              style: TextStyle(fontSize: _fontSize(), color: Colors.orange),
+              minFontSize: 1.0,
+            ),
+            new AutoSizeText(
+              ctInfo == null
+                  ? CommonUtils.getLocale(context).home_cmtsTitle_watch
+                  : CommonUtils.getLocale(context).home_cmtsTitle_watch + ': ',
+              style: TextStyle(fontSize: _fontSize(), color: Colors.blue),
+              minFontSize: 1.0,
+            ),
+            new AutoSizeText(
+              ctInfo == null
+                  ? CommonUtils.getLocale(context).home_cmtsTitle_fix2
+                  : CommonUtils.getLocale(context).home_cmtsTitle_fix2 + ': ',
+              style: TextStyle(fontSize: _fontSize(), color: Colors.pink),
+              minFontSize: 1.0,
+            ),
+            new AutoSizeText(
+              ctInfo == null
+                  ? CommonUtils.getLocale(context).home_cmtsTitle_fix
+                  : CommonUtils.getLocale(context).home_cmtsTitle_fix +
+                      ': ${ctInfo.FIX}',
+              style: TextStyle(fontSize: _fontSize(), color: Colors.red),
+              minFontSize: 1.0,
+            ),
+          ],
         ),
       ],
-      rows: <DataRow>[],
-    ),
-    //   child: new Column(
-    //     children: <Widget>[
-    //         DataTable(
-    //   columns: <DataColumn>[
-    //     DataColumn(
-    //       label: Text('data', style: TextStyle(color: Colors.black),),
-    //       numeric: false,
-    //       tooltip: 'To display '
-    //     ),
-    //     DataColumn(
-    //       label: Text('data'),
-    //       numeric: false,
-    //       tooltip: 'To display '
-    //     ),
-    //     DataColumn(
-    //       label: Text('data'),
-    //       numeric: false,
-    //       tooltip: 'To display '
-    //     ),
-    //     DataColumn(
-    //       label: Text('data'),
-    //       numeric: false,
-    //       tooltip: 'To display '
-    //     ),
-    //   ],
-    //   rows: <DataRow>[],
-    // ),
-   
-    //     ],
-    //   ),
-       
     );
-    
-    
+  }
+
+  ///signal table
+  _buildSignalTable() {
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      // height: 140.0,
+      // color: Colors.yellow,
+      child: DataTable(
+          columns: <DataColumn>[
+            DataColumn(
+                label: Text(
+                  CommonUtils.getLocale(context).home_signal_area,
+                  style: TextStyle(
+                      color: Colors.black, fontSize: MyConstant.minTextSize),
+                ),
+                // label: Text('', style: TextStyle(color: Colors.black),),
+                numeric: false,
+                tooltip: 'To display '),
+            DataColumn(
+                label: Text(
+                  CommonUtils.getLocale(context).home_signal_online,
+                  style: TextStyle(
+                      color: Colors.blue, fontSize: MyConstant.minTextSize),
+                ),
+                // label: Text('', style: TextStyle(color: Colors.black),),
+                numeric: false,
+                tooltip: 'To display '),
+            DataColumn(
+                label: Text(
+                  CommonUtils.getLocale(context).home_sinal_bad,
+                  style: TextStyle(
+                      color: Colors.red, fontSize: MyConstant.minTextSize),
+                ),
+                // label: Text('', style: TextStyle(color: Colors.black),),
+                numeric: false,
+                tooltip: 'To display '),
+            DataColumn(
+                label: Text(
+                  CommonUtils.getLocale(context).home_signal_upP,
+                  style: TextStyle(
+                      color: Colors.black, fontSize: MyConstant.minTextSize),
+                ),
+                // label: Text('', style: TextStyle(color: Colors.black),),
+                numeric: false,
+                tooltip: 'To display '),
+            DataColumn(
+                label: Text(
+                  CommonUtils.getLocale(context).home_signal_problem,
+                  style: TextStyle(
+                      color: Colors.pink, fontSize: MyConstant.minTextSize),
+                ),
+                // label: Text('', style: TextStyle(color: Colors.black),),
+                numeric: false,
+                tooltip: 'To display '),
+            DataColumn(
+                label: Text(
+                  CommonUtils.getLocale(context).home_signal_percent,
+                  style: TextStyle(
+                      color: Colors.blue[300],
+                      fontSize: MyConstant.minTextSize),
+                ),
+                // label: Text('', style: TextStyle(color: Colors.black),),
+                numeric: false,
+                tooltip: 'To display '),
+          ],
+          rows: sdList == null
+              ? []
+              : sdList
+                  .map((dic) => DataRow(cells: [
+                        DataCell(Text(dic.Name),
+                            showEditIcon: false, placeholder: false),
+                        DataCell(Text(dic.OnLine),
+                            showEditIcon: false, placeholder: false),
+                        DataCell(Text(dic.Bad),
+                            showEditIcon: false, placeholder: false),
+                        DataCell(Text(dic.OverPower),
+                            showEditIcon: false, placeholder: false),
+                        DataCell(Text(dic.Problem),
+                            showEditIcon: false, placeholder: false),
+                        DataCell(Text(dic.BadRate.toString()),
+                            showEditIcon: false, placeholder: false),
+                      ]))
+                  .toList()),
+    );
+  }
+
+  _buildListView() {
+    return Container(
+      height: 200,
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index) {
+          return new Container(
+              height: 40.0,
+              child: new Column(
+                children: <Widget>[
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.max,
+                    children: sdList == null
+                        ? []
+                        : <Widget>[
+                            _buildTextFontColor(
+                                sdList[index].Name, Colors.black),
+                            _buildTextFontColor(
+                                sdList[index].OnLine, Colors.blue),
+                            _buildTextFontColor(sdList[index].Bad, Colors.red),
+                            _buildTextFontColor(
+                                sdList[index].OverPower, Colors.black),
+                            _buildTextFontColor(
+                                sdList[index].Problem, Colors.pink),
+                            _buildTextFontColor(
+                                sdList[index].BadRate.toString(),
+                                Colors.blue[300]),
+                          ],
+                  ),
+                  _buildLine()
+                ],
+              ));
+        },
+        itemCount: sdList.length,
+      ),
+    );
   }
 
   @override
@@ -226,7 +382,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final deviceHeight = MediaQuery.of(context).size.height;
     double fontSize = 0.0;
     if (deviceHeight < 570) {
-      fontSize = 10.0;
+      fontSize = 12.0;
     } else {
       fontSize = 16.0;
     }
@@ -250,73 +406,75 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             appBar: new AppBar(
               backgroundColor: Theme.of(context).primaryColor,
               actions: <Widget>[
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    ButtonTheme(
-                      minWidth: 60.0,
-                      child: new MyToolButton(
-                        text: "新北市",
-                        textColor: Colors.white,
-                        color: Colors.transparent,
-                        fontSize: fontSize,
-                        onPress: () {
-                          _signalData();
-                        },
+                new Expanded(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      ButtonTheme(
+                        minWidth: 60.0,
+                        child: new MyToolButton(
+                          text: "新北市",
+                          textColor: Colors.white,
+                          color: Colors.transparent,
+                          fontSize: fontSize,
+                          onPress: () {
+                            _signalData();
+                          },
+                        ),
                       ),
-                    ),
-                    ButtonTheme(
-                      minWidth: 60.0,
-                      child: new MyToolButton(
-                        text: "自移",
-                        textColor: Colors.white,
-                        color: Colors.transparent,
-                        fontSize: fontSize,
-                        onPress: () {
-                          print("123");
-                        },
+                      ButtonTheme(
+                        minWidth: 60.0,
+                        child: new MyToolButton(
+                          text: "自移",
+                          textColor: Colors.white,
+                          color: Colors.transparent,
+                          fontSize: fontSize,
+                          onPress: () {
+                            print("123");
+                          },
+                        ),
                       ),
-                    ),
-                    ButtonTheme(
-                      minWidth: 60.0,
-                      child: new MyToolButton(
-                        text: "點數",
-                        textColor: Colors.white,
-                        color: Colors.transparent,
-                        fontSize: fontSize,
-                        onPress: () {
-                          print("123");
-                        },
+                      ButtonTheme(
+                        minWidth: 60.0,
+                        child: new MyToolButton(
+                          text: "點數",
+                          textColor: Colors.white,
+                          color: Colors.transparent,
+                          fontSize: fontSize,
+                          onPress: () {
+                            print("123");
+                          },
+                        ),
                       ),
-                    ),
-                    ButtonTheme(
-                      minWidth: 60.0,
-                      child: new MyToolButton(
-                        text: "鎖HP",
-                        textColor: Colors.white,
-                        color: Colors.transparent,
-                        fontSize: fontSize,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        onPress: () {
-                          print("123");
-                        },
+                      ButtonTheme(
+                        minWidth: 60.0,
+                        child: new MyToolButton(
+                          text: "鎖HP",
+                          textColor: Colors.white,
+                          color: Colors.transparent,
+                          fontSize: fontSize,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          onPress: () {
+                            print("123");
+                          },
+                        ),
                       ),
-                    ),
-                    ButtonTheme(
-                      minWidth: 60.0,
-                      child: new MyToolButton(
-                        text: "資料",
-                        textColor: Colors.white,
-                        color: Colors.transparent,
-                        fontSize: fontSize,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        onPress: () {
-                          print("123");
-                        },
+                      ButtonTheme(
+                        minWidth: 60.0,
+                        child: new MyToolButton(
+                          text: "資料",
+                          textColor: Colors.white,
+                          color: Colors.transparent,
+                          fontSize: fontSize,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          onPress: () {
+                            print("123");
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                )
               ],
             ),
 
@@ -405,127 +563,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   // SizedBox(
                   //   height: 5,
                   // ),
-                  new Card(
-                      color: Colors.white,
-                      child: Table(
-                        defaultVerticalAlignment:
-                            TableCellVerticalAlignment.middle,
-                        // defaultColumnWidth: IntrinsicColumnWidth(),
-                        columnWidths: const <int, TableColumnWidth>{
-                          // 0: FractionColumnWidth(1),
-                          1: FractionColumnWidth(.2),
-                          2: FractionColumnWidth(.2),
-                          3: FractionColumnWidth(.2),
-                        },
-                        border: TableBorder.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                            style: BorderStyle.solid),
-                        children: <TableRow>[
-                          TableRow(
-                            children: <Widget>[
-                              new AutoSizeText(
-                                ctInfo == null
-                                    ? CommonUtils.getLocale(context)
-                                        .home_cmtsTitle_lhp
-                                    : CommonUtils.getLocale(context)
-                                            .home_cmtsTitle_lhp +
-                                        ': ${ctInfo.LHP}',
-                                style: TextStyle(
-                                    fontSize: MyConstant.tinyTextSize),
-                                minFontSize: 8.0,
-                              ),
-                              new AutoSizeText(
-                                ctInfo == null
-                                    ? CommonUtils.getLocale(context)
-                                        .home_cmtsTitle_dowP
-                                    : CommonUtils.getLocale(context)
-                                            .home_cmtsTitle_dowP +
-                                        ': ',
-                                style: TextStyle(
-                                    fontSize: MyConstant.tinyTextSize,
-                                    color: Colors.purple),
-                                minFontSize: 1.0,
-                              ),
-                              new AutoSizeText(
-                                ctInfo == null
-                                    ? CommonUtils.getLocale(context)
-                                        .home_cmtsTitle_cut
-                                    : CommonUtils.getLocale(context)
-                                            .home_cmtsTitle_cut +
-                                        ': ',
-                                style: TextStyle(
-                                    fontSize: MyConstant.tinyTextSize),
-                                minFontSize: 1.0,
-                              ),
-                              new AutoSizeText(
-                                ctInfo == null
-                                    ? CommonUtils.getLocale(context)
-                                        .home_cmtsTitle_major
-                                    : CommonUtils.getLocale(context)
-                                            .home_cmtsTitle_major +
-                                        ': ${ctInfo.MAJOR}',
-                                style: TextStyle(
-                                    fontSize: MyConstant.tinyTextSize,
-                                    color: Colors.red),
-                                minFontSize: 1.0,
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: <Widget>[
-                              new AutoSizeText(
-                                ctInfo == null
-                                    ? CommonUtils.getLocale(context)
-                                        .home_cmtsTitle_hp
-                                    : CommonUtils.getLocale(context)
-                                            .home_cmtsTitle_hp +
-                                        ': ${ctInfo.HP}',
-                                style: TextStyle(
-                                    fontSize: MyConstant.tinyTextSize,
-                                    color: Colors.orange),
-                                minFontSize: 1.0,
-                              ),
-                              new AutoSizeText(
-                                ctInfo == null
-                                    ? CommonUtils.getLocale(context)
-                                        .home_cmtsTitle_watch
-                                    : CommonUtils.getLocale(context)
-                                            .home_cmtsTitle_watch +
-                                        ': ',
-                                style: TextStyle(
-                                    fontSize: MyConstant.tinyTextSize,
-                                    color: Colors.blue),
-                                minFontSize: 1.0,
-                              ),
-                              new AutoSizeText(
-                                ctInfo == null
-                                    ? CommonUtils.getLocale(context)
-                                        .home_cmtsTitle_fix2
-                                    : CommonUtils.getLocale(context)
-                                            .home_cmtsTitle_fix2 +
-                                        ': ',
-                                style: TextStyle(
-                                    fontSize: MyConstant.tinyTextSize,
-                                    color: Colors.pink),
-                                minFontSize: 1.0,
-                              ),
-                              new AutoSizeText(
-                                ctInfo == null
-                                    ? CommonUtils.getLocale(context)
-                                        .home_cmtsTitle_fix
-                                    : CommonUtils.getLocale(context)
-                                            .home_cmtsTitle_fix +
-                                        ': ${ctInfo.FIX}',
-                                style: TextStyle(
-                                    fontSize: MyConstant.tinyTextSize,
-                                    color: Colors.red),
-                                minFontSize: 1.0,
-                              ),
-                            ],
-                          ),
-                        ],
-                      )),
+                  new Card(color: Colors.white, child: _buildCmtsTable()),
                   _buildLine(),
 
                   /// 高度1的分隔線
@@ -556,9 +594,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       ],
                     ),
                   ),
+
                   /// 高度1的分隔線
                   _buildLine(),
-                  _buildSignalTable(),
+                  // _buildSignalTable(),
+                  _buildListView(),
                 ],
               ),
             ),
@@ -567,12 +607,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             bottomNavigationBar: new Material(
               color: Theme.of(context).primaryColor,
               child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   ButtonTheme(
                     minWidth: 60.0,
                     child: new MyToolButton(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      // padding: EdgeInsets.only(left: 10.0, right: 10.0),
                       text: "刷新",
                       textColor: Colors.white,
                       color: Colors.transparent,
@@ -585,7 +625,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   ButtonTheme(
                     minWidth: 60.0,
                     child: new MyToolButton(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      // padding: EdgeInsets.only(left: 10.0, right: 10.0),
                       text: "分析",
                       textColor: Colors.white,
                       color: Colors.transparent,
@@ -597,21 +637,32 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   ),
                   ButtonTheme(
                     minWidth: 60.0,
-                    child: new MyToolButton(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: "PING",
+                    child: new FlatButton.icon(
+                      icon: Image.asset(MyICons.DEFAULT_USER_ICON, width: 30, height: 30,),
                       textColor: Colors.white,
                       color: Colors.transparent,
-                      fontSize: fontSize,
-                      onPress: () {
-                        print("123");
+                      label: Text('PING', style: TextStyle(fontSize: 10),),
+                      onPressed: (){
+                        print(123);
                       },
-                    ),
+                    )
+                    
+                    // new MyToolButton(
+                    //   padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                  
+                    //   text: "PING",
+                    //   textColor: Colors.white,
+                    //   color: Colors.transparent,
+                    //   fontSize: fontSize,
+                    //   onPress: () {
+                    //     print("123");
+                    //   },
+                    // ),
                   ),
                   ButtonTheme(
                     minWidth: 60.0,
                     child: new MyToolButton(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      // padding: EdgeInsets.only(left: 10.0, right: 10.0),
                       text: "設定",
                       textColor: Colors.white,
                       color: Colors.transparent,
@@ -624,7 +675,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   ButtonTheme(
                     minWidth: 60.0,
                     child: new MyToolButton(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      // padding: EdgeInsets.only(left: 10.0, right: 10.0),
                       text: "返回",
                       textColor: Colors.white,
                       color: Colors.transparent,
