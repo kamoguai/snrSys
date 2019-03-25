@@ -116,4 +116,7 @@ abstract class MyStringBase {
   String home_signal_problem;
 
   String home_signal_percent;
+
+  String home_signal_total;
+  
 }

@@ -117,5 +117,7 @@ class MyStringZh extends MyStringBase {
   @override
   String home_signal_problem = "問題";
   @override
-  String home_signal_percent = "%";
+  String home_signal_percent = " % ";
+  @override
+  String home_signal_total = "合計";
 }
