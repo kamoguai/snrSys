@@ -15,6 +15,10 @@ import 'package:snr/common/model/HomeCmtsTitleInfo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:snr/common/model/HomeSignal.dart';
 import 'package:snr/widget/MyCardItem.dart';
+import 'package:snr/widget/MyListState.dart';
+import 'package:snr/common/dao/BigBadDao.dart';
+import 'package:snr/common/model/BigBad.dart';
+
 
 /**
  * 主頁
@@ -27,17 +31,18 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-var _major = "0";
-
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin<HomePage>, MyListState<HomePage> {
   CmtsTitleInfo ctInfo;
   List<SignalData> sdList = new List();
   List<SignalData> noSdList = new List();
+  List<Bigbad> bigbadList = new List();
 
   var selectArea;
 
   ///取得cmts表資料
   _cmtsTitleData() async {
+    ctInfo = null;
     var res = await HomeDao.getQueryCMTSMainTitleInfoAPI();
     if (res != null && res.result) {
       setState(() {
@@ -46,9 +51,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
     ;
   }
-
   ///取得signal資料
   _signalData() async {
+    sdList = [];
+    noSdList = [];
     var res = await HomeDao.getQueryAllSNRSignalAPI();
     if (res != null && res.result) {
       setState(() {
@@ -65,12 +71,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       });
     }
   }
-
+  ///取得重大list
+  _bigbadData() async {
+    bigbadList = [];
+    var res = await BigbadDao.getQueryBigBadAPI();
+    if (res != null && res.result) {
+      setState(() {
+        List<Bigbad> list = res.data;
+        bigbadList = list;
+      });
+    }
+  }
   @override
   void initState() {
     super.initState();
     _cmtsTitleData();
     _signalData();
+    _bigbadData();
     // areaItemList();
   }
 
@@ -78,6 +95,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void dispose() {
     super.dispose();
   }
+
+  @override
+  bool get isRefreshFirst => false;
 
   // @override
   // void didChangeDependencies() {
@@ -216,6 +236,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       text,
       style: TextStyle(color: color, fontSize: _fontSize()),
       minFontSize: 9.0,
+      textAlign: TextAlign.center,
     );
   }
 
@@ -305,91 +326,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
-  ///signal table
-  _buildSignalTable() {
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      // height: 140.0,
-      // color: Colors.yellow,
-      child: DataTable(
-          columns: <DataColumn>[
-            DataColumn(
-                label: Text(
-                  CommonUtils.getLocale(context).home_signal_area,
-                  style: TextStyle(
-                      color: Colors.black, fontSize: MyConstant.minTextSize),
-                ),
-                // label: Text('', style: TextStyle(color: Colors.black),),
-                numeric: false,
-                tooltip: 'To display '),
-            DataColumn(
-                label: Text(
-                  CommonUtils.getLocale(context).home_signal_online,
-                  style: TextStyle(
-                      color: Colors.blue, fontSize: MyConstant.minTextSize),
-                ),
-                // label: Text('', style: TextStyle(color: Colors.black),),
-                numeric: false,
-                tooltip: 'To display '),
-            DataColumn(
-                label: Text(
-                  CommonUtils.getLocale(context).home_sinal_bad,
-                  style: TextStyle(
-                      color: Colors.red, fontSize: MyConstant.minTextSize),
-                ),
-                // label: Text('', style: TextStyle(color: Colors.black),),
-                numeric: false,
-                tooltip: 'To display '),
-            DataColumn(
-                label: Text(
-                  CommonUtils.getLocale(context).home_signal_upP,
-                  style: TextStyle(
-                      color: Colors.black, fontSize: MyConstant.minTextSize),
-                ),
-                // label: Text('', style: TextStyle(color: Colors.black),),
-                numeric: false,
-                tooltip: 'To display '),
-            DataColumn(
-                label: Text(
-                  CommonUtils.getLocale(context).home_signal_problem,
-                  style: TextStyle(
-                      color: Colors.pink, fontSize: MyConstant.minTextSize),
-                ),
-                // label: Text('', style: TextStyle(color: Colors.black),),
-                numeric: false,
-                tooltip: 'To display '),
-            DataColumn(
-                label: Text(
-                  CommonUtils.getLocale(context).home_signal_percent,
-                  style: TextStyle(
-                      color: Colors.blue[300],
-                      fontSize: MyConstant.minTextSize),
-                ),
-                // label: Text('', style: TextStyle(color: Colors.black),),
-                numeric: false,
-                tooltip: 'To display '),
-          ],
-          rows: sdList == null
-              ? []
-              : sdList
-                  .map((dic) => DataRow(cells: [
-                        DataCell(Text(dic.Name),
-                            showEditIcon: false, placeholder: false),
-                        DataCell(Text(dic.OnLine),
-                            showEditIcon: false, placeholder: false),
-                        DataCell(Text(dic.Bad),
-                            showEditIcon: false, placeholder: false),
-                        DataCell(Text(dic.OverPower),
-                            showEditIcon: false, placeholder: false),
-                        DataCell(Text(dic.Problem),
-                            showEditIcon: false, placeholder: false),
-                        DataCell(Text(dic.BadRate.toString()),
-                            showEditIcon: false, placeholder: false),
-                      ]))
-                  .toList()),
-    );
-  }
-
   _buildSignalHead() {
     return new Container(
       height: 40.0,
@@ -397,116 +333,301 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildTextFontColor(
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor(
               CommonUtils.getLocale(context).home_signal_area, Colors.black),
-          _buildTextFontColor(
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor(
               CommonUtils.getLocale(context).home_signal_online, Colors.blue),
-          _buildTextFontColor(
+            )
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor(
               CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
-          _buildTextFontColor(
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor(
               CommonUtils.getLocale(context).home_signal_upP, Colors.black),
-          _buildTextFontColor(
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor(
               CommonUtils.getLocale(context).home_signal_problem, Colors.pink),
-          _buildTextFontColor(
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor(
               CommonUtils.getLocale(context).home_signal_percent,
               Colors.blue[300]),
+            ),
+          )
         ],
       ),
     );
   }
 
+  List<GestureDetector> _listView() {
+    var index = 0;
+    return sdList.map((sd){
+      var contrainer = Container(
+        decoration: new BoxDecoration(color: Colors.white),
+        child: new Row(
+          children: <Widget>[
+            new Expanded(
+              child: new Container(
+                padding: EdgeInsets.all(5.0),
+                child: Text(sd.Name)
+              ),
+            )
+          ],
+        ),
+      );
+      index = index + 1;
+      final getstureDetector = GestureDetector(
+        child: contrainer,
+        onTap: () {
+          print(123);
+        },
+      );
+      return getstureDetector;
+    }).toList();
+  }
+
   ///signal list body
   _buildSignalBody() {
     return Container(
-      height: 200,
+      height: 120,
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         itemBuilder: (context, index) {
-          return new Container(
-              height: 40.0,
-              child: new Column(
-                children: <Widget>[
-                  new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.max,
-                    children: sdList == null
-                        ? []
-                        : <Widget>[
-                            _buildTextFontColor(
-                                sdList[index].Name, Colors.black),
-                            _buildTextFontColor(
-                                sdList[index].OnLine, Colors.blue),
-                            _buildTextFontColor(sdList[index].Bad, Colors.red),
-                            _buildTextFontColor(
-                                sdList[index].OverPower, Colors.black),
-                            _buildTextFontColor(
-                                sdList[index].Problem, Colors.pink),
-                            _buildTextFontColor(
-                                '${(sdList[index].BadRate * 1000) / 10}%',
-                                Colors.blue[300]),
-                          ],
-                  ),
-                  _buildLine()
-                ],
-              ));
+          return new GestureDetector(
+            child: new Container(
+                height: 44.0,
+                child: new Column(
+                  children: <Widget>[
+                    new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.max,
+                      children: sdList == null
+                          ? []
+                          : <Widget>[
+                              new Expanded(
+                                child: new Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: _buildTextFontColor(
+                                  sdList[index].Name, Colors.black),
+                              ),
+                              ),
+                              new Expanded(
+                                child: new Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: _buildTextFontColor(
+                                  sdList[index].OnLine, Colors.blue),
+                              ),
+                              ),
+                              new Expanded(
+                                child: new Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: _buildTextFontColor(
+                                  sdList[index].Bad, Colors.red),
+                              ),
+                              ),
+                              new Expanded(
+                                child:  new Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: _buildTextFontColor(
+                                  sdList[index].OverPower, Colors.black),
+                              ),
+                              ),
+                              new Expanded(
+                                child: new Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: _buildTextFontColor(
+                                  sdList[index].Problem, Colors.pink),
+                              ),
+                              ),
+                              new Expanded(
+                                child:  new Container(
+                                padding: EdgeInsets.all(5.0),
+                          
+                                child: _buildTextFontColor(
+                                  '${((sdList[index].BadRate * 1000) / 10).toStringAsFixed(1)}%',
+                                  Colors.blue[300]),
+                              )   
+                              )
+                                                                               
+                            ],
+                    ),
+                    _buildLine()
+                  ],
+                )),
+            onTap: () {
+              print('selected item -> ${index.toString()}');
+              NavigatorUtils.goAbnormalCard(context);
+            }
+          );
         },
         itemCount: sdList.length,
       ),
     );
   }
+  ///signal 底
   _buildSignalFooter() {
+    var intVb = 0;
+    var intFix = 0;
+    var intOnline = 0;
+    var intProblem = 0;
+    var intOverPower = 0;
+    var intBad = 0;
+    var doubleRate = 0.0;
+    if (sdList.length > 0) {
+      for (int i = 0; i < sdList.length; i++) {
+        var dic = sdList[i];
+        intFix += int.parse(dic.AssignFix);
+        intOnline += int.parse(dic.OnLine);
+        intProblem += int.parse(dic.Problem);
+        intOverPower += int.parse(dic.OverPower);
+        intBad += int.parse(dic.Bad);
+        doubleRate += dic.BadRate;
+      }
+    }
     return new Container(
       height: 40.0,
       color: Color(MyColors.hexFromStr('#f0fcff')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildTextFontColor(
-              CommonUtils.getLocale(context).home_signal_area, Colors.black),
-          _buildTextFontColor(
-              CommonUtils.getLocale(context).home_signal_online, Colors.blue),
-          _buildTextFontColor(
-              CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
-          _buildTextFontColor(
-              CommonUtils.getLocale(context).home_signal_upP, Colors.black),
-          _buildTextFontColor(
-              CommonUtils.getLocale(context).home_signal_problem, Colors.pink),
-          _buildTextFontColor(
-              CommonUtils.getLocale(context).home_signal_percent,
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor(
+              CommonUtils.getLocale(context).home_signal_total, Colors.black),
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor("${intOnline}", Colors.blue),
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor("${intBad}", Colors.red),
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor("${intOverPower}", Colors.black),
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor("${intProblem}", Colors.pink),
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: _buildTextFontColor("${(((doubleRate * 1000) / 10) / sdList.length).toStringAsFixed(1)}%",
               Colors.blue[300]),
+            ),
+          )
         ],
       ),
     );
   }
+  ///位置錯誤
   _buildWrongPlace() {
     var y = 0;
     var str = "";
     if (noSdList.length > 0) {
       for (int i = 0; i < noSdList.length; i++) {
         var dic = noSdList[i];
-        // if (y == 2) {
-        //   str = "${str}\n";
-        // }
-        // else {
-        //   y = y + 1;
-        //   str = "${str} (${dic.Name}:${dic.OnLine})";
-        // }
         str += "(${dic.Name}:${dic.OnLine})";
         y++;
-        if (y == 2){
+        if (y == 2) {
           str += "\n";
         }
       }
+      noSdList = [];
       print("無對應 -> ${str}");
-      return AutoSizeText(
-        str,
-        textAlign: TextAlign.left,
-        minFontSize: 9.0,
-        maxFontSize: 16.0,
+      return Row(
+        children: <Widget>[
+          AutoSizeText(
+            str,
+            textAlign: TextAlign.left,
+            minFontSize: 9.0,
+            maxFontSize: 16.0,
+          ),
+        ],
       );
     }
   }
-
+  ///重大信息
+  _buildBigbadListView() {
+    return new Container(
+      height: 50.0,
+      child: new ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index) {
+          return new GestureDetector(
+            child: new Container(
+              height: 40.0,
+              child: new Column(
+                children: <Widget>[
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: bigbadList == null ? [] : <Widget>[
+                      new Container(
+                          padding: EdgeInsets.all(5.0),
+                          child: _buildTextFontColor("${bigbadList[index].Name}-${bigbadList[index].CIF}", Colors.black),
+                      ),
+                      new Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: _buildTextFontColor(bigbadList[index].DATE, Colors.black),
+                      ),
+                      new Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: _buildTextFontColor(bigbadList[index].Time, Colors.red),
+                      ),
+                      new Container(
+                        child: _buildTextFontColor("~", Colors.black)
+                      ),
+                      new Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: _buildTextFontColor(bigbadList[index].RTIME == null ? "--:--" : bigbadList[index].RTIME, Colors.blue),
+                      )
+                      
+                    ],
+                  ),
+                  _buildLine()
+                ],
+              )
+            ),
+          );
+        },
+        itemCount: bigbadList.length,
+      ),
+    );
+  }
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     ///通過state判斷app前後台切換
@@ -537,8 +658,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             return _dialogExitApp(context);
           },
           child: SafeArea(
-            top: true,
             bottom: true,
+            top: false,
             child: new Scaffold(
               ///appBar
               appBar: new AppBar(
@@ -718,32 +839,43 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     //   height: 5,
                     // ),
                     new Card(color: Colors.white, child: _buildCmtsTable()),
-
                     /// 高度1的分隔線
                     _buildLine(),
-
                     /// signal table head
                     _buildSignalHead(),
-
                     /// 高度1的分隔線
                     _buildLine(),
-
                     ///signal table body
                     _buildSignalBody(),
-                    new Container(
-                      height: 30,
-                    ),
+                    /// 高度1的分隔線
                     _buildLine(),
                     new Container(
                       alignment: Alignment(0, 0),
                       padding: EdgeInsets.only(left: 5.0),
-                      color: Colors.yellow,
                       // padding: EdgeInsets.all(10.0),
                       height: 40,
                       child: _buildWrongPlace(),
                     ),
+                    /// 高度1的分隔線
                     _buildLine(),
-
+                    /// signal table底
+                    _buildSignalFooter(),
+                    /// 高度1的分隔線
+                    _buildLine(),
+                    new Container(
+                      height: 20.0,
+                      child: Text(
+                        CommonUtils.getLocale(context).home_cmtsTitle_major,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: fontSize
+                        ),  
+                      ),
+                    ),
+                     /// 高度1的分隔線
+                    _buildLine(),
+                    _buildBigbadListView(),
+                   
                   ],
                 ),
               ),
@@ -763,7 +895,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         color: Colors.transparent,
                         fontSize: fontSize,
                         onPress: () {
-                          print("123");
+                          showRefreshLoading();
+                          setState(() {
+                            _cmtsTitleData();
+                            _signalData();
+                            _bigbadData();
+                          });
                         },
                       ),
                     ),
@@ -792,7 +929,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           color: Colors.transparent,
                           label: Text(
                             'PING',
-                            style: TextStyle(fontSize: 10),
+                            style: TextStyle(fontSize: fontSize),
                           ),
                           onPressed: () {
                             print(123);
@@ -834,7 +971,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         fontSize: fontSize,
                         mainAxisAlignment: MainAxisAlignment.start,
                         onPress: () {
-                          print("123");
+                          NavigatorUtils.goLogin(context);
                         },
                       ),
                     ),

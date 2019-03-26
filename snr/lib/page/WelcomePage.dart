@@ -35,7 +35,7 @@ class _WelcomePageState extends State<WelcomePage> {
       UserDao.initUserInfo(store).then((res) {
          // 將使用者信息去db查詢
          if (res != null && res.result) {
-
+           NavigatorUtils.goHome(context);
          }
          else {
            NavigatorUtils.goLogin(context);

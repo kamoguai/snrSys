@@ -35,6 +35,7 @@ class UserDao {
     if (res != null && res.result) {
       store.dispatch(UpdateUserAction(res.data));
     }
+    return new DataResult(res.data, (res.result));
   }
 
    ///獲取本地登入用戶信息
