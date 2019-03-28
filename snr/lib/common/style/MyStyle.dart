@@ -77,7 +77,6 @@ class MyConstant {
   static const middleTextWhiteSize = 16.0;
   static const smallTextSize = 14.0;
   static const minTextSize = 12.0;
-  static const miniTextSize = 10.0;
   static const tinyTextSize = 10.0;
 
   static const minText = TextStyle(
@@ -316,4 +315,32 @@ class MyICons {
   static const IconData PUSH_ITEM_EDIT = Icons.mode_edit;
   static const IconData PUSH_ITEM_ADD = Icons.add_box;
   static const IconData PUSH_ITEM_MIN = Icons.indeterminate_check_box;
+}
+
+class MyScreen {
+  ///首頁bar按鈕長度
+  static double homePageBarButtonWidth(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double width = 0.0;
+    if (deviceHeight < 570) {
+      width = 50.0;
+    } else {
+      width = 60.0;
+    }
+    return width;
+  }
+
+  ///首頁字體大小
+  static double homePageFontSize(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double fontSize = 0.0;
+    if (deviceHeight < 570) {
+      fontSize = MyConstant.tinyTextSize;
+    } else if (deviceHeight > 800) {
+      fontSize = MyConstant.normalTextSize;
+    } else {
+      fontSize = MyConstant.middleTextWhiteSize;
+    }
+    return fontSize;
+  }
 }

@@ -120,4 +120,6 @@ class MyStringZh extends MyStringBase {
   String home_signal_percent = " % ";
   @override
   String home_signal_total = "合計";
+  @override
+  String area_dialog_title = "請選擇區域";
 }

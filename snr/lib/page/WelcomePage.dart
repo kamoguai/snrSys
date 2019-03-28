@@ -33,7 +33,7 @@ class _WelcomePageState extends State<WelcomePage> {
     new Future.delayed(const Duration(seconds: 2), () {
       //延遲2秒跳轉
       UserDao.initUserInfo(store).then((res) {
-         // 將使用者信息去db查詢
+         // 將使用者信息去store查詢
          if (res != null && res.result) {
            NavigatorUtils.goHome(context);
          }

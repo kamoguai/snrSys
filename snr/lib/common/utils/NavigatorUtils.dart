@@ -26,7 +26,7 @@ class NavigatorUtils {
   static NavigatorRouter(BuildContext context, Widget widget) {
     return Navigator.push(context, new CupertinoPageRoute(builder: (context) => widget));
   }
-
+  
   ///登入頁
   static goLogin(BuildContext context) {
     Navigator.pushReplacementNamed(context, LoginPage.sName);
@@ -37,8 +37,8 @@ class NavigatorUtils {
     Navigator.pushReplacementNamed(context, HomePage.sName);
   }
 
-  static goAbnormalCard(BuildContext context) {
-    NavigatorRouter(context, new AbnormalCardPage());
+  static goAbnormalCard(BuildContext context, String cmtsCode, String name, String time) {
+    NavigatorRouter(context, new AbnormalCardPage(cmtsCode, name, time));
   }
 
   static goAbnormalNode(BuildContext context) {
