@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:device_info/device_info.dart';
 import 'package:date_format/date_format.dart';
+import 'package:snr/common/config/Config.dart';
+import 'package:snr/common/local/LocalStorage.dart';
 
 ///地址數據
 class Address {
@@ -171,8 +173,13 @@ class Address {
   static postResetCM(cmts, custNo, accName) {
     return "${kSNRHostPingName}/SNRping.php?Action=ResetCM&Custno=$custNo&CMTS=$cmts&AccName=$accName";
   }
-
+  ///重啟CM
   static postReStartCM(cmts,custNo,accName) {
     return "${kSNRHostPingName}/SNRping.php?Action=RestartCM&Custno=$custNo&CMTS=$cmts&AccName=$accName";
+  }
+  ///abnormal
+  static getSNRSignalByCMTSAPI(cmtsCode){
+    var date = formatDate(DateTime.now(), [yyyy,'-',mm,'-',dd]);
+    return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRSignalByCMTS&CMTSCode=${cmtsCode}&Date=${date}";
   }
 }
