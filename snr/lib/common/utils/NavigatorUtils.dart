@@ -37,8 +37,8 @@ class NavigatorUtils {
     Navigator.pushReplacementNamed(context, HomePage.sName);
   }
 
-  static goAbnormalCard(BuildContext context) {
-    NavigatorRouter(context, new AbnormalCardPage());
+  static goAbnormalCard(BuildContext context, String cmtsCode, String name, String time) {
+    NavigatorRouter(context, new AbnormalCardPage(cmtsCode, name, time));
   }
 
   static goAbnormalNode(BuildContext context) {

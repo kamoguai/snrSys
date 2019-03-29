@@ -102,4 +102,16 @@ class UserDao {
       }
     }
   }
+    ///
+  static isUpdateApp(context) async {
+    var res = await HttpManager.netFetch(Address.getValidateVersionAPI(), null, null, null);
+    if (res != null && res.result && res.data.length > 0) {
+      if (res.data['ReturnCode'] == "00") {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+  }
 }

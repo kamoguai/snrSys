@@ -1,20 +1,16 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:snr/common/localization/DefaultLocalizations.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
-import 'package:snr/widget/MyTabBarWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
-import 'package:snr/widget/MyFlexButton.dart';
 import 'package:snr/common/dao/HomeDao.dart';
 import 'package:snr/common/model/HomeCmtsTitleInfo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:snr/common/model/HomeSignal.dart';
-import 'package:snr/widget/MyCardItem.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/common/dao/BigBadDao.dart';
 import 'package:snr/common/model/BigBad.dart';
@@ -33,12 +29,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage>, MyListState<HomePage> {
+  
   CmtsTitleInfo ctInfo;
   List<SignalData> sdList = new List();
   List<SignalData> noSdList = new List();
   List<Bigbad> bigbadList = new List();
 
-  var selectArea;
+  var selectArea = '新北市';
 
   ///取得cmts表資料
   _cmtsTitleData() async {
@@ -67,8 +64,8 @@ class _HomePageState extends State<HomePage>
             sdList.add(dic);
           }
         }
-        // sdList = res.data;
       });
+      isLoading = false;
     }
   }
   ///取得重大list
@@ -79,16 +76,18 @@ class _HomePageState extends State<HomePage>
       setState(() {
         List<Bigbad> list = res.data;
         bigbadList = list;
+        
       });
     }
   }
+
   @override
   void initState() {
     super.initState();
+    isLoading = true;
     _cmtsTitleData();
     _signalData();
     _bigbadData();
-    // areaItemList();
   }
 
   @override
@@ -99,13 +98,6 @@ class _HomePageState extends State<HomePage>
   @override
   bool get isRefreshFirst => false;
 
-  // @override
-  // void didChangeDependencies() {
-  //   setState(() {
-  //     selectArea =AreaSelector(context)[0];
-  //   });
-  //   super.didChangeDependencies();
-  // }
   ///提示退出app
   Future<bool> _dialogExitApp(BuildContext context) {
     return showDialog(
@@ -124,105 +116,34 @@ class _HomePageState extends State<HomePage>
               ],
             ));
   }
-
-  _fontSize() {
-    final deviceHeight = MediaQuery.of(context).size.height;
-    double fontSize = 0.0;
-    if (deviceHeight < 570) {
-      fontSize = 10.0;
-    } else {
-      fontSize = 16.0;
-    }
-    return fontSize;
-  }
-
-  List<DropdownMenuItem> areaItemList() {
-    List<DropdownMenuItem> items = new List();
-    DropdownMenuItem item1 = new DropdownMenuItem(
-      value: "新北市",
-      child: new Text("新北市"),
+ 
+ 
+  ///區域dialog, ios樣式
+  _showAlertSheetController(BuildContext context) {
+    showCupertinoModalPopup<String>(context: context, builder: (context) {
+      var dialog = CupertinoActionSheet(
+      title: Text(CommonUtils.getLocale(context).area_dialog_title),
+      cancelButton: CupertinoActionSheetAction(onPressed: (){
+        Navigator.pop(context,'cancel');
+      },child: Text('取消'),),
+      actions: <Widget>[
+        CupertinoActionSheetAction(onPressed: (){
+          setState(() {
+            selectArea = '新北市';
+          });
+          Navigator.pop(context);
+        },child: Text('新北市'),),
+        CupertinoActionSheetAction(onPressed: (){
+          setState(() {
+            selectArea = '台北市';
+          });
+          Navigator.pop(context);
+        },child: Text('台北市'),),
+      ],
     );
-    DropdownMenuItem item2 = new DropdownMenuItem(
-      value: "台北市",
-      child: new Text("台北市"),
-    );
-    items.add(item1);
-    items.add(item2);
-    return items;
+    return dialog;
+    });
   }
-
-  ///頁面上方下拉選單
-  _renderHeader(Store<SysState> store) {
-    if (selectArea == null) {
-      return Container();
-    }
-    return new MyCardItem(
-      color: store.state.themeData.primaryColor,
-      margin: EdgeInsets.all(10.0),
-      shape: new RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(4.0)),
-      ),
-      child: new Padding(
-        padding:
-            new EdgeInsets.only(left: 0.0, top: 5.0, right: 0.0, bottom: 5.0),
-        child: new Row(
-          children: <Widget>[
-            _renderHeaderPopItem(selectArea.name, AreaSelector(context),
-                (AreaCodeModel result) {
-              setState(() {
-                selectArea = result;
-              });
-            })
-          ],
-        ),
-      ),
-    );
-  }
-
-  _renderHeaderPopItem(String data, List<AreaCodeModel> list,
-      PopupMenuItemSelected<AreaCodeModel> onSelected) {
-    return new Expanded(
-      child: new PopupMenuButton<AreaCodeModel>(
-        child: new Center(
-            child: new Text(data, style: MyConstant.middleTextWhite)),
-        onSelected: onSelected,
-        itemBuilder: (BuildContext context) {
-          return _renderHeaderPopItemChild(list);
-        },
-      ),
-    );
-  }
-
-  _renderHeaderPopItemChild(List<AreaCodeModel> data) {
-    List<PopupMenuEntry<AreaCodeModel>> list = new List();
-    for (AreaCodeModel item in data) {
-      list.add(PopupMenuItem<AreaCodeModel>(
-        value: item,
-        child: new Text(item.name),
-      ));
-    }
-    return list;
-  }
-
-  _buildButtonItem(String title, var value, String color, onPressed) {
-    return new Center(
-      child: new RaisedButton(
-        elevation: 2.0,
-        highlightElevation: 8.0,
-        disabledElevation: 0.0,
-        clipBehavior: Clip.none,
-        padding: EdgeInsets.only(top: 8.0),
-        color: Color(MyColors.hexFromStr(color)),
-        textColor: Colors.white,
-        child: Text(
-          title,
-          textAlign: TextAlign.center,
-        ),
-        onPressed: onPressed,
-      ),
-    );
-  }
-
   ///分隔線
   _buildLine() {
     return new Container(
@@ -230,18 +151,23 @@ class _HomePageState extends State<HomePage>
       color: Colors.grey,
     );
   }
-
+  ///自動縮放text
   _buildTextFontColor(String text, Color color) {
     return AutoSizeText(
       text,
-      style: TextStyle(color: color, fontSize: _fontSize()),
-      minFontSize: 9.0,
+      style: TextStyle(color: color, fontSize: MyScreen.homePageFontSize(context)),
+      minFontSize: 5.0,
       textAlign: TextAlign.center,
     );
   }
 
   /// cmts talbe
   _buildCmtsTable() {
+    var miniFontSize = MyScreen.homePageFontSize(context);
+    if (miniFontSize < 11.0){
+      miniFontSize = miniFontSize - 2;
+    }
+   
     return Table(
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       // defaultColumnWidth: IntrinsicColumnWidth(),
@@ -261,21 +187,21 @@ class _HomePageState extends State<HomePage>
                   ? CommonUtils.getLocale(context).home_cmtsTitle_lhp
                   : CommonUtils.getLocale(context).home_cmtsTitle_lhp +
                       ': ${ctInfo.LHP}',
-              style: TextStyle(fontSize: _fontSize()),
+              style: TextStyle(fontSize: miniFontSize),
               minFontSize: 8.0,
             ),
             new AutoSizeText(
               ctInfo == null
                   ? CommonUtils.getLocale(context).home_cmtsTitle_dowP
                   : CommonUtils.getLocale(context).home_cmtsTitle_dowP + ': ',
-              style: TextStyle(fontSize: _fontSize(), color: Colors.purple),
+              style: TextStyle(fontSize: miniFontSize, color: Colors.purple),
               minFontSize: 1.0,
             ),
             new AutoSizeText(
               ctInfo == null
                   ? CommonUtils.getLocale(context).home_cmtsTitle_cut
                   : CommonUtils.getLocale(context).home_cmtsTitle_cut + ': ',
-              style: TextStyle(fontSize: _fontSize()),
+              style: TextStyle(fontSize: miniFontSize),
               minFontSize: 1.0,
             ),
             new AutoSizeText(
@@ -283,7 +209,7 @@ class _HomePageState extends State<HomePage>
                   ? CommonUtils.getLocale(context).home_cmtsTitle_major
                   : CommonUtils.getLocale(context).home_cmtsTitle_major +
                       ': ${ctInfo.MAJOR}',
-              style: TextStyle(fontSize: _fontSize(), color: Colors.red),
+              style: TextStyle(fontSize: miniFontSize, color: Colors.red),
               minFontSize: 1.0,
             ),
           ],
@@ -295,21 +221,21 @@ class _HomePageState extends State<HomePage>
                   ? CommonUtils.getLocale(context).home_cmtsTitle_hp
                   : CommonUtils.getLocale(context).home_cmtsTitle_hp +
                       ': ${ctInfo.HP}',
-              style: TextStyle(fontSize: _fontSize(), color: Colors.orange),
+              style: TextStyle(fontSize: miniFontSize, color: Colors.orange),
               minFontSize: 1.0,
             ),
             new AutoSizeText(
               ctInfo == null
                   ? CommonUtils.getLocale(context).home_cmtsTitle_watch
                   : CommonUtils.getLocale(context).home_cmtsTitle_watch + ': ',
-              style: TextStyle(fontSize: _fontSize(), color: Colors.blue),
+              style: TextStyle(fontSize: miniFontSize, color: Colors.blue),
               minFontSize: 1.0,
             ),
             new AutoSizeText(
               ctInfo == null
                   ? CommonUtils.getLocale(context).home_cmtsTitle_fix2
                   : CommonUtils.getLocale(context).home_cmtsTitle_fix2 + ': ',
-              style: TextStyle(fontSize: _fontSize(), color: Colors.pink),
+              style: TextStyle(fontSize: miniFontSize, color: Colors.pink),
               minFontSize: 1.0,
             ),
             new AutoSizeText(
@@ -317,7 +243,7 @@ class _HomePageState extends State<HomePage>
                   ? CommonUtils.getLocale(context).home_cmtsTitle_fix
                   : CommonUtils.getLocale(context).home_cmtsTitle_fix +
                       ': ${ctInfo.FIX}',
-              style: TextStyle(fontSize: _fontSize(), color: Colors.red),
+              style: TextStyle(fontSize: miniFontSize, color: Colors.red),
               minFontSize: 1.0,
             ),
           ],
@@ -325,7 +251,7 @@ class _HomePageState extends State<HomePage>
       ],
     );
   }
-
+  ///信號表頭
   _buildSignalHead() {
     return new Container(
       height: 40.0,
@@ -410,8 +336,14 @@ class _HomePageState extends State<HomePage>
 
   ///signal list body
   _buildSignalBody() {
+    var miniFontSize = MyScreen.homePageFontSize(context);
+    var tableHeight = 120.0;
+    final deviceHeight = MediaQuery.of(context).size.height;
+    if (deviceHeight > 800) {
+      tableHeight = 210.0;
+    }
     return Container(
-      height: 120,
+      height: tableHeight,
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         itemBuilder: (context, index) {
@@ -429,48 +361,81 @@ class _HomePageState extends State<HomePage>
                               new Expanded(
                                 child: new Container(
                                 padding: EdgeInsets.all(5.0),
-                                child: _buildTextFontColor(
-                                  sdList[index].Name, Colors.black),
-                              ),
+                                child: new Text(
+                                  sdList[index].Name,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: miniFontSize
+                                  ),
+                                )
+                                ),
                               ),
                               new Expanded(
                                 child: new Container(
                                 padding: EdgeInsets.all(5.0),
-                                child: _buildTextFontColor(
-                                  sdList[index].OnLine, Colors.blue),
-                              ),
+                                child: new Text(
+                                  sdList[index].OnLine,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: miniFontSize
+                                  ),
+                                ),
+                                ),
                               ),
                               new Expanded(
                                 child: new Container(
                                 padding: EdgeInsets.all(5.0),
-                                child: _buildTextFontColor(
-                                  sdList[index].Bad, Colors.red),
-                              ),
+                                child: new Text(
+                                  sdList[index].Bad,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: miniFontSize
+                                  ),
+                                ),
+                                ),
                               ),
                               new Expanded(
                                 child:  new Container(
                                 padding: EdgeInsets.all(5.0),
-                                child: _buildTextFontColor(
-                                  sdList[index].OverPower, Colors.black),
-                              ),
+                                child: new Text(
+                                   sdList[index].OverPower,
+                                   textAlign: TextAlign.center,
+                                   style: TextStyle(
+                                     color: Colors.black,
+                                     fontSize: miniFontSize
+                                   ),
+                                )
+                                ),
                               ),
                               new Expanded(
                                 child: new Container(
                                 padding: EdgeInsets.all(5.0),
-                                child: _buildTextFontColor(
-                                  sdList[index].Problem, Colors.pink),
-                              ),
+                                child: new Text(
+                                  sdList[index].Problem,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                    fontSize: miniFontSize
+                                  ),
+                                )
+                                ),
                               ),
                               new Expanded(
                                 child:  new Container(
                                 padding: EdgeInsets.all(5.0),
-                          
-                                child: _buildTextFontColor(
+                                child: new Text(
                                   '${((sdList[index].BadRate * 1000) / 10).toStringAsFixed(1)}%',
-                                  Colors.blue[300]),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color:  Colors.blue[300],
+                                    fontSize: miniFontSize
+                                  ),
+                                )
                               )   
                               )
-                                                                               
                             ],
                     ),
                     _buildLine()
@@ -478,7 +443,10 @@ class _HomePageState extends State<HomePage>
                 )),
             onTap: () {
               print('selected item -> ${index.toString()}');
-              NavigatorUtils.goAbnormalCard(context);
+              String cmtsCode = sdList[index].CMTSCode;
+              String name = sdList[index].Name;
+              String time = sdList[index].Time;
+              NavigatorUtils.goAbnormalCard(context, cmtsCode, name, time);
             }
           );
         },
@@ -488,6 +456,8 @@ class _HomePageState extends State<HomePage>
   }
   ///signal 底
   _buildSignalFooter() {
+    var miniFontSize =MyScreen.homePageFontSize(context);
+
     var intVb = 0;
     var intFix = 0;
     var intOnline = 0;
@@ -515,39 +485,79 @@ class _HomePageState extends State<HomePage>
           new Expanded(
             child: new Container(
               padding: EdgeInsets.all(5.0),
-              child: _buildTextFontColor(
-              CommonUtils.getLocale(context).home_signal_total, Colors.black),
+              child: new Text(
+                CommonUtils.getLocale(context).home_signal_total, 
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: miniFontSize
+                ),
+              )
             ),
           ),
           new Expanded(
             child: new Container(
               padding: EdgeInsets.all(5.0),
-              child: _buildTextFontColor("${intOnline}", Colors.blue),
+              child: new Text(
+                "${intOnline}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: miniFontSize
+                ),
+              )
             ),
           ),
           new Expanded(
             child: new Container(
               padding: EdgeInsets.all(5.0),
-              child: _buildTextFontColor("${intBad}", Colors.red),
+              child: new Text(
+                "${intBad}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: miniFontSize
+                ),
+              )
             ),
           ),
           new Expanded(
             child: new Container(
               padding: EdgeInsets.all(5.0),
-              child: _buildTextFontColor("${intOverPower}", Colors.black),
+              child: new Text(
+                "${intOverPower}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: miniFontSize
+                ),
+              )
             ),
           ),
           new Expanded(
             child: new Container(
               padding: EdgeInsets.all(5.0),
-              child: _buildTextFontColor("${intProblem}", Colors.pink),
+              child: new Text(
+                "${intProblem}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.pink,
+                  fontSize: miniFontSize
+                ),
+              )
             ),
           ),
           new Expanded(
             child: new Container(
               padding: EdgeInsets.all(5.0),
-              child: _buildTextFontColor("${(((doubleRate * 1000) / 10) / sdList.length).toStringAsFixed(1)}%",
-              Colors.blue[300]),
+              child: new Text(
+                "${(((doubleRate * 1000) / 10) / sdList.length).toStringAsFixed(1)}%",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.blue[300],
+                  fontSize: miniFontSize
+                ),
+              )
             ),
           )
         ],
@@ -556,6 +566,10 @@ class _HomePageState extends State<HomePage>
   }
   ///位置錯誤
   _buildWrongPlace() {
+    var miniFontSize = MyScreen.homePageFontSize(context);
+    // if (miniFontSize < 11) {
+    //   miniFontSize = miniFontSize - 2;
+    // }
     var y = 0;
     var str = "";
     if (noSdList.length > 0) {
@@ -569,28 +583,32 @@ class _HomePageState extends State<HomePage>
       }
       noSdList = [];
       print("無對應 -> ${str}");
-      return Row(
+      return ListView(
+        scrollDirection: Axis.vertical,
         children: <Widget>[
-          AutoSizeText(
+          Text(
             str,
-            textAlign: TextAlign.left,
-            minFontSize: 9.0,
-            maxFontSize: 16.0,
-          ),
+            style: TextStyle(fontSize: miniFontSize),
+          )
         ],
       );
     }
   }
   ///重大信息
   _buildBigbadListView() {
+    var miniFontSize = MyScreen.homePageFontSize(context);
+    var tableHeight = 70.0;
+    final deviceHeight = MediaQuery.of(context).size.height;
+    if (deviceHeight > 800) {
+      tableHeight = 110;
+    }
     return new Container(
-      height: 50.0,
+      height: tableHeight,
       child: new ListView.builder(
         scrollDirection: Axis.vertical,
         itemBuilder: (context, index) {
           return new GestureDetector(
             child: new Container(
-              height: 40.0,
               child: new Column(
                 children: <Widget>[
                   new Row(
@@ -598,24 +616,58 @@ class _HomePageState extends State<HomePage>
                     children: bigbadList == null ? [] : <Widget>[
                       new Container(
                           padding: EdgeInsets.all(5.0),
-                          child: _buildTextFontColor("${bigbadList[index].Name}-${bigbadList[index].CIF}", Colors.black),
+                          child: Text(
+                            "${bigbadList[index].Name}-${bigbadList[index].CIF}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: miniFontSize
+                            ),
+                          )
                       ),
                       new Container(
                         padding: EdgeInsets.all(5.0),
-                        child: _buildTextFontColor(bigbadList[index].DATE, Colors.black),
+                        child: new Text(
+                          bigbadList[index].DATE,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: miniFontSize
+                          ),
+                        )
                       ),
                       new Container(
                         padding: EdgeInsets.all(5.0),
-                        child: _buildTextFontColor(bigbadList[index].Time, Colors.red),
+                        child: new Text(
+                          bigbadList[index].Time,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: miniFontSize
+                          ),
+                        )
                       ),
                       new Container(
-                        child: _buildTextFontColor("~", Colors.black)
+                        child: new Text(
+                          "~",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: miniFontSize
+                          ),
+                        )
                       ),
                       new Container(
                         padding: EdgeInsets.all(5.0),
-                        child: _buildTextFontColor(bigbadList[index].RTIME == null ? "--:--" : bigbadList[index].RTIME, Colors.blue),
+                        child: Text(
+                          bigbadList[index].RTIME == null ? "--:--" : bigbadList[index].RTIME,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: miniFontSize
+                          ),
+                        )
                       )
-                      
                     ],
                   ),
                   _buildLine()
@@ -628,29 +680,9 @@ class _HomePageState extends State<HomePage>
       ),
     );
   }
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    ///通過state判斷app前後台切換
-    if (state == AppLifecycleState.resumed) {
-      print('resumed');
-    } else if (state == AppLifecycleState.inactive) {
-      print('inactive');
-    } else if (state == AppLifecycleState.paused) {
-      print('paused');
-    } else if (state == AppLifecycleState.suspending) {
-      print('suspending');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    final deviceHeight = MediaQuery.of(context).size.height;
-    double fontSize = 0.0;
-    if (deviceHeight < 570) {
-      fontSize = 12.0;
-    } else {
-      fontSize = 16.0;
-    }
 
     return new StoreBuilder<SysState>(builder: (context, store) {
       return WillPopScope(
@@ -669,63 +701,49 @@ class _HomePageState extends State<HomePage>
                     child: new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        // new DropdownButtonHideUnderline(
-                        //   child: new DropdownButton(
-                        //   hint: new Text('新北市'),
-                        //   value: selectArea,
-                        //   items: areaItemList(),
-                        //   // style: TextStyle( fontSize: fontSize),
-                        //   onChanged: (T){
-                        //     setState(() {
-                        //       selectArea = T;
-                        //     });
-                        //   },
-                        // ),
-                        // ),
-
                         ButtonTheme(
-                          minWidth: 60.0,
+                          minWidth: MyScreen.homePageBarButtonWidth(context),
                           child: new MyToolButton(
-                            text: "新北市",
+                            text: selectArea,
                             textColor: Colors.white,
                             color: Colors.transparent,
-                            fontSize: fontSize,
+                            fontSize: MyScreen.homePageFontSize(context),
                             onPress: () {
-                              _renderHeader(store);
+                              _showAlertSheetController(context);
                             },
                           ),
                         ),
                         ButtonTheme(
-                          minWidth: 60.0,
+                          minWidth: MyScreen.homePageBarButtonWidth(context),
                           child: new MyToolButton(
                             text: "自移",
                             textColor: Colors.white,
                             color: Colors.transparent,
-                            fontSize: fontSize,
+                            fontSize: MyScreen.homePageFontSize(context),
                             onPress: () {
                               print("123");
                             },
                           ),
                         ),
                         ButtonTheme(
-                          minWidth: 60.0,
+                          minWidth: MyScreen.homePageBarButtonWidth(context),
                           child: new MyToolButton(
                             text: "點數",
                             textColor: Colors.white,
                             color: Colors.transparent,
-                            fontSize: fontSize,
+                            fontSize: MyScreen.homePageFontSize(context),
                             onPress: () {
                               print("123");
                             },
                           ),
                         ),
                         ButtonTheme(
-                          minWidth: 60.0,
+                          minWidth: MyScreen.homePageBarButtonWidth(context),
                           child: new MyToolButton(
                             text: "鎖HP",
                             textColor: Colors.white,
                             color: Colors.transparent,
-                            fontSize: fontSize,
+                            fontSize: MyScreen.homePageFontSize(context),
                             mainAxisAlignment: MainAxisAlignment.start,
                             onPress: () {
                               print("123");
@@ -733,12 +751,12 @@ class _HomePageState extends State<HomePage>
                           ),
                         ),
                         ButtonTheme(
-                          minWidth: 60.0,
+                          minWidth: MyScreen.homePageBarButtonWidth(context),
                           child: new MyToolButton(
                             text: "資料",
                             textColor: Colors.white,
                             color: Colors.transparent,
-                            fontSize: fontSize,
+                            fontSize: MyScreen.homePageFontSize(context),
                             mainAxisAlignment: MainAxisAlignment.start,
                             onPress: () {
                               print("123");
@@ -752,7 +770,7 @@ class _HomePageState extends State<HomePage>
               ),
 
               ///body
-              body: new SingleChildScrollView(
+              body: isLoading ? showProgressLoading() : new SingleChildScrollView(
                 child: new Column(
                   children: <Widget>[
                     new Row(
@@ -760,7 +778,7 @@ class _HomePageState extends State<HomePage>
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         ButtonTheme(
-                          minWidth: 60,
+                          minWidth: 60.0,
                           height: 35,
                           child: new MyToolButton(
                             padding: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -775,7 +793,7 @@ class _HomePageState extends State<HomePage>
                           ),
                         ),
                         ButtonTheme(
-                          minWidth: 60,
+                          minWidth: 60.0,
                           height: 35,
                           child: new MyToolButton(
                             padding: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -789,7 +807,7 @@ class _HomePageState extends State<HomePage>
                           ),
                         ),
                         ButtonTheme(
-                          minWidth: 60,
+                          minWidth: 60.0,
                           height: 35,
                           child: new MyToolButton(
                             padding: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -804,7 +822,7 @@ class _HomePageState extends State<HomePage>
                           ),
                         ),
                         ButtonTheme(
-                          minWidth: 60,
+                          minWidth: 60.0,
                           height: 35,
                           child: new MyToolButton(
                             padding: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -819,7 +837,7 @@ class _HomePageState extends State<HomePage>
                           ),
                         ),
                         ButtonTheme(
-                          minWidth: 60,
+                          minWidth: 60.0,
                           height: 35,
                           child: new MyToolButton(
                             padding: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -863,12 +881,13 @@ class _HomePageState extends State<HomePage>
                     /// 高度1的分隔線
                     _buildLine(),
                     new Container(
-                      height: 20.0,
+                      padding: EdgeInsets.only(bottom: 1.0),
                       child: Text(
                         CommonUtils.getLocale(context).home_cmtsTitle_major,
                         style: TextStyle(
+
                           color: Colors.red,
-                          fontSize: fontSize
+                          fontSize: MyScreen.homePageFontSize(context)
                         ),  
                       ),
                     ),
@@ -887,15 +906,15 @@ class _HomePageState extends State<HomePage>
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     ButtonTheme(
-                      minWidth: 60.0,
+                      minWidth: MyScreen.homePageBarButtonWidth(context),
                       child: new MyToolButton(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         text: "刷新",
                         textColor: Colors.white,
                         color: Colors.transparent,
-                        fontSize: fontSize,
+                        fontSize: MyScreen.homePageFontSize(context),
                         onPress: () {
-                          showRefreshLoading();
+                          isLoading = true;
                           setState(() {
                             _cmtsTitleData();
                             _signalData();
@@ -905,20 +924,19 @@ class _HomePageState extends State<HomePage>
                       ),
                     ),
                     ButtonTheme(
-                      minWidth: 60.0,
+                      minWidth: MyScreen.homePageBarButtonWidth(context),
                       child: new MyToolButton(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         text: "分析",
                         textColor: Colors.white,
                         color: Colors.transparent,
-                        fontSize: fontSize,
+                        fontSize: MyScreen.homePageFontSize(context),
                         onPress: () {
                           print("123");
                         },
                       ),
                     ),
                     ButtonTheme(
-                        minWidth: 60.0,
                         child: new FlatButton.icon(
                           icon: Image.asset(
                             MyICons.DEFAULT_USER_ICON,
@@ -929,46 +947,34 @@ class _HomePageState extends State<HomePage>
                           color: Colors.transparent,
                           label: Text(
                             'PING',
-                            style: TextStyle(fontSize: fontSize),
+                            style: TextStyle(fontSize: MyScreen.homePageFontSize(context)),
                           ),
                           onPressed: () {
                             print(123);
                           },
                         )
-
-                        // new MyToolButton(
-                        //   padding: EdgeInsets.only(left: 10.0, right: 10.0),
-
-                        //   text: "PING",
-                        //   textColor: Colors.white,
-                        //   color: Colors.transparent,
-                        //   fontSize: fontSize,
-                        //   onPress: () {
-                        //     print("123");
-                        //   },
-                        // ),
-                        ),
+                    ),
                     ButtonTheme(
-                      minWidth: 60.0,
+                      minWidth: MyScreen.homePageBarButtonWidth(context),
                       child: new MyToolButton(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         text: "設定",
                         textColor: Colors.white,
                         color: Colors.transparent,
-                        fontSize: fontSize,
+                        fontSize: MyScreen.homePageFontSize(context),
                         onPress: () {
                           print("123");
                         },
                       ),
                     ),
                     ButtonTheme(
-                      minWidth: 60.0,
+                      minWidth: MyScreen.homePageBarButtonWidth(context),
                       child: new MyToolButton(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         text: "返回",
                         textColor: Colors.white,
                         color: Colors.transparent,
-                        fontSize: fontSize,
+                        fontSize: MyScreen.homePageFontSize(context),
                         mainAxisAlignment: MainAxisAlignment.start,
                         onPress: () {
                           NavigatorUtils.goLogin(context);
@@ -997,13 +1003,3 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-class AreaCodeModel {
-  final String name;
-  final String value;
-
-  AreaCodeModel(this.name, this.value);
-}
-
-AreaSelector(BuildContext context) {
-  return [AreaCodeModel("新北市", "新北市"), AreaCodeModel("台北市", "台北市")];
-}

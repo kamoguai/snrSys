@@ -118,5 +118,7 @@ abstract class MyStringBase {
   String home_signal_percent;
 
   String home_signal_total;
+
+  String area_dialog_title;
   
 }

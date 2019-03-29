@@ -22,6 +22,10 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
 
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
+  showProgressLoading() {
+    return new Center(child: new CircularProgressIndicator());
+  }
+
   showRefreshLoading() {
     new Future.delayed(const Duration(seconds: 0), () {
       refreshIndicatorKey.currentState.show().then((e) {});
