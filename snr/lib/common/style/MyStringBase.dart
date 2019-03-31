@@ -123,5 +123,7 @@ abstract class MyStringBase {
 
   String abnormal_card_hub;
 
+  String abnormal_card_text;
+
   
 }

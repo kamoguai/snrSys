@@ -16,8 +16,11 @@ import 'package:snr/common/event/HttpErrorEvent.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:snr/common/localization/MyLocalizationsDelegate.dart';
 import 'package:snr/page/HomePage.dart';
+import 'package:flutter/rendering.dart';
 void main() {
   runApp(new SnrReduxApp());
+  debugPaintSizeEnabled = false;
+  debugPaintPointersEnabled = false;
   PaintingBinding.instance.imageCache.maximumSize = 100;
 }
 

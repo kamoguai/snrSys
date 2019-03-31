@@ -124,4 +124,6 @@ class MyStringZh extends MyStringBase {
   String area_dialog_title = "請選擇區域";
   @override
   String abnormal_card_hub = "HUB";
+  @override
+  String abnormal_card_text = "卡板";
 }

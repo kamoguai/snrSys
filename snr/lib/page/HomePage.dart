@@ -753,7 +753,7 @@ class _HomePageState extends State<HomePage>
                         ButtonTheme(
                           minWidth: MyScreen.homePageBarButtonWidth(context),
                           child: new MyToolButton(
-                            text: "資料",
+                            text: sdList == null ?  "資料" : sdList[0].Time,
                             textColor: Colors.white,
                             color: Colors.transparent,
                             fontSize: MyScreen.homePageFontSize(context),

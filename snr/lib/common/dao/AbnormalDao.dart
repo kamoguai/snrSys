@@ -28,9 +28,9 @@ class AbnormalDao {
         return new DataResult(null, false);
       }
       if (mainDataArray.length > 0) {
-        dataArray = mainDataArray["Data"];
+        // dataArray = mainDataArray["Data"];
 
-        return new DataResult(dataArray, true);
+        return new DataResult(mainDataArray, true);
       } else {
         return new DataResult(null, false);
       }

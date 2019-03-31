@@ -5,6 +5,7 @@ import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/MyListState.dart';
+
 /**
  * 卡板列表頁面
  * Date: 2019-03-28
@@ -23,10 +24,10 @@ class AbnormalCardPage extends StatefulWidget {
   _AbnormalCardPageState createState() => _AbnormalCardPageState();
 }
 
-class _AbnormalCardPageState extends State<AbnormalCardPage>  with AutomaticKeepAliveClientMixin<AbnormalCardPage>, MyListState<AbnormalCardPage> {
+class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepAliveClientMixin<AbnormalCardPage>, MyListState<AbnormalCardPage> {
   ///data 相關
   List<dynamic> dataArray = new List();
-
+  List<dynamic> dataArray2 = new List();
 
   @override
   bool get isRefreshFirst => false;
@@ -37,21 +38,35 @@ class _AbnormalCardPageState extends State<AbnormalCardPage>  with AutomaticKeep
     isLoading = true;
     getApiDataList();
   }
+
   @override
   void dispose() {
     super.dispose();
   }
+
   ///取得api data
   getApiDataList() async {
     dataArray = [];
+    dataArray2 = [];
     var res = await AbnormalDao.getSNRSignalByCMTS(widget.CMTSCode);
     if (res != null && res.result) {
       setState(() {
-        dataArray = res.data;
+        dataArray = res.data['Data'];
+        dataArray2 = res.data['Data2'];
+        // dataArray = res.data;
         isLoading = false;
       });
     }
   }
+
+  ///分隔線
+  _buildLine() {
+    return new Container(
+      height: 1.0,
+      color: Colors.grey,
+    );
+  }
+
   _buildCmtsHeader1() {
     return new Container(
       height: 40.0,
@@ -63,143 +78,429 @@ class _AbnormalCardPageState extends State<AbnormalCardPage>  with AutomaticKeep
             child: new Container(
               padding: EdgeInsets.all(5.0),
               child: Text(
-              CommonUtils.getLocale(context).abnormal_card_hub, style: TextStyle(color: Colors.black)),
+                CommonUtils.getLocale(context).abnormal_card_hub,
+                style: TextStyle(color: Colors.black),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          new Expanded(
+              child: new Container(
+            padding: EdgeInsets.all(5.0),
+            child: Text(
+              CommonUtils.getLocale(context).home_signal_online,
+              style: TextStyle(color: Colors.blue),
+              textAlign: TextAlign.center,
+            ),
+          )),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: Text(
+                CommonUtils.getLocale(context).home_sinal_bad,
+                style: TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
           new Expanded(
             child: new Container(
               padding: EdgeInsets.all(5.0),
               child: Text(
-              CommonUtils.getLocale(context).home_signal_online, style: TextStyle(color: Colors.blue)),
-            )
-          ),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-              CommonUtils.getLocale(context).home_sinal_bad, style: TextStyle(color: Colors.red)),
+                CommonUtils.getLocale(context).home_signal_upP,
+                style: TextStyle(color: Colors.black),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
           new Expanded(
             child: new Container(
               padding: EdgeInsets.all(5.0),
               child: Text(
-              CommonUtils.getLocale(context).home_signal_upP, style:TextStyle(color: Colors.black)),
+                CommonUtils.getLocale(context).home_signal_problem,
+                style: TextStyle(color: Colors.pink),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
           new Expanded(
             child: new Container(
               padding: EdgeInsets.all(5.0),
               child: Text(
-              CommonUtils.getLocale(context).home_signal_problem, style:TextStyle(color: Colors.pink)),
-            ),
-          ),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-              CommonUtils.getLocale(context).home_signal_percent, style:TextStyle(color: Colors.blue[300])
+                CommonUtils.getLocale(context).home_signal_percent,
+                style: TextStyle(color: Colors.blue[300]),
+                textAlign: TextAlign.center,
               ),
             ),
           )
         ],
       ),
     );
+  }
 
+  /// cmts list
+  _buildCmtsList1() {
+    return Container(
+      height: 200.0,
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            child: Container(
+              height: 44.0,
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.max,
+                    children: dataArray == null
+                        ? []
+                        : <Widget>[
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray[index]['CIF'],
+                                  style: TextStyle(color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray[index]['OnLine'],
+                                  style: TextStyle(color: Colors.blue),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray[index]['Bad'],
+                                  style: TextStyle(color: Colors.red),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray[index]['OverPower'],
+                                  style: TextStyle(color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray[index]['Problem'],
+                                  style: TextStyle(color: Colors.pink),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  '${((double.parse(dataArray[index]['BadRate']) * 1000) / 10).toStringAsFixed(1)}%',
+                                  style: TextStyle(color: Colors.pink),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                  ),
+                  _buildLine()
+                ],
+              ),
+            ),
+            onTap: () {
+              print(123);
+            },
+          );
+        },
+        itemCount: dataArray.length,
+      ),
+    );
+  }
+///cmts head title2
+_buildCmtsHeader2() {
+    return new Container(
+      height: 40.0,
+      color: Color(MyColors.hexFromStr('#f5ffe9')),
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: Text(
+                CommonUtils.getLocale(context).abnormal_card_text,
+                style: TextStyle(color: Colors.black),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          new Expanded(
+              child: new Container(
+            padding: EdgeInsets.all(5.0),
+            child: Text(
+              CommonUtils.getLocale(context).home_signal_online,
+              style: TextStyle(color: Colors.blue),
+              textAlign: TextAlign.center,
+            ),
+          )),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: Text(
+                CommonUtils.getLocale(context).home_sinal_bad,
+                style: TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: Text(
+                CommonUtils.getLocale(context).home_signal_upP,
+                style: TextStyle(color: Colors.black),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: Text(
+                CommonUtils.getLocale(context).home_signal_problem,
+                style: TextStyle(color: Colors.pink),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: Text(
+                CommonUtils.getLocale(context).home_signal_percent,
+                style: TextStyle(color: Colors.blue[300]),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+   /// cmts list2
+  _buildCmtsList2() {
+    return Expanded(
+      child: Container(
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            child: Container(
+              height: 50.0,
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.max,
+                    children: dataArray2 == null
+                        ? []
+                        : <Widget>[
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray2[index]['CIF'],
+                                  style: TextStyle(color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray2[index]['OnLine'],
+                                  style: TextStyle(color: Colors.blue),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray2[index]['Bad'],
+                                  style: TextStyle(color: Colors.red),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray2[index]['OverPower'],
+                                  style: TextStyle(color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray2[index]['Problem'],
+                                  style: TextStyle(color: Colors.pink),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  '${dataArray2[index]['BadRate']}%',
+                                  style: TextStyle(color: Colors.pink),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                  ),
+                  _buildLine()
+                ],
+              ),
+            ),
+            onTap: () {
+              print(123);
+            },
+          );
+        },
+        itemCount: dataArray2 == null ? 0 : dataArray2.length,
+      ),
+     ),
+    );
     
   }
   ///將body寫在這裡
-  getBody() {
-    return isLoading ? showProgressLoading() : new Material(
-      child: new Center(
-        child: new Container(
-        color: Colors.yellow,
-        child: _buildCmtsHeader1(),
-      ),
-      )
-       
-    );
+  Widget getBody() {
+    return isLoading
+        ? showProgressLoading()
+        : new Column(
+            children: <Widget>[
+              ///headtilte
+              _buildCmtsHeader1(),
+              _buildLine(),
+              _buildCmtsList1(),
+              _buildLine(),
+              _buildCmtsHeader2(),
+              _buildLine(),
+              _buildCmtsList2(),
+              _buildLine(),
+            ],
+          );
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         top: false,
         child: Scaffold(
-        appBar: AppBar(
-        // iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-        backgroundColor: Theme.of(context).primaryColor,
-        actions: <Widget>[
-          new Expanded(
+          appBar: AppBar(
+            // iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+            backgroundColor: Theme.of(context).primaryColor,
+            actions: <Widget>[
+              new Expanded(
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    new Text(widget.Name,
+                        style: TextStyle(
+                            fontSize: MyScreen.homePageFontSize(context))),
+                    new Text('資料時間:${widget.Time}',
+                        style: TextStyle(
+                            fontSize: MyScreen.homePageFontSize(context)))
+                  ],
+                ),
+              )
+            ],
+          ),
+
+          ///body
+          body: getBody(),
+
+          ///toolBar
+          bottomNavigationBar: new Material(
+            color: Theme.of(context).primaryColor,
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                new Text(widget.Name, style:TextStyle(fontSize: MyScreen.homePageFontSize(context))),
-                new Text('data', style:TextStyle(fontSize:MyScreen.homePageFontSize(context)))
-
+                ButtonTheme(
+                  // minWidth: MyScreen.homePageBarButtonWidth(context),
+                  child: new MyToolButton(
+                    // padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                    padding: EdgeInsets.all(1.0),
+                    text: "刷新",
+                    textColor: Colors.white,
+                    color: Colors.transparent,
+                    fontSize: MyScreen.homePageFontSize(context),
+                    onPress: () {
+                      getApiDataList();
+                    },
+                  ),
+                ),
+                ButtonTheme(
+                    // padding: EdgeInsets.all(1.0),
+                    child: new FlatButton.icon(
+                  icon: Image.asset(
+                    MyICons.DEFAULT_USER_ICON,
+                    width: 30,
+                    height: 30,
+                  ),
+                  textColor: Colors.white,
+                  color: Colors.transparent,
+                  label: Text(
+                    'DCTV',
+                    style:
+                        TextStyle(fontSize: MyScreen.homePageFontSize(context)),
+                  ),
+                  onPressed: () {
+                    print(123);
+                  },
+                )),
+                ButtonTheme(
+                  // minWidth: MyScreen.homePageBarButtonWidth(context),
+                  child: new MyToolButton(
+                    // padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                    padding: EdgeInsets.all(1.0),
+                    text: "返回",
+                    textColor: Colors.white,
+                    color: Colors.transparent,
+                    fontSize: MyScreen.homePageFontSize(context),
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    onPress: () {
+                      NavigatorUtils.goHome(context);
+                    },
+                  ),
+                ),
               ],
             ),
-          )
-        ],
-      ),
-      ///body
-      body: getBody(),
-      ///toolBar
-      bottomNavigationBar: new Material(
-        color: Theme.of(context).primaryColor,
-        child: new Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            ButtonTheme(
-              // minWidth: MyScreen.homePageBarButtonWidth(context),
-              child: new MyToolButton(
-                padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                text: "刷新",
-                textColor: Colors.white,
-                color: Colors.transparent,
-                fontSize: MyScreen.homePageFontSize(context),
-                onPress: () {
-                 getApiDataList();
-                },
-              ),
-            ),
-           
-            ButtonTheme(
-                child: new FlatButton.icon(
-              icon: Image.asset(
-                MyICons.DEFAULT_USER_ICON,
-                width: 30,
-                height: 30,
-              ),
-              textColor: Colors.white,
-              color: Colors.transparent,
-              label: Text(
-                'DCTV',
-                style: TextStyle(fontSize: MyScreen.homePageFontSize(context)),
-              ),
-              onPressed: () {
-                print(123);
-              },
-            )),
-            
-            ButtonTheme(
-              // minWidth: MyScreen.homePageBarButtonWidth(context),
-              child: new MyToolButton(
-                padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                text: "返回",
-                textColor: Colors.white,
-                color: Colors.transparent,
-                fontSize: MyScreen.homePageFontSize(context),
-                mainAxisAlignment: MainAxisAlignment.start,
-                onPress: () {
-                  NavigatorUtils.goHome(context);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
-
-
 }
