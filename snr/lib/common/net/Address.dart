@@ -177,9 +177,14 @@ class Address {
   static postReStartCM(cmts,custNo,accName) {
     return "${kSNRHostPingName}/SNRping.php?Action=RestartCM&Custno=$custNo&CMTS=$cmts&AccName=$accName";
   }
-  ///abnormal
+  ///abnormal card
   static getSNRSignalByCMTSAPI(cmtsCode){
     var date = formatDate(DateTime.now(), [yyyy,'-',mm,'-',dd]);
     return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRSignalByCMTS&CMTSCode=${cmtsCode}&Date=${date}";
+  }
+  ///abnormal node
+  static getSNRSignalByCmtsAndCifAPI(cmtsCode, cif){
+    var date = formatDate(DateTime.now(), [yyyy,'-',mm,'-',dd]);
+    return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRNodeSignalByCMTS_CIF&CMTSCode=${cmtsCode}&CIF=${cif}&Date=${date}";
   }
 }

@@ -79,7 +79,7 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
               padding: EdgeInsets.all(5.0),
               child: Text(
                 CommonUtils.getLocale(context).abnormal_card_hub,
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -89,7 +89,7 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
             padding: EdgeInsets.all(5.0),
             child: Text(
               CommonUtils.getLocale(context).home_signal_online,
-              style: TextStyle(color: Colors.blue),
+              style: TextStyle(color: Colors.blue, fontSize: MyScreen.normalPageFontSize(context)),
               textAlign: TextAlign.center,
             ),
           )),
@@ -97,18 +97,8 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
             child: new Container(
               padding: EdgeInsets.all(5.0),
               child: Text(
-                CommonUtils.getLocale(context).home_sinal_bad,
-                style: TextStyle(color: Colors.red),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
                 CommonUtils.getLocale(context).home_signal_upP,
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -118,7 +108,17 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
               padding: EdgeInsets.all(5.0),
               child: Text(
                 CommonUtils.getLocale(context).home_signal_problem,
-                style: TextStyle(color: Colors.pink),
+                style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context)),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: Text(
+                CommonUtils.getLocale(context).home_sinal_bad,
+                style: TextStyle(color: Colors.red, fontSize: MyScreen.normalPageFontSize(context)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -128,7 +128,7 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
               padding: EdgeInsets.all(5.0),
               child: Text(
                 CommonUtils.getLocale(context).home_signal_percent,
-                style: TextStyle(color: Colors.blue[300]),
+                style: TextStyle(color: Colors.pink, fontSize: MyScreen.normalPageFontSize(context)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -161,7 +161,7 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
                                   dataArray[index]['CIF'],
-                                  style: TextStyle(color: Colors.black),
+                                  style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize(context)),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -171,17 +171,7 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
                                   dataArray[index]['OnLine'],
-                                  style: TextStyle(color: Colors.blue),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  dataArray[index]['Bad'],
-                                  style: TextStyle(color: Colors.red),
+                                  style: TextStyle(color: Colors.blue, fontSize: MyScreen.normalListPageFontSize(context)),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -191,7 +181,7 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
                                   dataArray[index]['OverPower'],
-                                  style: TextStyle(color: Colors.black),
+                                  style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize(context)),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -201,7 +191,17 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
                                   dataArray[index]['Problem'],
-                                  style: TextStyle(color: Colors.pink),
+                                  style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize(context)),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray[index]['Bad'],
+                                  style: TextStyle(color: Colors.red, fontSize: MyScreen.normalListPageFontSize(context)),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -211,7 +211,7 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
                                   '${((double.parse(dataArray[index]['BadRate']) * 1000) / 10).toStringAsFixed(1)}%',
-                                  style: TextStyle(color: Colors.pink),
+                                  style: TextStyle(color: Colors.blue, fontSize: MyScreen.normalListPageFontSize(context)),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -223,7 +223,7 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
               ),
             ),
             onTap: () {
-              print(123);
+              NavigatorUtils.goAbnormalNode(context, widget.CMTSCode, dataArray[index]['CIF'], "${widget.Name} ${dataArray[index]['CIF']}", widget.Time);
             },
           );
         },
@@ -235,7 +235,7 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
 _buildCmtsHeader2() {
     return new Container(
       height: 40.0,
-      color: Color(MyColors.hexFromStr('#f5ffe9')),
+      color: Color(MyColors.hexFromStr('#f0fcff')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -244,7 +244,7 @@ _buildCmtsHeader2() {
               padding: EdgeInsets.all(5.0),
               child: Text(
                 CommonUtils.getLocale(context).abnormal_card_text,
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -254,7 +254,7 @@ _buildCmtsHeader2() {
             padding: EdgeInsets.all(5.0),
             child: Text(
               CommonUtils.getLocale(context).home_signal_online,
-              style: TextStyle(color: Colors.blue),
+              style: TextStyle(color: Colors.blue, fontSize: MyScreen.normalPageFontSize(context)),
               textAlign: TextAlign.center,
             ),
           )),
@@ -262,18 +262,8 @@ _buildCmtsHeader2() {
             child: new Container(
               padding: EdgeInsets.all(5.0),
               child: Text(
-                CommonUtils.getLocale(context).home_sinal_bad,
-                style: TextStyle(color: Colors.red),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
                 CommonUtils.getLocale(context).home_signal_upP,
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -283,7 +273,17 @@ _buildCmtsHeader2() {
               padding: EdgeInsets.all(5.0),
               child: Text(
                 CommonUtils.getLocale(context).home_signal_problem,
-                style: TextStyle(color: Colors.pink),
+                style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context)),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          new Expanded(
+            child: new Container(
+              padding: EdgeInsets.all(5.0),
+              child: Text(
+                CommonUtils.getLocale(context).home_sinal_bad,
+                style: TextStyle(color: Colors.red, fontSize: MyScreen.normalPageFontSize(context)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -293,7 +293,7 @@ _buildCmtsHeader2() {
               padding: EdgeInsets.all(5.0),
               child: Text(
                 CommonUtils.getLocale(context).home_signal_percent,
-                style: TextStyle(color: Colors.blue[300]),
+                style: TextStyle(color: Colors.pink, fontSize: MyScreen.normalPageFontSize(context)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -311,7 +311,7 @@ _buildCmtsHeader2() {
         itemBuilder: (context, index) {
           return GestureDetector(
             child: Container(
-              height: 50.0,
+              height: 55.0,
               child: Column(
                 children: <Widget>[
                   Row(
@@ -325,7 +325,7 @@ _buildCmtsHeader2() {
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
                                   dataArray2[index]['CIF'],
-                                  style: TextStyle(color: Colors.black),
+                                  style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize_s(context)),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -335,17 +335,7 @@ _buildCmtsHeader2() {
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
                                   dataArray2[index]['OnLine'],
-                                  style: TextStyle(color: Colors.blue),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  dataArray2[index]['Bad'],
-                                  style: TextStyle(color: Colors.red),
+                                  style: TextStyle(color: Colors.blue, fontSize: MyScreen.normalListPageFontSize(context)),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -355,7 +345,7 @@ _buildCmtsHeader2() {
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
                                   dataArray2[index]['OverPower'],
-                                  style: TextStyle(color: Colors.black),
+                                  style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize(context)),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -365,7 +355,17 @@ _buildCmtsHeader2() {
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
                                   dataArray2[index]['Problem'],
-                                  style: TextStyle(color: Colors.pink),
+                                  style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize(context)),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  dataArray2[index]['Bad'],
+                                  style: TextStyle(color: Colors.red, fontSize: MyScreen.normalListPageFontSize(context)),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -375,7 +375,7 @@ _buildCmtsHeader2() {
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
                                   '${dataArray2[index]['BadRate']}%',
-                                  style: TextStyle(color: Colors.pink),
+                                  style: TextStyle(color: Colors.pink, fontSize: MyScreen.normalListPageFontSize(context)),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -431,14 +431,18 @@ _buildCmtsHeader2() {
                   children: <Widget>[
                     new Text(widget.Name,
                         style: TextStyle(
-                            fontSize: MyScreen.homePageFontSize(context))),
-                    new Text('資料時間:${widget.Time}',
+                            fontSize: MyScreen.normalPageFontSize(context))),
+                    new Text('         ',
                         style: TextStyle(
-                            fontSize: MyScreen.homePageFontSize(context)))
+                            fontSize: MyScreen.normalPageFontSize(context))),
+                    new Text('資料:${widget.Time}',
+                        style: TextStyle(
+                            fontSize: MyScreen.normalPageFontSize(context)))
                   ],
                 ),
               )
             ],
+            leading: Container(),
           ),
 
           ///body
@@ -458,9 +462,12 @@ _buildCmtsHeader2() {
                     text: "刷新",
                     textColor: Colors.white,
                     color: Colors.transparent,
-                    fontSize: MyScreen.homePageFontSize(context),
+                    fontSize: MyScreen.normalPageFontSize(context),
                     onPress: () {
-                      getApiDataList();
+                      isLoading = true;
+                      setState(() {
+                        getApiDataList();
+                      });                      
                     },
                   ),
                 ),
@@ -477,7 +484,7 @@ _buildCmtsHeader2() {
                   label: Text(
                     'DCTV',
                     style:
-                        TextStyle(fontSize: MyScreen.homePageFontSize(context)),
+                        TextStyle(fontSize: MyScreen.normalPageFontSize(context)),
                   ),
                   onPressed: () {
                     print(123);
@@ -491,10 +498,11 @@ _buildCmtsHeader2() {
                     text: "返回",
                     textColor: Colors.white,
                     color: Colors.transparent,
-                    fontSize: MyScreen.homePageFontSize(context),
+                    fontSize: MyScreen.normalPageFontSize(context),
                     mainAxisAlignment: MainAxisAlignment.start,
                     onPress: () {
-                      NavigatorUtils.goHome(context);
+                      //返回上一頁
+                      Navigator.pop(context);
                     },
                   ),
                 ),

@@ -33,18 +33,20 @@ class NavigatorUtils {
   }
 
   ///首頁
+  ///pushReplacementNamed需要由main.dart做導航
   static goHome(BuildContext context) {
     Navigator.pushReplacementNamed(context, HomePage.sName);
   }
-
+  ///卡板頁面
   static goAbnormalCard(BuildContext context, String cmtsCode, String name, String time) {
     NavigatorRouter(context, new AbnormalCardPage(cmtsCode, name, time));
   }
-
-  static goAbnormalNode(BuildContext context) {
-    Navigator.pushReplacementNamed(context, AbnormalNodePage.sName);
+  ///卡板node頁面
+  static goAbnormalNode(BuildContext context, String cmtsCode, String cif, String name, String time) {
+    // Navigator.pushReplacementNamed(context, AbnormalNodePage.sName);
+    NavigatorRouter(context,new AbnormalNodePage(cmtsCode, cif, name, time));
   }
-
+  ///卡板詳情頁面
   static goAbnormalDetail(BuildContext context) {
     Navigator.pushReplacementNamed(context, AbnormalDetialPage.sName);
   }

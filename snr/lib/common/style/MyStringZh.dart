@@ -122,8 +122,14 @@ class MyStringZh extends MyStringBase {
   String home_signal_total = "合計";
   @override
   String area_dialog_title = "請選擇區域";
+  ///normal card頁面
   @override
   String abnormal_card_hub = "HUB";
   @override
   String abnormal_card_text = "卡板";
+  ///normal node頁面
+  @override
+  String abnormal_node_title = "卡板/HUB";
+  @override
+  String abnormal_node_node = "NODE";
 }

@@ -125,5 +125,9 @@ abstract class MyStringBase {
 
   String abnormal_card_text;
 
+  String abnormal_node_title;
+
+  String abnormal_node_node;
+
   
 }

@@ -72,13 +72,13 @@ class MyConstant {
       "https://github.com/CarGuo/MyGithubAppFlutter";
 
   static const lagerTextSize = 30.0;
-  static const bigTextSize = 23.0;
+  static const bigTextSize = 20.0;
   static const normalTextSize = 18.0;
   static const middleTextWhiteSize = 16.0;
   static const smallTextSize = 14.0;
   static const minTextSize = 12.0;
   static const miniTextSize = 10.0;
-  static const tinyTextSize = 10.0;
+  static const tinyTextSize = 8.0;
 
   static const minText = TextStyle(
     color: Color(MyColors.subLightTextColor),
@@ -335,11 +335,66 @@ class MyScreen {
     final deviceHeight = MediaQuery.of(context).size.height;
     double fontSize = 0.0;
     if (deviceHeight < 570) {
-      fontSize = MyConstant.tinyTextSize;
+      fontSize = MyConstant.miniTextSize;
     } else if (deviceHeight > 800) {
       fontSize = MyConstant.normalTextSize;
     } else {
       fontSize = MyConstant.middleTextWhiteSize;
+    }
+    return fontSize;
+  }
+  ///卡板字體大小
+  static double normalPageFontSize(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double fontSize = 0.0;
+    if (deviceHeight < 570) {
+      fontSize = MyConstant.smallTextSize;
+    } else if (deviceHeight > 800) {
+      fontSize = MyConstant.bigTextSize;
+    } else {
+      fontSize = MyConstant.normalTextSize;
+    }
+    return fontSize;
+  }
+  ///卡板字體大小s
+  static double normalPageFontSize_s(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double fontSize = 0.0;
+    if (deviceHeight < 570) {
+      fontSize = MyConstant.miniTextSize;
+    } else if (deviceHeight > 800) {
+      fontSize = MyConstant.bigTextSize;
+    } else {
+      fontSize = MyConstant.normalTextSize;
+    }
+    return fontSize;
+  }
+  ///卡板list字體大小
+  static double normalListPageFontSize(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double fontSize = 0.0;
+    if (deviceHeight < 570) {
+      fontSize = MyConstant.miniTextSize;
+    } else if (deviceHeight > 800) {
+      fontSize = MyConstant.normalTextSize;
+    } else {
+      fontSize = MyConstant.middleTextWhiteSize;
+    }
+    return fontSize;
+  }
+  ///卡板list字體大小s
+  static double normalListPageFontSize_s(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double fontSize = 0.0;
+    if (deviceHeight < 570) {
+      fontSize = MyConstant.tinyTextSize;
+    } else if (deviceHeight > 800) {
+      fontSize = MyConstant.smallTextSize;
+    } else if (deviceHeight > 600 && deviceHeight < 720) {
+      fontSize = MyConstant.minTextSize;
+    }
+    else {
+      fontSize = MyConstant.smallTextSize;
     }
     return fontSize;
   }
