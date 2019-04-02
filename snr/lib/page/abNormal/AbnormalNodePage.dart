@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:snr/common/dao/AbnormalDao.dart';
-import 'package:snr/common/net/Address.dart';
-import 'package:snr/common/net/Api.dart';
 import 'package:snr/common/style/MyStyle.dart';
-import 'package:snr/widget/MyToolBarButton.dart';
-import 'package:snr/common/style/MyStyle.dart';
-import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
+import 'package:snr/widget/MyToolBarButton.dart';
+import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/MyListState.dart';
 
 class AbnormalNodePage extends StatefulWidget {
@@ -219,7 +216,7 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
               ),
             ),
             onTap: () {
-              // NavigatorUtils.goAbnormalNode(context, widget.CMTSCode, dataArray[index]['CIF'], "${widget.Name} ${dataArray[index]['CIF']}", widget.Time);
+              NavigatorUtils.goAbnormalDetail(context);
             },
           );
         },
@@ -295,7 +292,7 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
                   textColor: Colors.white,
                   color: Colors.transparent,
                   label: Text(
-                    'DCTV',
+                    'PING',
                     style:
                         TextStyle(fontSize: MyScreen.normalPageFontSize(context)),
                   ),

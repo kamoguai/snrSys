@@ -482,7 +482,7 @@ _buildCmtsHeader2() {
                   textColor: Colors.white,
                   color: Colors.transparent,
                   label: Text(
-                    'DCTV',
+                    'PING',
                     style:
                         TextStyle(fontSize: MyScreen.normalPageFontSize(context)),
                   ),

@@ -48,6 +48,6 @@ class NavigatorUtils {
   }
   ///卡板詳情頁面
   static goAbnormalDetail(BuildContext context) {
-    Navigator.pushReplacementNamed(context, AbnormalDetialPage.sName);
+    NavigatorRouter(context,new AbnormalDetialPage());
   }
 }
