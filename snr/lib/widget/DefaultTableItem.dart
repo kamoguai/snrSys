@@ -23,6 +23,13 @@ class DefaultTableItem extends StatelessWidget {
       color: Colors.grey,
     );
   }
+   _buildHeightLine51() {
+    return new Container(
+      height: 51.0,
+      width: 1.0,
+      color: Colors.grey,
+    );
+  }
 
   _deviceWidth(context) {
     final deviceWidth = MediaQuery.of(context).size.width;
@@ -54,12 +61,17 @@ class DefaultTableItem extends StatelessWidget {
     return deviceWidth / 6;
   }
 
-  _autoTextSize(text, style) {
+   _deviceWidth9(context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    return deviceWidth / 9;
+  }
+
+  _autoTextSize(text, style, context) {
     return AutoSizeText(
       text,
       style: style,
-      maxFontSize: 16.0,
-      minFontSize: 8.0,
+      maxFontSize: MyScreen.defaultTableCellFontSize(context),
+      minFontSize: 5.0,
       textAlign: TextAlign.center,
     );
   }
@@ -85,7 +97,7 @@ class DefaultTableItem extends StatelessWidget {
                             onPressed: () {},
                             child: _autoTextSize(
                               'address',
-                              TextStyle(color: Colors.grey),
+                              TextStyle(color: Colors.grey), context
                             ),
                           ),
                         )
@@ -102,7 +114,7 @@ class DefaultTableItem extends StatelessWidget {
                           onPressed: () {},
                           child: Container(
                             child: _autoTextSize(
-                                'installman', TextStyle(color: Colors.grey)),
+                                'installman', TextStyle(color: Colors.grey), context),
                           ),
                         ),
                       ),
@@ -112,7 +124,7 @@ class DefaultTableItem extends StatelessWidget {
                           onPressed: () {},
                           child: Container(
                             child: _autoTextSize(
-                                'installtime', TextStyle(color: Colors.grey)),
+                                'installtime', TextStyle(color: Colors.grey), context),
                           ),
                         ),
                       ),
@@ -122,7 +134,7 @@ class DefaultTableItem extends StatelessWidget {
                         onPressed: () {},
                         child: Container(
                           child: _autoTextSize(
-                              'saleman', TextStyle(color: Colors.grey)),
+                              'saleman', TextStyle(color: Colors.grey), context),
                         ),
                       )),
                     ],
@@ -134,35 +146,35 @@ class DefaultTableItem extends StatelessWidget {
           _buildLine(),
           Container(
             height: 25.0,
-            padding: EdgeInsets.only(left: 5.0, right: 5.0),
+            // padding: EdgeInsets.only(left: 5.0, right: 5.0),
             child: Row(
               // crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: _deviceWidth4(context) * 1.27,
+                  width: _deviceWidth3(context),
                   child: _autoTextSize(
-                      'realNodePath', TextStyle(color: Colors.grey)),
+                      'realNodePath', TextStyle(color: Colors.grey), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth6(context) / 1.29,
-                  child: _autoTextSize('note6', TextStyle(color: Colors.blue)),
+                  child: _autoTextSize('note6', TextStyle(color: Colors.blue), context),
                 ),
                 _buildHeightLine(),
                 Container(
-                  width: _deviceWidth5(context),
+                  width: _deviceWidth6(context) * 1.19,
                   child: _autoTextSize(
-                      'maintainTime', TextStyle(color: Colors.brown)),
+                      'maintainTime', TextStyle(color: Colors.brown), context),
                 ),
                 _buildHeightLine(),
-                Expanded(
+                Expanded(                  
                   child: FlatButton(
                       onPressed: () {
                         print('指派人員');
                       },
                       child: Container(
                         child: _autoTextSize(
-                            'assignMan', TextStyle(color: Colors.brown)),
+                            'assignMan', TextStyle(color: Colors.brown), context),
                       )),
                 ),
               ],
@@ -175,15 +187,15 @@ class DefaultTableItem extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Container(
-                  width: _deviceWidth2(context) * 1.303,
+                  width: _deviceWidth2(context) * 1.307,
                   child: _autoTextSize(
-                      'bossNosePath', TextStyle(color: Colors.black)),
+                      'bossNosePath', TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                 Expanded(
                   child: Container(
                     child:
-                        _autoTextSize('otime', TextStyle(color: Colors.blue)),
+                        _autoTextSize('otime', TextStyle(color: Colors.blue), context),
                   ),
                 )
               ],
@@ -198,33 +210,112 @@ class DefaultTableItem extends StatelessWidget {
                 Container(
                   width: _deviceWidth4(context) * 1.27,
                   child:
-                      _autoTextSize('custCode', TextStyle(color: Colors.grey)),
+                      _autoTextSize('custCode', TextStyle(color: Colors.grey), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   color: Color(MyColors.hexFromStr('#f0fcff')),
                   width: _deviceWidth6(context) / 2.5,
-                  child: _autoTextSize('note1', TextStyle(color: Colors.red)),
+                  child: _autoTextSize('note1', TextStyle(color: Colors.red), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth4(context) * 1.048,
                   child:
-                      _autoTextSize('buildName', TextStyle(color: Colors.red)),
+                      _autoTextSize('buildName', TextStyle(color: Colors.red), context),
                 ),
                 _buildHeightLine(),
                 Expanded(
                     child: Container(
-                  child: _autoTextSize('custName', TextStyle(color: Colors.black)),
+                  child: _autoTextSize('custName', TextStyle(color: Colors.black), context),
                 )),
               ],
             ),
           ),
           _buildLine(),
           Container(
-            height: 25.0,
-            
-          )
+            height: 51.0,
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: _deviceWidth2(context) * 1.323,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        height: 25.0,
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: _deviceWidth9(context),
+                              child: _autoTextSize('fix', TextStyle(color: Colors.red), context),
+                            ),
+                            _buildHeightLine(),
+                            Container(
+                              width: _deviceWidth9(context),
+                              child: _autoTextSize('restart', TextStyle(color: Colors.black), context),
+                            ),
+                            _buildHeightLine(),
+                            Container(
+                              width: _deviceWidth9(context),
+                              child: _autoTextSize('snr1', TextStyle(color: Colors.blue), context),
+                            ),
+                            _buildHeightLine(),
+                            Container(
+                              width: _deviceWidth9(context),
+                              child: _autoTextSize('snr2', TextStyle(color: Colors.blue), context),
+                            ),
+                            _buildHeightLine(),
+                            Container(
+                              width: _deviceWidth9(context),
+                              child: _autoTextSize('snr3', TextStyle(color: Colors.blue), context),
+                            ),
+                            _buildHeightLine(),
+                            Container(
+                              width: _deviceWidth9(context),
+                              child: _autoTextSize('snr4', TextStyle(color: Colors.blue), context),
+                            ),
+                          ],
+                        ),
+                      ),
+                      _buildLine(),
+                      Container(
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              child: _autoTextSize('restart', TextStyle(color: Colors.black), context),
+                            ),
+                            _buildHeightLine(),
+                            Container(
+                              child: _autoTextSize('snr1', TextStyle(color: Colors.blue), context),
+                            ),
+                            _buildHeightLine(),
+                            Container(
+                              child: _autoTextSize('snr2', TextStyle(color: Colors.blue), context),
+                            ),
+                            _buildHeightLine(),
+                            Container(
+                              child: _autoTextSize('snr3', TextStyle(color: Colors.blue), context),
+                            ),
+                            _buildHeightLine(),
+                            Container(
+                              child: _autoTextSize('snr4', TextStyle(color: Colors.blue), context),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                _buildHeightLine51(),
+                Expanded(
+                  child: Container(
+                    color: Colors.pink,
+                  ),
+                )
+              ],
+            ),
+          ),
+          _buildLine(),
         ],
       ),
     );
