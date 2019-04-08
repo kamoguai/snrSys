@@ -143,6 +143,9 @@ class DefaultTableCell {
    this.U3C,
    this.U3U,
   );
+  
+  DefaultTableCell.empty();
+
   factory DefaultTableCell.fromJson(Map<String, dynamic> json) => _$DefaultTableCellFromJson(json);
 
   Map<String, dynamic> toJson() => _$DefaultTableCellToJson(this);

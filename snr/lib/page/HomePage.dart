@@ -80,6 +80,9 @@ class _HomePageState extends State<HomePage>
     }
   }
 
+  _snrConfig() async {
+    await HomeDao.getQueryConfigAPI();
+  }
   @override
   void initState() {
     super.initState();
@@ -87,6 +90,7 @@ class _HomePageState extends State<HomePage>
     _cmtsTitleData();
     _signalData();
     _bigbadData();
+    _snrConfig();
   }
 
   @override

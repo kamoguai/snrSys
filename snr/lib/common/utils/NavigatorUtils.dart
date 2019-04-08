@@ -47,7 +47,7 @@ class NavigatorUtils {
     NavigatorRouter(context,new AbnormalNodePage(cmtsCode, cif, name, time));
   }
   ///卡板詳情頁面
-  static goAbnormalDetail(BuildContext context) {
-    NavigatorRouter(context,new AbnormalDetialPage());
+  static goAbnormalDetail(BuildContext context, String cmtsCode, String cif, String node) {
+    NavigatorRouter(context,new AbnormalDetialPage(cmtsCode, cif, node));
   }
 }

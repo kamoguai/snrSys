@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/model/User.dart';
+import 'package:snr/common/redux/DefaultTableCellReducer.dart';
 import 'package:snr/common/redux/UserRedux.dart';
 import 'package:snr/common/redux/ThemeRedux.dart';
 import 'package:snr/common/redux/LocaleReducer.dart';
@@ -25,8 +27,12 @@ class SysState {
   ////當前手機平台默認語言
   Locale platfromLocale;
 
+  ///詳情通用cell
+  List<DefaultTableCell> defaultList = new List();
+
   ///構造方法
-  SysState({this.userInfo, this.themeData,this.locale});
+  SysState({this.userInfo, this.themeData,this.locale });
+
 }
 ///創建 Reducer
 ///源碼中Reducer 是一個方法 typedef state Reducer<State>(State state, dynamic action);
@@ -41,5 +47,8 @@ SysState appReducer(SysState state, action) {
 
     ///通過 LocaleReducer 將 SysState 內的 locale 和 action 關聯在一起
     locale: LocaleReducer(state.locale, action),
+
+    ///通過 DefaultTableCellReducer 將 SysState 內的 defaultList 和 action 關聯在一起
+    // defaultList: DefaultTableCellReducer(state.defaultList, action),
   );
 }

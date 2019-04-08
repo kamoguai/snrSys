@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:redux/redux.dart';
+import 'package:snr/common/config/Config.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_statusbar/flutter_statusbar.dart';
 import 'package:snr/common/redux/ThemeRedux.dart';
@@ -18,6 +19,7 @@ import 'package:snr/common/localization/DefaultLocalizations.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/widget/MyFlexButton.dart';
 import 'package:snr/common/net/Address.dart';
+import 'package:snr/common/local/LocalStorage.dart';
 
 /**
  * 通用邏輯
@@ -314,5 +316,96 @@ class CommonUtils {
         );
       }
     );
+  }
+
+  ///snr設定檔決定顏色
+  static checkSnrConfigureValueColor(String data, String name, String netType, dynamic configData) {
+    if (data == "") {
+      return MyColors.hexFromStr("#000000");
+    }
+    final dic = configData;
+    // dp最小
+    final strDOWNDBMIN =  dic["DSDB_MIN"];
+    // dp最大
+    final strDOWNDBMAX = dic["DSDB_MAX"];
+    
+    final strUSSNRMIN = dic["USSNR_MIN"];
+    // ds
+    final strDSSNRMIN = dic["DSSNR_MIN"];
+    // 外網 snr,pwr
+    final strUPDBMAX_EXT = dic["USDB_MAX_EXT"];
+    // 內網 snr,pwr
+    final strUPDBMAX_INT = dic["USDB_MAX_INT"];
+    // 上snr
+    if (name == "US0" || name == "US1" || name == "US2" || name == "US3" || name == "SNR_U0" || name == "SNR_U1" || name == "SNR_U2" || name == "SNR_U3" || name == "U0_SNR" || name == "U1_SNR" || name == "U2_SNR" || name == "U3_SNR") {
+      if (double.parse(data) == null) {
+        return MyColors.hexFromStr("#FF0000");
+      }
+      else if (double.parse(data) < 1) {
+        return MyColors.hexFromStr("#0000FF");
+      }
+      else {
+        return (double.parse(data) >= double.parse(strUSSNRMIN) ? MyColors.hexFromStr("#0000FF") : MyColors.hexFromStr("#FF0000"));
+      }
+    }
+    // 下pwr
+    if (name == "UP0" || name == "UP1" || name == "UP2" || name == "UP3" || name == "POW_U0" || name == "POW_U1" || name == "POW_U2" || name == "POW_U3" || name == "U0_PWR" || name == "U1_PWR" || name == "U2_PWR" || name == "U3_PWR" ) {
+      if (double.parse(data) == null) {
+        return MyColors.hexFromStr("#FF0000");
+      }
+      else if (double.parse(data) < 1) {
+        return MyColors.hexFromStr("#0000FF");
+      }
+      if (netType == "EXT") {
+        return (double.parse(data) >= double.parse(strUPDBMAX_EXT) ? MyColors.hexFromStr("#FF0000") : MyColors.hexFromStr("#0000FF"));
+      }
+      else {
+        return (double.parse(data) >= double.parse(strUPDBMAX_INT) ? MyColors.hexFromStr("#FF0000") : MyColors.hexFromStr("#0000FF"));
+      }
+    }
+    // 下pwr
+    if (name == "U0_PWR_PING" || name == "U1_PWR_PING" || name == "U2_PWR_PING" || name == "U3_PWR_PING" ) {
+      if (double.parse(data) == null) {
+        return MyColors.hexFromStr("#FF0000");
+      }
+      else {
+        if (netType == "EXT") {
+          return (double.parse(data) >= double.parse(strUPDBMAX_EXT) ? MyColors.hexFromStr("#FF0000") : MyColors.hexFromStr("#0000FF"));
+        }
+        else {
+          return (double.parse(data) >= double.parse(strUPDBMAX_INT) ? MyColors.hexFromStr("#FF0000") : MyColors.hexFromStr("#0000FF"));
+        }
+      }
+    }
+    if(name == "DS0_PING" || name == "DS1_PING" || name == "DS2_PING" || name == "DS3_PING" || name == "DS4_PING" || name == "DS5_PING" || name == "DS6_PING" || name == "DS7_PING" ) {
+      if (double.parse(data) == null) {
+        return MyColors.hexFromStr("#FF0000");
+      }
+       if (netType == "EXT") {
+          return (double.parse(data) >= double.parse(strUPDBMAX_EXT) ? MyColors.hexFromStr("#FF0000") : MyColors.hexFromStr("#0000FF"));
+       }
+       else {
+          return (double.parse(data) >= double.parse(strUPDBMAX_INT) ? MyColors.hexFromStr("#FF0000") : MyColors.hexFromStr("#0000FF"));
+       }
+    }
+    // 上DS
+    if (name == "DS0" || name == "DS1" || name == "DS2" || name == "DS3" || name == "DS4" || name == "DS5" || name == "DS6" || name == "DS7" ) {
+      if (double.parse(data) == null) {
+        return MyColors.hexFromStr("#FD5AD5");
+      }
+      else {
+        return (double.parse(data) >= double.parse(strDSSNRMIN)) ? MyColors.hexFromStr('#5F605E') : MyColors.hexFromStr('#FD5AD5');
+      }
+    }
+    // 下DP
+    if (name == "DP0" || name == "DP1" || name == "DP2" || name == "DP3" || name == "DP4" || name == "DP5" || name == "DP6" || name == "DP7" ) {
+      if (double.parse(data) == null) {
+        return MyColors.hexFromStr("#5F605E");
+      }
+      else {
+        return (double.parse(data) >= double.parse(strDOWNDBMIN)) && (double.parse(data) <= double.parse(strDOWNDBMAX)) ? MyColors.hexFromStr('#5F605E') : MyColors.hexFromStr('#FD5AD5');
+      }
+    }
+    return MyColors.hexFromStr("#000000");
   }
 }

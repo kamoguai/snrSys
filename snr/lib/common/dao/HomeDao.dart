@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:snr/common/dao/DaoResult.dart';
+import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/net/Api.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/model/HomeCmtsTitleInfo.dart';
 import 'package:snr/common/model/HomeSignal.dart';
+import 'dart:convert';
 
 class HomeDao {
   ///取得首頁cmtsTitleInfo筆數
@@ -62,6 +64,27 @@ class HomeDao {
       }
     } else {
       return new DataResult(null, false);
+    }
+  }
+  ///snr設定檔
+  static getQueryConfigAPI() async {
+    Map<String, dynamic> mainDataArray = {};
+    Map<String, dynamic> dataArray = {};
+    var res = await HttpManager.netFetch(Address.getQueryConfigureAPI(), null, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("取得snr設定檔 resp => ${res.data.toString()}");
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        mainDataArray = res.data["ReturnData"];
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        mainDataArray = res.data["ReturnData"];
+      }
+      if (mainDataArray.length > 0 ){
+        dataArray = mainDataArray["Data"];
+        await LocalStorage.save(Config.SNR_CONFIG, json.encode(dataArray));
+      }
     }
   }
 }

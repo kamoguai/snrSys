@@ -34,6 +34,7 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
     super.initState();
     isLoading = true;
     getApiDataList();
+
   }
 
   @override
@@ -216,7 +217,7 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
               ),
             ),
             onTap: () {
-              NavigatorUtils.goAbnormalDetail(context);
+              NavigatorUtils.goAbnormalDetail(context, widget.cmtsCodeStr, widget.cifStr, dataArray[index]['NODE']);
             },
           );
         },

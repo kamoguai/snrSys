@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/AbnormalDao.dart';
+import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
@@ -37,8 +41,17 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
     super.initState();
     isLoading = true;
     getApiDataList();
+    xx();
   }
+  xx() async {
 
+    var dic  = await LocalStorage.get(Config.SNR_CONFIG);
+    if (dic != null) {
+      var dicMap = json.decode(dic);
+      print('dic ===========> ${dicMap["DSSNR_MIN"]}');
+    }
+    
+  }
   @override
   void dispose() {
     super.dispose();

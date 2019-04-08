@@ -187,4 +187,8 @@ class Address {
     var date = formatDate(DateTime.now(), [yyyy,'-',mm,'-',dd]);
     return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRNodeSignalByCMTS_CIF&CMTSCode=${cmtsCode}&CIF=${cif}&Date=${date}";
   }
+  ///abnormal detail
+  static getSNRDetailByCMTSAndCIFAPI(cmts, cif, node, type, sort) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRDetailByCMTSAndCIF&CMTSCode=${cmts}&CIF=${cif}&NODE=${node}&Type=${type}&Sort=${sort}";
+  }
 }
