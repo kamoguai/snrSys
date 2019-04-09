@@ -823,6 +823,9 @@ class _HomePageState extends State<HomePage>
                                   color: Color(MyColors.hexFromStr("#fff7dc")),
                                   fontSize: MyConstant.smallTextSize,
                                   textColor: Colors.black,
+                                  onPress: () {
+                                    NavigatorUtils.goProblemDetail(context);
+                                  },
                                 ),
                               ),
                               ButtonTheme(

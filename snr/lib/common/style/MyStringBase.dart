@@ -129,5 +129,13 @@ abstract class MyStringBase {
 
   String abnormal_node_node;
 
+  String text_problem;
+
+  String text_vbad;
+
+  String text_trace;
+
+  String text_other;
+
   
 }

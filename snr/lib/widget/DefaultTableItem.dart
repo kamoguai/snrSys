@@ -283,7 +283,7 @@ class DefaultTableItem extends StatelessWidget {
                             Container(
                               width: _deviceWidth9(context) - 1,
                               child: _autoTextSize(
-                                  'fix', TextStyle(color: Colors.red), context),
+                                  defaultViewModel.isMarjor, TextStyle(color: Colors.red), context),
                             ),
                             _buildHeightLine(),
                             Container(
@@ -360,7 +360,7 @@ class DefaultTableItem extends StatelessWidget {
                 _buildHeightLine51(),
                 Container(
                   width: _deviceWidth3(context),
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(11.0),
                   child: FlatButton.icon(
                     icon: Image.asset('static/images/pingBtn.png'),
                     label: Text(''),
@@ -533,22 +533,22 @@ class DefaultTableItem extends StatelessWidget {
                 _buildHeightLine(),
                 Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('status', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('status', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('status', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('status', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
                 ),
               ],
             ),
@@ -566,22 +566,22 @@ class DefaultTableItem extends StatelessWidget {
                 _buildHeightLine(),
                 Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('status', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('status', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('status', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('status', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
                 ),
               ],
             ),
@@ -593,7 +593,7 @@ class DefaultTableItem extends StatelessWidget {
               children: <Widget>[
                 Container(
                   width: (_deviceWidth9(context) * 2.5) - 1,
-                  child: _autoTextSize('上:${defaultViewModel.usflow}', TextStyle(color: Colors.blue), context),
+                  child: _autoTextSize('上:${defaultViewModel.usflow}', TextStyle(color: Colors.red), context),
                 ),
                 _buildHeightLine(),
                 Container(
@@ -603,12 +603,12 @@ class DefaultTableItem extends StatelessWidget {
                 _buildHeightLine(),
                 Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('回:${defaultViewModel.response}', TextStyle(color: Colors.blue), context),
+                  child: _autoTextSize('回:${defaultViewModel.response}', TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('掉:${defaultViewModel.packetLoss}', TextStyle(color: Colors.blue), context),
+                  child: _autoTextSize('掉:${defaultViewModel.packetLoss}', TextStyle(color: Colors.black), context),
                 ),
                 
               ],

@@ -132,4 +132,12 @@ class MyStringZh extends MyStringBase {
   String abnormal_node_title = "卡板/HUB";
   @override
   String abnormal_node_node = "NODE";
+  @override
+  String text_problem = "問題";
+  @override
+  String text_vbad = "可異";
+  @override
+  String text_trace = "追蹤";
+  @override
+  String text_other = "其它";
 }

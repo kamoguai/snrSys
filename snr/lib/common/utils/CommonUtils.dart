@@ -320,7 +320,7 @@ class CommonUtils {
 
   ///snr設定檔決定顏色
   static checkSnrConfigureValueColor(String data, String name, String netType, dynamic configData) {
-    if (data == "") {
+    if (data == "" || data == "---") {
       return MyColors.hexFromStr("#000000");
     }
     final dic = configData;

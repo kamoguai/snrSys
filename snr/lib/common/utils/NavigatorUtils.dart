@@ -7,6 +7,7 @@ import 'package:snr/page/HomePage.dart';
 import 'package:snr/page/abNormal/AbnormalCardPage.dart';
 import 'package:snr/page/abNormal/AbnormalNodePage.dart';
 import 'package:snr/page/abNormal/AbnormalDetailPage.dart';
+import 'package:snr/page/problem/ProblemDetial.dart';
 
 /**
  * 導航欄
@@ -47,7 +48,11 @@ class NavigatorUtils {
     NavigatorRouter(context,new AbnormalNodePage(cmtsCode, cif, name, time));
   }
   ///卡板詳情頁面
-  static goAbnormalDetail(BuildContext context, String cmtsCode, String cif, String node) {
-    NavigatorRouter(context,new AbnormalDetialPage(cmtsCode, cif, node));
+  static goAbnormalDetail(BuildContext context, String cmtsCode, String cif, String node, String time) {
+    NavigatorRouter(context,new AbnormalDetailPage(cmtsCode, cif, node, time));
+  }
+  ///問題詳情頁面
+  static goProblemDetail(BuildContext context){
+    NavigatorRouter(context,new ProblemDetailPage());
   }
 }

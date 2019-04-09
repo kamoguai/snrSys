@@ -191,4 +191,12 @@ class Address {
   static getSNRDetailByCMTSAndCIFAPI(cmts, cif, node, type, sort) {
     return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRDetailByCMTSAndCIF&CMTSCode=${cmts}&CIF=${cif}&NODE=${node}&Type=${type}&Sort=${sort}";
   }
+  ///problem，
+  static getQueryListAPI(type, city, sort, hub) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryList&Type=${type}&city=${city}&Sort=${sort}&hub=${hub}";
+  }
+  ///可異裡面的問題
+  static getSNRProblemsAllBadSignalAPI(city, sort, hub, typeValue, typeOf, accNo) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRAllBigBad&City=${city}&Sort=${sort}&Hub=${hub}&${typeOf}=${typeValue}&accNo=${accNo}";
+  }
 }

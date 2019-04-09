@@ -65,7 +65,7 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
   _buildNodeHeader() {
     return new Container(
       height: 40.0,
-      color: Color(MyColors.hexFromStr('#f0fcff')),
+      color: Color(MyColors.hexFromStr('#fef5f6')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -217,7 +217,7 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
               ),
             ),
             onTap: () {
-              NavigatorUtils.goAbnormalDetail(context, widget.cmtsCodeStr, widget.cifStr, dataArray[index]['NODE']);
+              NavigatorUtils.goAbnormalDetail(context, widget.cmtsCodeStr, widget.cifStr, dataArray[index]['NODE'], widget.timeStr);
             },
           );
         },
