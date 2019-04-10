@@ -137,5 +137,43 @@ abstract class MyStringBase {
 
   String text_other;
 
-  
+  String text_transform;
+
+  String text_sort;
+
+  String text_search;
+
+  String text_back;
+
+  String text_analyze;
+
+  String text_refresh;
+
+  String text_time;
+
+  String text_building;
+
+  String text_address;
+
+  String text_custcode;
+
+  String text_extranet;
+
+  String text_intranet;
+
+  String text_online;
+
+  String text_offline;
+
+  String text_bq;
+
+  String text_xz;
+
+  String text_sc;
+
+  String text_tc;
+
+  String text_lu;
+
+  String text_all;
 }

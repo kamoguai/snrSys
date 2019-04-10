@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/AbnormalDao.dart';
@@ -9,6 +10,7 @@ import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
+import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/DefaultTableItem.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyListState.dart';
@@ -54,20 +56,7 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
         sort: '');
     return res;
   }
-  _reloadAction() async {
-    
-    isLoading = showRefreshLoading();
-    var res = await getApiDataList();
-    if (res != null && res.result) {
-      setState(() {
-        clearData();
-        pullLoadWidgetControl.dataList.addAll(res.data);
-        pullLoadWidgetControl.needLoadMore = false;
-      });
-    }
-
-    isLoading = false;
-  }
+  
   Store<SysState> _getStore() {
     return StoreProvider.of(context);
   }
@@ -152,8 +141,13 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
                             textColor: nowType == switchType.big ? Colors.yellow : Colors.white,
                             fontSize: MyScreen.normalPageFontSize(context),
                             onPress: () {
+                              if (isLoading) {
+                                Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                                return;
+                              }
                               setState(() {
                                 nowType = switchType.big;
+                                showRefreshLoading();
                               });
                             },
                           ),
@@ -165,8 +159,13 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
                             textColor: nowType == switchType.power ? Colors.yellow : Colors.white,
                             fontSize: MyScreen.normalPageFontSize(context),
                             onPress: () {
+                              if (isLoading) {
+                                Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                                return;
+                              }
                               setState(() {
                                 nowType = switchType.power;
+                                showRefreshLoading();
                               });
                             },
                           ),
@@ -178,8 +177,13 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
                             textColor: nowType == switchType.problem ? Colors.yellow : Colors.white,
                             fontSize: MyScreen.normalPageFontSize(context),
                             onPress: () {
+                              if (isLoading) {
+                                Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                                return;
+                              }
                               setState(() {
                                 nowType = switchType.problem;
+                                showRefreshLoading();
                               });
                             },
                           ),
@@ -210,15 +214,17 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
                       child: new MyToolButton(
                         // padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         padding: EdgeInsets.all(1.0),
-                        text: "刷新",
+                        text: CommonUtils.getLocale(context).text_refresh,
                         textColor: Colors.white,
                         color: Colors.transparent,
                         fontSize: MyScreen.normalPageFontSize(context),
                         onPress: () {
-                          isLoading = true;
+                          if (isLoading) {
+                            Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                            return;
+                          }
                           setState(() {
-                            _reloadAction();
-                            print(123);
+                            showRefreshLoading();
                           });
                         },
                       ),
@@ -247,14 +253,22 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
                       child: new MyToolButton(
                         // padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         padding: EdgeInsets.all(1.0),
-                        text: "返回",
+                        text: CommonUtils.getLocale(context).text_back,
                         textColor: Colors.white,
                         color: Colors.transparent,
                         fontSize: MyScreen.normalPageFontSize(context),
                         mainAxisAlignment: MainAxisAlignment.start,
                         onPress: () {
-                          //返回上一頁
-                          Navigator.pop(context);
+                          if (isLoading) {
+                            Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                            return;
+                          }
+                          setState(() {
+                            clearData();
+                            //返回上一頁
+                            Navigator.pop(context);
+                          });
+                         
                         },
                       ),
                     ),

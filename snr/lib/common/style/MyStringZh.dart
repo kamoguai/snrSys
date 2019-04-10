@@ -140,4 +140,44 @@ class MyStringZh extends MyStringBase {
   String text_trace = "追蹤";
   @override
   String text_other = "其它";
+  @override
+  String text_transform = "跳轉";
+  @override
+  String text_sort = "排序";
+  @override
+  String text_search = "查詢";
+  @override
+  String text_back = "返回";
+  @override
+  String text_analyze = "分析";
+  @override
+  String text_refresh = "刷新";
+  @override
+  String text_time = "時間";
+  @override
+  String text_building = "大樓";
+  @override
+  String text_address = "地址";
+  @override
+  String text_custcode = "客編";
+  @override
+  String text_extranet = "外網";
+  @override
+  String text_intranet = "內網";
+  @override
+  String text_online = "上線";
+  @override
+  String text_offline = "離線";
+  @override
+  String text_bq = "板橋";
+  @override
+  String text_xz = "新莊";
+  @override
+  String text_sc = "三重";
+  @override
+  String text_tc = "土城";
+  @override
+  String text_lu = "蘆洲";
+  @override
+  String text_all = "全部";
 }

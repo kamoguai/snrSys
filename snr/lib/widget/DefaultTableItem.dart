@@ -50,29 +50,9 @@ class DefaultTableItem extends StatelessWidget {
     return deviceWidth;
   }
 
-  _deviceWidth2(context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-    return deviceWidth / 2;
-  }
-
   _deviceWidth3(context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     return deviceWidth / 3;
-  }
-
-  _deviceWidth4(context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-    return deviceWidth / 4;
-  }
-
-  _deviceWidth5(context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-    return deviceWidth / 5;
-  }
-
-  _deviceWidth6(context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-    return deviceWidth / 6;
   }
 
   _deviceWidth9(context) {
@@ -90,6 +70,27 @@ class DefaultTableItem extends StatelessWidget {
     );
   }
 
+  _autoContainer({child}) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+        )
+      ),
+      child: child,
+    );
+  }
+
+  _autoContainer_full({child}) {
+    return Container(
+      padding: EdgeInsets.only(top: 2.0, bottom: 2.0),
+      decoration: BoxDecoration(
+        border: Border(
+        )
+      ),
+      child: child,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var netType = 'EXT';
@@ -98,71 +99,39 @@ class DefaultTableItem extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Container(
+          GestureDetector(
+            onTap: (){print(123);},
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
+                _autoContainer_full(child: _autoTextSize(defaultViewModel.address,TextStyle(color: Colors.grey), context), ),
                 _buildLine(),
-                Container(
-                    height: 25.0,
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: FlatButton(
-                            onPressed: () {},
-                            child: _autoTextSize(defaultViewModel.address,
-                                TextStyle(color: Colors.grey), context),
-                          ),
-                        )
-                      ],
-                    )),
-                _buildLine(),
-                Container(
-                  height: 25.0,
+                _autoContainer(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
                         width: _deviceWidth3(context) - 1,
-                        child: FlatButton(
-                          onPressed: () {},
-                          child: Container(
-                            child: _autoTextSize(defaultViewModel.installMan,
-                                TextStyle(color: Colors.grey), context),
-                          ),
-                        ),
+                        child: _autoTextSize(defaultViewModel.installMan,TextStyle(color: Colors.grey), context),
                       ),
                       _buildHeightLine(),
                       Container(
                         width: _deviceWidth3(context) - 1,
-                        child: FlatButton(
-                          onPressed: () {},
-                          child: Container(
-                            child: _autoTextSize(defaultViewModel.installDate,
-                                TextStyle(color: Colors.grey), context),
-                          ),
-                        ),
+                        child: _autoTextSize(defaultViewModel.installDate,TextStyle(color: Colors.grey), context),
                       ),
                       _buildHeightLine(),
                       Container(
-                          width: _deviceWidth3(context),
-                          child: FlatButton(
-                            onPressed: () {},
-                            child: Container(
-                              child: _autoTextSize(defaultViewModel.saleMan,
-                                  TextStyle(color: Colors.grey), context),
-                            ),
-                          )),
+                        width: _deviceWidth3(context),
+                        child: _autoTextSize(defaultViewModel.saleMan,TextStyle(color: Colors.grey), context),
+                      ),
                     ],
                   ),
-                ),
+                )
               ],
             ),
           ),
           _buildLine(),
-          Container(
-            height: 25.0,
-            // padding: EdgeInsets.only(left: 5.0, right: 5.0),
+          _autoContainer(
             child: Row(
               // crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -179,7 +148,7 @@ class DefaultTableItem extends StatelessWidget {
                       Container(
                         width: _deviceWidth9(context) - 1,
                         child: _autoTextSize(
-                            defaultViewModel.note6, TextStyle(color: Colors.blue), context),
+                            defaultViewModel.note6, TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.note6_color))), context),
                       ),
                       _buildHeightLine(),
                       Container(
@@ -191,23 +160,20 @@ class DefaultTableItem extends StatelessWidget {
                   ),
                 ),
                 _buildHeightLine(),
-                Container(
-                  width: _deviceWidth3(context),
-                  child: FlatButton(
-                      onPressed: () {
-                        print('指派人員');
-                      },
-                      child: Container(
-                        child: _autoTextSize(defaultViewModel.assignMan,
-                            TextStyle(color: Colors.brown), context),
-                      )),
+                GestureDetector(
+                  onTap: (){
+                    print('assignman');
+                  },
+                  child: Container(
+                    width: _deviceWidth3(context),
+                    child: _autoTextSize(defaultViewModel.assignMan,TextStyle(color: Colors.brown), context),
+                  ),
                 ),
               ],
             ),
           ),
           _buildLine(),
-          Container(
-            height: 25.0,
+          _autoContainer(
             child: Row(
               children: <Widget>[
                 Container(
@@ -227,8 +193,7 @@ class DefaultTableItem extends StatelessWidget {
             ),
           ),
           _buildLine(),
-          Container(
-            height: 25.0,
+          _autoContainer(
             child: Row(
               children: <Widget>[
                 Container(
@@ -245,7 +210,7 @@ class DefaultTableItem extends StatelessWidget {
                         color: Color(MyColors.hexFromStr('#f0fcff')),
                         width: (_deviceWidth9(context) / 2) - 1,
                         child: _autoTextSize(
-                            defaultViewModel.note1, TextStyle(color: Colors.red), context),
+                            defaultViewModel.note1, TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.note1_color))), context),
                       ),
                       _buildHeightLine(),
                       Container(
@@ -269,29 +234,50 @@ class DefaultTableItem extends StatelessWidget {
           ),
           _buildLine(),
           Container(
-            height: 51.0,
+            decoration: BoxDecoration(border: Border()),
             child: Row(
               children: <Widget>[
-                Container(
-                  width: (_deviceWidth3(context) * 2) - 1,
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        height: 25.0,
-                        child: Row(
+                GestureDetector(
+                  onTap: (){print('custCode');},
+                  child: Container(
+                    width: (_deviceWidth9(context) * 2) - 1,
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(border: Border()),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                width: _deviceWidth9(context) - 1,
+                                child: _autoTextSize(defaultViewModel.isMarjor, TextStyle(color: Colors.red), context),
+                              ),
+                              _buildHeightLine(),
+                              Container(
+                                width: _deviceWidth9(context) - 1,
+                                child: _autoTextSize(defaultViewModel.restartCount,TextStyle(color: Colors.black), context),
+                              ),
+                            ],
+                          ),
+                        ),
+                        _buildLine(),
+                        Container(
+                          decoration: BoxDecoration(border: Border()),
+                          child: _autoTextSize(defaultViewModel.restartTime,TextStyle(color: Colors.black), context),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+                _buildHeightLine51(),
+                GestureDetector(
+                  child:  Container(
+                    decoration: BoxDecoration(border: Border()),
+                    width: (_deviceWidth9(context) * 4) - 1,
+                    child: Column(
+                      children: <Widget>[
+                        Row(
                           children: <Widget>[
-                            Container(
-                              width: _deviceWidth9(context) - 1,
-                              child: _autoTextSize(
-                                  defaultViewModel.isMarjor, TextStyle(color: Colors.red), context),
-                            ),
-                            _buildHeightLine(),
-                            Container(
-                              width: _deviceWidth9(context) - 1,
-                              child: _autoTextSize(defaultViewModel.restartCount,
-                                  TextStyle(color: Colors.black), context),
-                            ),
-                            _buildHeightLine(),
                             Container(
                               width: _deviceWidth9(context) - 1,
                               child: _autoTextSize(defaultViewModel.u0_SNR,
@@ -317,17 +303,9 @@ class DefaultTableItem extends StatelessWidget {
                             ),
                           ],
                         ),
-                      ),
-                      _buildLine(),
-                      Container(
-                        child: Row(
+                        _buildLine(),
+                        Row(
                           children: <Widget>[
-                            Container(
-                              width: (_deviceWidth9(context) * 2) - 1,
-                              child: _autoTextSize(defaultViewModel.restartTime,
-                                  TextStyle(color: Colors.black), context),
-                            ),
-                            _buildHeightLine(),
                             Container(
                               width: _deviceWidth9(context) - 1,
                               child: _autoTextSize(defaultViewModel.u0_PWR,
@@ -353,22 +331,22 @@ class DefaultTableItem extends StatelessWidget {
                             ),
                           ],
                         ),
-                      )
-                    ],
+                      ],
+                    ),
+
                   ),
+                  onTap: (){print(123);},
                 ),
                 _buildHeightLine51(),
-                Container(
-                  width: _deviceWidth3(context),
-                  padding: EdgeInsets.all(11.0),
-                  child: FlatButton.icon(
-                    icon: Image.asset('static/images/pingBtn.png'),
-                    label: Text(''),
-                    onPressed: (){
-
-                    },
+                GestureDetector(
+                  child: Container(
+                    width: _deviceWidth3(context),
+                    // padding: EdgeInsets.all(2.0),
+                    child: Image.asset('static/images/pingBtn.png', height: 40.0, width: 40.0),
                   ),
-                )
+                  onTap: (){print('ping');},
+                ),
+                
               ],
             ),
           ),
@@ -479,8 +457,7 @@ class DefaultTableItem extends StatelessWidget {
             ),
           ),
           _buildLine(),
-          Container(
-            height: 25.0,
+          _autoContainer(
             child: Row(
               children: <Widget>[
                 Container(
@@ -587,47 +564,44 @@ class DefaultTableItem extends StatelessWidget {
             ),
           ),
           _buildLine(),
-          Container(
-            height: 25.0,
-            child: Row(
+          GestureDetector(
+            child: Column(
               children: <Widget>[
-                Container(
-                  width: (_deviceWidth9(context) * 2.5) - 1,
-                  child: _autoTextSize('上:${defaultViewModel.usflow}', TextStyle(color: Colors.red), context),
+                _autoContainer(
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        width: (_deviceWidth9(context) * 2.5) - 1,
+                        child: _autoTextSize('上:${defaultViewModel.usflow}', TextStyle(color: Colors.red), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth9(context) * 2.5) - 1,
+                        child: _autoTextSize('下:${defaultViewModel.dsflow}', TextStyle(color: Colors.blue), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth9(context) * 2) - 1,
+                        child: _autoTextSize('回:${defaultViewModel.response}', TextStyle(color: Colors.black), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth9(context) * 2) - 1,
+                        child: _autoTextSize('掉:${defaultViewModel.packetLoss}', TextStyle(color: Colors.black), context),
+                      ),
+                      
+                    ],
+                  ),
                 ),
-                _buildHeightLine(),
-                Container(
-                  width: (_deviceWidth9(context) * 2.5) - 1,
-                  child: _autoTextSize('下:${defaultViewModel.dsflow}', TextStyle(color: Colors.blue), context),
-                ),
-                _buildHeightLine(),
-                Container(
-                  width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('回:${defaultViewModel.response}', TextStyle(color: Colors.black), context),
-                ),
-                _buildHeightLine(),
-                Container(
-                  width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('掉:${defaultViewModel.packetLoss}', TextStyle(color: Colors.black), context),
-                ),
-                
+                _buildLine(),
+                _autoContainer_full(
+                  child: _autoTextSize(defaultViewModel.reportLog, TextStyle(color:  Colors.black), context),
+                )
               ],
             ),
+            onTap: (){print("showLog");},
           ),
-          _buildLine(),
-          Container(
-            padding: EdgeInsets.all(2.0),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  width: 1.0,
-                  color: Colors.red,
-                  style: BorderStyle.none
-                )
-              )
-            ),
-            child: _autoTextSize(defaultViewModel.reportLog, TextStyle(color:  Colors.black), context),
-          ),
+          
           _buildRedLine()
         ],
       ),
@@ -721,7 +695,7 @@ class DefaultViewModel {
     otime = data.OTIME == null ? "" : data.OTIME;
     custNo = data.CustNo == null ? "" : data.CustNo;
     note1 = data.note1 == null ? "" : data.note1;
-    note1_color = data.note1_color == null ? "000000" : data.Address;
+    note1_color = data.note1_color == null ? "000000" : data.note1_color;
     custClass = data.CustClass == null ? "" : data.CustClass;
     name = data.Name == null ? "" : data.Name;
     isMarjor = data.isMarjor == null ? "" : data.isMarjor;

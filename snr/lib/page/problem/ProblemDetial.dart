@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/ProblemDao.dart';
@@ -23,7 +25,7 @@ class ProblemDetailPage extends StatefulWidget {
   _ProblemDetailPageState createState() => _ProblemDetailPageState();
 }
 
-class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKeepAliveClientMixin<ProblemDetailPage>, MyListState<ProblemDetailPage> {
+class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKeepAliveClientMixin<ProblemDetailPage>, MyListState<ProblemDetailPage>, WidgetsBindingObserver {
 
   var config;
   var nowType = buttonType.problem;
@@ -51,7 +53,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           ButtonTheme(
-            minWidth: 70.0,
+            minWidth: MyScreen.default4BtnWidth(context),
             height: 35,
             child: new MyToolButton(
               padding:
@@ -63,20 +65,24 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               text: CommonUtils.getLocale(context)
                   .text_problem + "-${problemCount}",
               color: Color(MyColors.hexFromStr("#eeffef")),
-              fontSize: MyConstant.smallTextSize,
+              fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.problem ? Colors.red : Colors.grey[700],
               onPress: () {
+                if (isLoading) {
+                  Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                  return;
+                }
                 setState(() {
                   nowType = buttonType.problem;
                   typeof = "PROBLEM";
-                  _reloadAction();
+                  showRefreshLoading();
                 });
                 
               },
             ),
           ),
           ButtonTheme(
-            minWidth: 70.0,
+            minWidth: MyScreen.default4BtnWidth(context),
             height: 35,
             child: new MyToolButton(
               padding:
@@ -88,19 +94,23 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               text: CommonUtils.getLocale(context)
                   .text_vbad + "-${vbadCount}",
               color: Color(MyColors.hexFromStr("#f0fcff")),
-              fontSize: MyConstant.smallTextSize,
+              fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.vbad ? Colors.red : Colors.grey[700],
               onPress: () {
+                if (isLoading) {
+                  Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                  return;
+                }
                 setState(() {
                   nowType = buttonType.vbad;
                   typeof = "VBAD";
-                  _reloadAction();
+                  showRefreshLoading();
                 });
               },
             ),
           ),
           ButtonTheme(
-            minWidth: 70.0,
+            minWidth: MyScreen.default4BtnWidth(context),
             height: 35,
             child: new MyToolButton(
               padding:
@@ -112,19 +122,23 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               text: CommonUtils.getLocale(context)
                   .text_trace + "-${traceCount}",
               color: Color(MyColors.hexFromStr("#fafff2")),
-              fontSize: MyConstant.smallTextSize,
+              fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.trace ? Colors.red : Colors.grey[700],
               onPress: () {
+                if (isLoading) {
+                  Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                  return;
+                }
                 setState(() {
                   nowType = buttonType.trace;
                   typeof = "TRACK";
-                  _reloadAction();
+                  showRefreshLoading();
                 });
               },
             ),
           ),
           ButtonTheme(
-            minWidth: 70.0,
+            minWidth: MyScreen.default4BtnWidth(context),
             height: 35,
             child: new MyToolButton(
               padding:
@@ -136,13 +150,17 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               text: CommonUtils.getLocale(context)
                   .text_other + "-${otherCount}",
               color: Color(MyColors.hexFromStr("#fef5f6")),
-              fontSize: MyConstant.smallTextSize,
+              fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.other ? Colors.red : Colors.grey[700],
               onPress: () {
+                if (isLoading) {
+                  Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                  return;
+                }
                 setState(() {
                   nowType = buttonType.other;
                   typeof = "OTHER";
-                  _reloadAction();
+                  showRefreshLoading();
                 });
               },
             ),
@@ -196,33 +214,223 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
     );
     return res;
   }
+  ///排序dialog, ios樣式
+  _showSortAlertSheetController(BuildContext context) {
+    showCupertinoModalPopup<String>(
+        context: context,
+        builder: (context) {
+          var dialog = CupertinoActionSheet(
+            title: Text(CommonUtils.getLocale(context).text_sort),
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context, 'cancel');
+              },
+              child: Text('取消'),
+            ),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strSort = 'T';
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_time),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strSort = 'A';
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_address),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strSort = 'B';
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_building),
+              ),
+            ],
+          );
+          
+          return dialog;
+        }
+    );
+  }
 
-  _reloadAction() async {
-    
-    isLoading = showRefreshLoading();
-    var res = await getApiDataList();
-    if (res != null && res.result) {
-      List<DefaultTableCell> list = new List();
-      List<dynamic> dataArray = [];
-      dataArray = res.data["Data"];
-      if (dataArray.length > 0 ) {
-          for (var dic in dataArray) {
-            list.add(DefaultTableCell.fromJson(dic));
-          }
-      }
-      setState(() {
-        clearData();
-        vbadCount = res.data["VBAD"];
-        problemCount = res.data["PROBLEM"];
-        otherCount = res.data["OTHER"];
-        traceCount = res.data["TRACK"] == null ? "0" : res.data["TRACK"];
+  ///查詢dialog, ios樣式
+  _showSearchAlertSheetController(BuildContext context) {
+    showCupertinoModalPopup<String>(
+        context: context,
+        builder: (context) {
+          var dialog = CupertinoActionSheet(
+            title: Text(CommonUtils.getLocale(context).text_sort),
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context, 'cancel');
+              },
+              child: Text('取消'),
+            ),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_custcode),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text('CH'),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text('SNR'),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_extranet),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_intranet),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_offline),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_offline),
+              ),
+            ],
+          );
+          
+          return dialog;
+        }
+    );
+  }
 
-        pullLoadWidgetControl.dataList.addAll(list);
-        pullLoadWidgetControl.needLoadMore = false;
-      });
-    }
-
-    isLoading = false;
+  ///地區dialog, ios樣式
+  _showCityAlertSheetController(BuildContext context) {
+    showCupertinoModalPopup<String>(
+        context: context,
+        builder: (context) {
+          var dialog = CupertinoActionSheet(
+            title: Text(CommonUtils.getLocale(context).text_sort),
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context, 'cancel');
+              },
+              child: Text('取消'),
+            ),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strArea = '';
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_all),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strArea = CommonUtils.getLocale(context).text_bq;
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_bq),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strSort = CommonUtils.getLocale(context).text_sc;
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_sc),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strSort = CommonUtils.getLocale(context).text_xz;
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_xz),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strSort = CommonUtils.getLocale(context).text_tc;
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_tc),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strSort = CommonUtils.getLocale(context).text_lu;
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_lu),
+              ),
+            ],
+          );
+          
+          return dialog;
+        }
+    );
   }
 
   Store<SysState> _getStore() {
@@ -278,6 +486,15 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
     }
     super.didChangeDependencies();
   }
+  
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (pullLoadWidgetControl.dataList.length != 0) {
+        showRefreshLoading();
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -308,10 +525,37 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
         builder: (context, store) {
           return Scaffold(
             appBar: AppBar(
-              // flexibleSpace: _renderHeader(),
               backgroundColor: Theme.of(context).primaryColor,
               leading: Container(),
               elevation: 0.0,
+              actions: <Widget>[
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      ButtonTheme(
+                        minWidth: MyScreen.homePageBarButtonWidth(context),
+                        child: new MyToolButton(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          text: strArea == "" ?  '區:' + CommonUtils.getLocale(context).text_all : strArea,
+                          textColor: Colors.white,
+                          color: Colors.transparent,
+                          fontSize: MyScreen.normalPageFontSize(context),
+                          onPress: () {
+                            if (isLoading) {
+                              Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                              return;
+                            }
+                            _showCityAlertSheetController(context);
+                          },
+                        ),
+                      ),
+                      Text(CommonUtils.getLocale(context).text_problem, style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
+                      Text('          ', style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
+                    ],
+                  ),
+                )
+              ],
             ),
             // body: _renderBody(),
             body: Column(
@@ -334,12 +578,11 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: "刷新",
+                      text: CommonUtils.getLocale(context).text_transform,
                       textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
-                        isLoading = true;
                         setState(() {
                           
                         });
@@ -350,12 +593,17 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: "分析",
+                      text: CommonUtils.getLocale(context).text_sort,
                       textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
-                        print("123");
+                        if (isLoading) {
+                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                          return;
+                        }
+                        _showSortAlertSheetController(context);
+                      
                       },
                     ),
                   ),
@@ -381,12 +629,16 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: "設定",
+                      text: CommonUtils.getLocale(context).text_search,
                       textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
-                        print("123");
+                        if (isLoading) {
+                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                          return;
+                        }
+                        _showSearchAlertSheetController(context);
                       },
                     ),
                   ),
@@ -394,13 +646,20 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: "返回",
+                      text: CommonUtils.getLocale(context).text_back,
                       textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       mainAxisAlignment: MainAxisAlignment.start,
                       onPress: () {
-                        Navigator.pop(context);
+                        if (isLoading) {
+                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                          return;
+                        }
+                        clearData();
+                        setState(() {
+                          Navigator.pop(context);
+                        });                    
                       },
                     ),
                   ),

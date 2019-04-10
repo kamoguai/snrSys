@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/AbnormalDao.dart';
 import 'package:snr/common/local/LocalStorage.dart';
@@ -472,7 +473,7 @@ _buildCmtsHeader2() {
                   child: new MyToolButton(
                     // padding: EdgeInsets.only(left: 10.0, right: 10.0),
                     padding: EdgeInsets.all(1.0),
-                    text: "刷新",
+                    text: CommonUtils.getLocale(context).text_refresh,
                     textColor: Colors.white,
                     color: Colors.transparent,
                     fontSize: MyScreen.normalPageFontSize(context),
@@ -508,14 +509,21 @@ _buildCmtsHeader2() {
                   child: new MyToolButton(
                     // padding: EdgeInsets.only(left: 10.0, right: 10.0),
                     padding: EdgeInsets.all(1.0),
-                    text: "返回",
+                    text: CommonUtils.getLocale(context).text_back,
                     textColor: Colors.white,
                     color: Colors.transparent,
                     fontSize: MyScreen.normalPageFontSize(context),
                     mainAxisAlignment: MainAxisAlignment.start,
                     onPress: () {
-                      //返回上一頁
-                      Navigator.pop(context);
+                      if (isLoading) {
+                        Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                        return;
+                      }
+                      setState(() {
+                        //返回上一頁
+                        Navigator.pop(context);
+                      });
+                      
                     },
                   ),
                 ),

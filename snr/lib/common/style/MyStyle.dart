@@ -405,7 +405,7 @@ class MyScreen {
     if (deviceHeight < 570) {
       fontSize = MyConstant.tinyTextSize - 1;
     } else if (deviceHeight > 800) {
-      fontSize = MyConstant.smallTextSize;
+      fontSize = MyConstant.normalTextSize;
     } else if (deviceHeight > 600 && deviceHeight < 720) {
       fontSize = MyConstant.minTextSize;
     }
@@ -413,5 +413,21 @@ class MyScreen {
       fontSize = MyConstant.smallTextSize;
     }
     return fontSize;
+  }
+  ///四顆按鈕width
+  static double default4BtnWidth(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double width = 60.0;
+    if (deviceHeight < 570) {
+      width = 60.0;
+    } else if (deviceHeight > 800) {
+      width = 80.0;
+    } else if (deviceHeight > 600 && deviceHeight < 720) {
+      width = 70.0;
+    }
+    else {
+      width = 70.0;
+    }
+    return width;
   }
 }
