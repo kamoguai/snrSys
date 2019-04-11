@@ -398,12 +398,28 @@ class MyScreen {
     }
     return fontSize;
   }
-  ///卡板list字體大小s
+  ///通用detailList字體大小
   static double defaultTableCellFontSize(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
     double fontSize = 0.0;
     if (deviceHeight < 570) {
       fontSize = MyConstant.tinyTextSize - 1;
+    } else if (deviceHeight > 800) {
+      fontSize = MyConstant.normalTextSize;
+    } else if (deviceHeight > 600 && deviceHeight < 720) {
+      fontSize = MyConstant.minTextSize;
+    }
+    else {
+      fontSize = MyConstant.smallTextSize;
+    }
+    return fontSize;
+  }
+  ///通用detailList字體大小s
+  static double defaultTableCellFontSize_s(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double fontSize = 0.0;
+    if (deviceHeight < 570) {
+      fontSize = MyConstant.tinyTextSize - 2;
     } else if (deviceHeight > 800) {
       fontSize = MyConstant.normalTextSize;
     } else if (deviceHeight > 600 && deviceHeight < 720) {

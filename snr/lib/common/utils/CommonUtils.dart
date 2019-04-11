@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -302,21 +303,22 @@ class CommonUtils {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return CupertinoAlertDialog(
           title: new Text(titleStr),
           content: new Text(contentStr),
           actions: <Widget>[
-            new FlatButton(
-              child: new Text(CommonUtils.getLocale(context).app_cancel),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
+            CupertinoButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+                child: Text('確定', style: TextStyle(color: Colors.red),),
+            ),
           ],
         );
       }
     );
   }
+  
 
   ///snr設定檔決定顏色
   static checkSnrConfigureValueColor(String data, String name, String netType, dynamic configData) {

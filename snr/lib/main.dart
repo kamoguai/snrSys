@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:snr/common/localization/FallbackCupertinoLocalisationsDelegate.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/model/User.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
@@ -51,6 +52,7 @@ class SnrReduxApp extends StatelessWidget {
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             MyLocalizationsDelegate.delegate,
+            FallbackCupertinoLocalisationsDelegate(),
           ],
           locale: store.state.locale,
           supportedLocales: [store.state.locale],

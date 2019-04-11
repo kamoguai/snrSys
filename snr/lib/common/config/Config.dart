@@ -17,4 +17,5 @@ class Config {
   static const LOCALE = "locale";
   static const NOWDATE = "now-date";
   static const SNR_CONFIG = "snr-config";
+  static const USER_SSO_KEY = "user-sso";
 }

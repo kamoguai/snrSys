@@ -6,6 +6,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
+import 'package:snr/common/dao/DefaultTableDao.dart';
 import 'package:snr/common/dao/ProblemDao.dart';
 import 'package:snr/common/dao/UserDao.dart';
 import 'package:snr/common/local/LocalStorage.dart';
@@ -14,11 +15,11 @@ import 'package:snr/common/model/User.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
-import 'package:snr/page/problem/ProblemButtonController.dart';
 import 'package:snr/widget/DefaultTableItem.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
+import 'package:snr/common/model/SsoLogin.dart';
 
 class ProblemDetailPage extends StatefulWidget {
   @override
@@ -26,24 +27,41 @@ class ProblemDetailPage extends StatefulWidget {
 }
 
 class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKeepAliveClientMixin<ProblemDetailPage>, MyListState<ProblemDetailPage>, WidgetsBindingObserver {
-
+  ///snr設定檔
   var config;
+  ///現在按鈕enum
   var nowType = buttonType.problem;
+  ///區域
   var strArea = "";
+  ///排序
   var strSort = "";
+  ///hub
   var strHub = "";
+  ///現在功能
   var typevalue = "1";
+  ///同上
   var typeof = "PROBLEM";
+  ///可異筆數
   var vbadCount = "0";
+  ///問題筆數
   var problemCount = "0";
+  ///其他筆數
   var otherCount = "0";
+  ///追蹤筆數
   var traceCount = "0";
+  /// user model
   User user;
+  /// sso model
+  Sso sso;
+  ///跳轉客編arr
+  final List<String> toTransformArray = [];
+  ///數據資料arr
+  final List<dynamic> dataArray = [];
   ///列表顯示的物件
   _renderItem(index) {
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(model, config);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray);
   }
 
   ///頁面上方按鈕群
@@ -195,9 +213,12 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
   }
   ///初始化
   initParam() async {
-    var res = await UserDao.getUserInfoLocal();
-    user = res.data;
+    var userRes = await UserDao.getUserInfoLocal();
+    var ssoRes = await UserDao.getUserSSOInfoLocal();
+    user = userRes.data;
+    sso = ssoRes.data;
     user.accNo = await LocalStorage.get(Config.USER_NAME_KEY);
+    user.accName = sso.accName;
     final configData = await LocalStorage.get(Config.SNR_CONFIG);
     final dic = json.decode(configData);
     config = dic;
@@ -213,6 +234,21 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
     accNo: user.accNo,
     );
     return res;
+  }
+  /// call 跳轉api
+  postTransferAPI(to) async {
+    await DefaultTableDao.didTransfer(context, 
+    to: to, 
+    from: typeof,
+    accNo: user.accNo,
+    accName: user.accName,
+    custCDList: toTransformArray
+    );
+    
+    Future.delayed(const Duration(seconds: 1), () {
+      showRefreshLoading();
+    });
+    
   }
   ///排序dialog, ios樣式
   _showSortAlertSheetController(BuildContext context) {
@@ -291,8 +327,15 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
-                  setState(() {
-                    
+                 setState(() {
+                    List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BAD_TYPE"] == "C") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
@@ -301,7 +344,14 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    
+                    List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BAD_TYPE"] == "S") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
@@ -310,7 +360,14 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    
+                    List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BB"] != "內網") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
@@ -319,7 +376,14 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    
+                   List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BB"] == "內網") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
@@ -328,16 +392,30 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    
+                   List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["Status"] == "1") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_offline),
+                child: Text(CommonUtils.getLocale(context).text_online),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    
+                   List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["Status"] == "0") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
@@ -388,7 +466,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strSort = CommonUtils.getLocale(context).text_sc;
+                    strArea = CommonUtils.getLocale(context).text_sc;
                     showRefreshLoading();
                   });
                   Navigator.pop(context);
@@ -398,7 +476,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strSort = CommonUtils.getLocale(context).text_xz;
+                    strArea = CommonUtils.getLocale(context).text_xz;
                     showRefreshLoading();
                   });
                   Navigator.pop(context);
@@ -408,7 +486,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strSort = CommonUtils.getLocale(context).text_tc;
+                    strArea = CommonUtils.getLocale(context).text_tc;
                     showRefreshLoading();
                   });
                   Navigator.pop(context);
@@ -418,7 +496,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strSort = CommonUtils.getLocale(context).text_lu;
+                    strArea = CommonUtils.getLocale(context).text_lu;
                     showRefreshLoading();
                   });
                   Navigator.pop(context);
@@ -432,7 +510,170 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
         }
     );
   }
-
+  var typeStr = "";
+  ///執行跳轉action
+  _transformDataAction(BuildContext context) {
+    print("buttonTylpe => $nowType");
+    if (user.isTransfer == 1) {
+      if (toTransformArray.length < 1) {
+        Fluttertoast.showToast(msg: '尚未選擇欲跳轉客編');
+        return;
+      }
+      showCupertinoModalPopup<String>(
+        context: context,
+        builder: (context) {
+          var dialog = CupertinoActionSheet(
+            title: Text('將選取的資轉'),
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context, 'cancel');
+              },
+              child: Text('取消'),
+            ),
+            actions: _transSort()
+          );
+          return dialog;
+        }
+      );
+    } 
+  }
+  ///跳轉裡的選項
+  _transSort() {
+    List<String> sortArray = [];
+    List<Widget> wList = [];
+      switch (nowType) {
+        case buttonType.vbad: 
+          if (this.toTransformArray.length >= 2) {
+            sortArray = ["正常","其他","離線","問題","可優","無下行(超時)"];
+          }
+          else {
+            sortArray = ["正常","其他","離線","問題","可優","低HP","無下行(超時)"];
+          }
+          break;
+        case buttonType.problem: 
+          if (this.toTransformArray.length >= 2) {
+            sortArray = ["正常","派修","可異","離線","其他","可優","無下行(超時)"];
+          }
+          else {
+            sortArray = ["正常","派修","可異","離線","其他","可優","低HP","無下行(超時)"];
+          }
+          break;
+        case buttonType.other:
+          if (this.toTransformArray.length >= 2) {
+            sortArray = ["正常","派修","可異","離線","問題","可優","無下行(超時)"];
+          }
+          else {
+            sortArray = ["正常","派修","可異","離線","問題","可優","低HP","無下行(超時)"];
+          }
+          break;
+        case buttonType.trace:
+          sortArray = ["正常"];
+          break;
+      }
+      for (var sortStr in sortArray) {
+        wList.add(
+          CupertinoActionSheetAction(
+            onPressed: () {
+              switch (sortStr) {
+                case "派修":
+                  typeStr = "FIX";
+                  break;
+                case "低HP":
+                  typeStr = "LOWHP";
+                  break;
+                case "正常":
+                  typeStr = "GOOD";
+                  break;
+                case "追蹤":
+                  typeStr = "TRACK";
+                  break;
+                case "可異":
+                  typeStr = "VBAD";
+                  break;
+                case "問題":
+                  typeStr = "PROBLEM";
+                  break;
+                case "無下行(超時)" :
+                  typeStr = "NODS";
+                  break;
+                case "離線":
+                  typeStr = "OFFLINE";
+                  break;
+                case "其他":
+                  typeStr = "OTHER";
+                  break;
+                case "測機(追蹤)":
+                  typeStr = "TRACK4";
+                  break;
+                case "觀察(派修)":
+                  typeStr = "WATCH";
+                  break;
+                case "完工":
+                  typeStr = "FINISH";
+                  break;
+                case "可優":
+                  typeStr = "VBAD2";
+                  break;
+                case "NG":
+                  typeStr = "NG";
+                  break;
+                default:
+                  break;
+              }
+              print("跳轉to -> $typeStr");
+              Navigator.pop(context);
+              _transformDialog(context, to: typeStr, sortStr: sortStr);
+            },
+            child: Text(sortStr),
+          )
+        );
+      }
+      return wList;
+  }
+  _transformDialog(BuildContext context, {to,sortStr}) {
+    Future.delayed(const Duration(seconds: 1), () {
+      showDialog(
+        context: context,
+        builder: (context) {
+          var dialog = CupertinoAlertDialog(
+            content: Text('確定將選取的${toTransformArray.length}筆資料轉至\n${sortStr}'),
+            actions: <Widget>[
+              CupertinoButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+                child: Text('取消', style: TextStyle(color: Colors.red),),
+              ),
+              CupertinoButton(
+                onPressed: (){
+                  postTransferAPI(to);
+                  Navigator.pop(context);
+                },
+                child: Text('確定', style: TextStyle(color: Colors.blue),),
+              ),
+            ],
+          );
+          return dialog;  
+        }
+      );
+    });
+    
+  } 
+  ///跳轉function
+  void _addTransform(String custNo) {
+    setState(() {
+      if (toTransformArray.contains(custNo)) {
+        var index = toTransformArray.indexOf(custNo);
+        toTransformArray.removeAt(index);
+      }
+      else {
+        toTransformArray.add(custNo);
+      }
+      
+      print("now custNo => $toTransformArray");
+    });
+  }
+  
   Store<SysState> _getStore() {
     return StoreProvider.of(context);
   }
@@ -440,21 +681,24 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
   //透過override pullcontroller裡面的handleRefresh覆寫數據
   @override
   Future<Null> handleRefresh() async {
+    dataArray.clear();
     if (isLoading) {
       return null;
     }
     isLoading = true;
+ 
     var res = await getApiDataList();
     if (res != null && res.result) {
       List<DefaultTableCell> list = new List();
-      List<dynamic> dataArray = [];
-      dataArray = res.data["Data"];
+      
+      dataArray.addAll(res.data["Data"]);
       if (dataArray.length > 0 ) {
           for (var dic in dataArray) {
             list.add(DefaultTableCell.fromJson(dic));
           }
       }
       setState(() {
+        toTransformArray.clear();
         clearData();
         vbadCount = res.data["VBAD"];
         problemCount = res.data["PROBLEM"];
@@ -465,7 +709,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
         pullLoadWidgetControl.needLoadMore = false;
       });
     }
-
+   
     isLoading = false;
     return null;
   }
@@ -531,7 +775,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
               actions: <Widget>[
                 Expanded(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       ButtonTheme(
                         minWidth: MyScreen.homePageBarButtonWidth(context),
@@ -550,8 +794,11 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                           },
                         ),
                       ),
+                      SizedBox(),
                       Text(CommonUtils.getLocale(context).text_problem, style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
-                      Text('          ', style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
+                      SizedBox(),
+                      SizedBox(),
+                      Text('筆數: ${pullLoadWidgetControl.dataList.length}', style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.white)),
                     ],
                   ),
                 )
@@ -583,9 +830,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
-                        setState(() {
-                          
-                        });
+                        _transformDataAction(context);
                       },
                     ),
                   ),

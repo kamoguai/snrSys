@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:snr/common/config/Config.dart';
+import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 
 /**
@@ -21,18 +23,237 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
   final MyPullLoadWidgetControl pullLoadWidgetControl = new MyPullLoadWidgetControl();
 
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
-
+  ///轉圈圈loading
   showProgressLoading() {
     return new Center(child: new CircularProgressIndicator());
   }
-
+  ///運用MyPullLoadWidget
   showRefreshLoading() {
     new Future.delayed(const Duration(seconds: 0), () {
       refreshIndicatorKey.currentState.show().then((e) {});
       return true;
     });
   }
+  ///排序dialog, ios樣式
+  showSortAlertSheetController(BuildContext context, strSort) {
+    showCupertinoModalPopup<String>(
+        context: context,
+        builder: (context) {
+          var dialog = CupertinoActionSheet(
+            title: Text(CommonUtils.getLocale(context).text_sort),
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context, 'cancel');
+              },
+              child: Text('取消'),
+            ),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strSort = 'T';
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_time),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strSort = 'A';
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_address),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strSort = 'B';
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_building),
+              ),
+            ],
+          );
+          
+          return dialog;
+        }
+    );
+  }
 
+  ///查詢dialog, ios樣式
+  showSearchAlertSheetController(BuildContext context) {
+    showCupertinoModalPopup<String>(
+        context: context,
+        builder: (context) {
+          var dialog = CupertinoActionSheet(
+            title: Text(CommonUtils.getLocale(context).text_sort),
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context, 'cancel');
+              },
+              child: Text('取消'),
+            ),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_custcode),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text('CH'),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text('SNR'),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_extranet),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_intranet),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_offline),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_offline),
+              ),
+            ],
+          );
+          
+          return dialog;
+        }
+    );
+  }
+
+  ///地區dialog, ios樣式
+  showCityAlertSheetController(BuildContext context, strArea) {
+    showCupertinoModalPopup<String>(
+        context: context,
+        builder: (context) {
+          var dialog = CupertinoActionSheet(
+            title: Text(CommonUtils.getLocale(context).text_sort),
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context, 'cancel');
+              },
+              child: Text('取消'),
+            ),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strArea = '';
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_all),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strArea = CommonUtils.getLocale(context).text_bq;
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_bq),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strArea = CommonUtils.getLocale(context).text_sc;
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_sc),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strArea = CommonUtils.getLocale(context).text_xz;
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_xz),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strArea = CommonUtils.getLocale(context).text_tc;
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_tc),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    strArea = CommonUtils.getLocale(context).text_lu;
+                    showRefreshLoading();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_lu),
+              ),
+            ],
+          );
+          
+          return dialog;
+        }
+    );
+  }
+  
+  
   @protected
   resolveRefreshResult(res) {
     if (res != null && res.result) {

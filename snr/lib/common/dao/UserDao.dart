@@ -25,6 +25,7 @@ class UserDao {
         print("sso登入resp => " + res.data.toString());
       } 
       Sso ssoInfo = Sso.fromJson(res.data);
+      await LocalStorage.save(Config.USER_SSO_KEY, json.encode(ssoInfo.toJson()));
       return new DataResult(ssoInfo, true);
     }
   }
@@ -45,6 +46,18 @@ class UserDao {
       var userMap = json.decode(userText);
       User user = User.fromJson(userMap);
       return new DataResult(user, true);
+    } else {
+      return new DataResult(null, false);
+    }
+  }
+
+  ///獲取本地sso登入用戶信息
+  static getUserSSOInfoLocal() async {
+    var ssoText = await LocalStorage.get(Config.USER_SSO_KEY);
+    if (ssoText != null) {
+      var ssoMap = json.decode(ssoText);
+      Sso sso = Sso.fromJson(ssoMap);
+      return new DataResult(sso, true);
     } else {
       return new DataResult(null, false);
     }

@@ -65,6 +65,7 @@ class DefaultTableCell {
   String Response;
   String PacketLoss;
   String ReportLog;
+  String ReportLogColor;
   String U0C;
   String U0U;
   String U1C;
@@ -134,6 +135,7 @@ class DefaultTableCell {
    this.Response,
    this.PacketLoss,
    this.ReportLog,
+   this.ReportLogColor,
    this.U0C,
    this.U0U,
    this.U1C,

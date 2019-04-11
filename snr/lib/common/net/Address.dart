@@ -199,4 +199,18 @@ class Address {
   static getSNRProblemsAllBadSignalAPI(city, sort, hub, typeValue, typeOf, accNo) {
     return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRAllBigBad&City=${city}&Sort=${sort}&Hub=${hub}&${typeOf}=${typeValue}&accNo=${accNo}";
   }
+  ///跳轉
+  static didTransferAPI(to, from, accNo, accName, custCDList) {
+    var custCDStr = "";
+    for (var str in custCDList) {
+      if (custCDStr == "") {
+        custCDStr = str;
+      }
+      else {
+        custCDStr = "${custCDStr},${str}";
+      }
+    }
+    print("to : ${to}\nfrom : ${from}\naccNo : ${accNo}\naccName : ${accName}\nCustCD : ${custCDStr}");
+    return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
+  }
 }

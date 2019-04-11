@@ -22,6 +22,7 @@ class AbnormalDetailPage extends StatefulWidget {
   final String cifStr;
   final String nodeStr;
   final String timeStr;
+ 
   AbnormalDetailPage(this.cmtsCodeStr, this.cifStr, this.nodeStr, this.timeStr,
       {Key key})
       : super(key: key);
@@ -32,11 +33,12 @@ class AbnormalDetailPage extends StatefulWidget {
 class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticKeepAliveClientMixin<AbnormalDetailPage>, MyListState<AbnormalDetailPage> {
 
   var config;
+  final List<String> toTransformArray = [];
   //列表顯示的物件
   _renderItem(index) {
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(model, config);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray);
   }
 
   //讀取snr config
@@ -56,7 +58,20 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
         sort: '');
     return res;
   }
-  
+  ///跳轉function 
+  void _addTransform(String custNo) {
+    setState(() {
+      if (toTransformArray.contains(custNo)) {
+        var index = toTransformArray.indexOf(custNo);
+        toTransformArray.removeAt(index);
+      }
+      else {
+        toTransformArray.add(custNo);
+      }
+      
+      print("now custNo => $toTransformArray");
+    });
+  }
   Store<SysState> _getStore() {
     return StoreProvider.of(context);
   }

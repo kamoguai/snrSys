@@ -12,8 +12,9 @@ class DefaultTableItem extends StatelessWidget {
 
   final DefaultViewModel defaultViewModel;
   final dynamic configData;
-
-  DefaultTableItem(this.defaultViewModel, this.configData);
+  final Function addTransform;
+  final List<String> addTransformArray;
+  DefaultTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray});
   ///分隔線
   _buildLine() {
     return new Container(
@@ -45,11 +46,6 @@ class DefaultTableItem extends StatelessWidget {
     );
   }
 
-  _deviceWidth(context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-    return deviceWidth;
-  }
-
   _deviceWidth3(context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     return deviceWidth / 3;
@@ -60,11 +56,25 @@ class DefaultTableItem extends StatelessWidget {
     return deviceWidth / 9;
   }
 
-  _autoTextSize(text, style, context) {
+  Widget _autoTextSize(text, style, context) {
+    var fontSize = MyScreen.defaultTableCellFontSize(context);
+
     return AutoSizeText(
       text,
       style: style,
-      maxFontSize: MyScreen.defaultTableCellFontSize(context),
+      maxFontSize: fontSize,
+      minFontSize: 5.0,
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _autoTextSize_s(text, style, context) {
+    var fontSize = MyScreen.defaultTableCellFontSize_s(context);
+
+    return AutoSizeText(
+      text,
+      style: style,
+      maxFontSize: fontSize,
       minFontSize: 5.0,
       textAlign: TextAlign.center,
     );
@@ -90,6 +100,16 @@ class DefaultTableItem extends StatelessWidget {
       child: child,
     );
   }
+  ///跳轉選定後改變欄位顏色
+  Color _changeTransColor() {
+    if(addTransformArray.contains(defaultViewModel.custNo)) {
+      return Colors.orange;
+    }
+    else {
+      return Colors.white;
+    }
+  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +167,7 @@ class DefaultTableItem extends StatelessWidget {
                     children: <Widget>[
                       Container(
                         width: _deviceWidth9(context) - 1,
-                        child: _autoTextSize(
+                        child: _autoTextSize_s(
                             defaultViewModel.note6, TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.note6_color))), context),
                       ),
                       _buildHeightLine(),
@@ -234,17 +254,20 @@ class DefaultTableItem extends StatelessWidget {
           ),
           _buildLine(),
           Container(
-            decoration: BoxDecoration(border: Border()),
+            // decoration: BoxDecoration(border: Border()),
+            height: 51.0,
             child: Row(
               children: <Widget>[
                 GestureDetector(
-                  onTap: (){print('custCode');},
+                  onTap: (){addTransform(defaultViewModel.custNo);},
                   child: Container(
+                    color: _changeTransColor(),
                     width: (_deviceWidth9(context) * 2) - 1,
                     child: Column(
                       children: <Widget>[
                         Container(
-                          decoration: BoxDecoration(border: Border()),
+                          // decoration: BoxDecoration(border: Border()),
+                          height: 25.0,
                           child: Row(
                             children: <Widget>[
                               Container(
@@ -254,17 +277,18 @@ class DefaultTableItem extends StatelessWidget {
                               _buildHeightLine(),
                               Container(
                                 width: _deviceWidth9(context) - 1,
-                                child: _autoTextSize(defaultViewModel.restartCount,TextStyle(color: Colors.black), context),
+                                child: _autoTextSize_s(defaultViewModel.restartCount,TextStyle(color: Colors.black), context),
                               ),
                             ],
                           ),
                         ),
                         _buildLine(),
                         Container(
-                          decoration: BoxDecoration(border: Border()),
-                          child: _autoTextSize(defaultViewModel.restartTime,TextStyle(color: Colors.black), context),
+                          // decoration: BoxDecoration(border: Border()),
+                          height: 25.0,
+                          child: _autoTextSize_s(defaultViewModel.restartTime,TextStyle(color: Colors.black), context),
                         ),
-
+              
                       ],
                     ),
                   ),
@@ -595,7 +619,7 @@ class DefaultTableItem extends StatelessWidget {
                 ),
                 _buildLine(),
                 _autoContainer_full(
-                  child: _autoTextSize(defaultViewModel.reportLog, TextStyle(color:  Colors.black), context),
+                  child: _autoTextSize(defaultViewModel.reportLog, TextStyle(color:  Color(MyColors.hexFromStr(defaultViewModel.reportLogColor))), context),
                 )
               ],
             ),
@@ -741,7 +765,7 @@ class DefaultViewModel {
     response = data.Response == null ? "" : data.Response;
     packetLoss = data.PacketLoss == null ? "" : data.PacketLoss;
     reportLog = data.ReportLog == null ? "" : data.ReportLog;
-    reportLogColor = "";
+    reportLogColor = data.ReportLogColor == null ? "000000" : data.ReportLogColor;
     
   }
 }
