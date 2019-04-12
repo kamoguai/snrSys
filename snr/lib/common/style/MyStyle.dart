@@ -421,7 +421,7 @@ class MyScreen {
     if (deviceHeight < 570) {
       fontSize = MyConstant.tinyTextSize - 2;
     } else if (deviceHeight > 800) {
-      fontSize = MyConstant.normalTextSize;
+      fontSize = MyConstant.bigTextSize;
     } else if (deviceHeight > 600 && deviceHeight < 720) {
       fontSize = MyConstant.minTextSize;
     }

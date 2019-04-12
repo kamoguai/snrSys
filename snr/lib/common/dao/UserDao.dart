@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:redux/redux.dart';
 import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/config/Config.dart';

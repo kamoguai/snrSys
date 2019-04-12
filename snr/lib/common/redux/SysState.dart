@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/model/User.dart';
-import 'package:snr/common/redux/DefaultTableCellReducer.dart';
 import 'package:snr/common/redux/UserRedux.dart';
 import 'package:snr/common/redux/ThemeRedux.dart';
 import 'package:snr/common/redux/LocaleReducer.dart';

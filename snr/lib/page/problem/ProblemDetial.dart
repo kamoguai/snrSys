@@ -31,10 +31,6 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
   var config;
   ///現在按鈕enum
   var nowType = buttonType.problem;
-  ///區域
-  var strArea = "";
-  ///排序
-  var strSort = "";
   ///hub
   var strHub = "";
   ///現在功能
@@ -226,7 +222,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
   ///get api data
   getApiDataList() async {
     var res = await ProblemDao.getSNRProblemsAllBadSignal(_getStore(),
-    city: strArea,
+    city: strCity,
     sort: strSort,
     hub: strHub,
     typeOf: typeof,
@@ -250,266 +246,78 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
     });
     
   }
-  ///排序dialog, ios樣式
-  _showSortAlertSheetController(BuildContext context) {
-    showCupertinoModalPopup<String>(
+  /// call 跳轉包含輸入匡api
+  postTransferInputTextAPI(to, memo) async {
+    await DefaultTableDao.didTransferInputText(context, 
+    to: to, 
+    from: typeof,
+    memo: memo,
+    accNo: user.accNo,
+    accName: user.accName,
+    custCDList: toTransformArray
+    );
+    
+    Future.delayed(const Duration(seconds: 1), () {
+      showRefreshLoading();
+    });
+    
+  }
+  ///客編輸入匡
+  _showQeuryCustNo(BuildContext context) {
+    var custNo = "";
+    Future.delayed(const Duration(seconds: 1), () {
+      showDialog(
         context: context,
         builder: (context) {
-          var dialog = CupertinoActionSheet(
-            title: Text(CommonUtils.getLocale(context).text_sort),
-            cancelButton: CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.pop(context, 'cancel');
-              },
-              child: Text('取消'),
-            ),
+          var dialog = CupertinoAlertDialog(
+            title: Text("查詢"),
+            content: Text('請輸入客編'),
             actions: <Widget>[
-              CupertinoActionSheetAction(
-                onPressed: () {
+              CupertinoTextField(
+                autofocus: true,
+                keyboardType: TextInputType.number,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  border: Border.all(color: Colors.grey, style: BorderStyle.solid)
+                ),
+                placeholder: '客編',
+                onChanged: (String value){
                   setState(() {
-                    strSort = 'T';
-                    showRefreshLoading();
+                    custNo = value;
                   });
-                  Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_time),
               ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    strSort = 'A';
-                    showRefreshLoading();
-                  });
+              CupertinoButton(
+                onPressed: (){
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_address),
+                child: Text('取消', style: TextStyle(color: Colors.red),),
               ),
-              CupertinoActionSheetAction(
-                onPressed: () {
+              CupertinoButton(
+                onPressed: (){
                   setState(() {
-                    strSort = 'B';
-                    showRefreshLoading();
+                      List<DefaultTableCell> list = new List();
+                      pullLoadWidgetControl.dataList.clear();
+                      for (var dic in dataArray) {
+                        if (dic["CustNo"] == custNo) {
+                          list.add(DefaultTableCell.fromJson(dic));
+                        }
+                      }
+                      pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_building),
+                child: Text('確定', style: TextStyle(color: Colors.blue),),
               ),
             ],
           );
-          
           return dialog;
         }
-    );
+      );
+    });
   }
 
-  ///查詢dialog, ios樣式
-  _showSearchAlertSheetController(BuildContext context) {
-    showCupertinoModalPopup<String>(
-        context: context,
-        builder: (context) {
-          var dialog = CupertinoActionSheet(
-            title: Text(CommonUtils.getLocale(context).text_sort),
-            cancelButton: CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.pop(context, 'cancel');
-              },
-              child: Text('取消'),
-            ),
-            actions: <Widget>[
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_custcode),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                 setState(() {
-                    List<DefaultTableCell> list = new List();
-                    pullLoadWidgetControl.dataList.clear();
-                    for (var dic in dataArray) {
-                      if (dic["BAD_TYPE"] == "C") {
-                        list.add(DefaultTableCell.fromJson(dic));
-                      }
-                    }
-                    pullLoadWidgetControl.dataList.addAll(list);
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text('CH'),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    List<DefaultTableCell> list = new List();
-                    pullLoadWidgetControl.dataList.clear();
-                    for (var dic in dataArray) {
-                      if (dic["BAD_TYPE"] == "S") {
-                        list.add(DefaultTableCell.fromJson(dic));
-                      }
-                    }
-                    pullLoadWidgetControl.dataList.addAll(list);
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text('SNR'),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    List<DefaultTableCell> list = new List();
-                    pullLoadWidgetControl.dataList.clear();
-                    for (var dic in dataArray) {
-                      if (dic["BB"] != "內網") {
-                        list.add(DefaultTableCell.fromJson(dic));
-                      }
-                    }
-                    pullLoadWidgetControl.dataList.addAll(list);
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_extranet),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                   List<DefaultTableCell> list = new List();
-                    pullLoadWidgetControl.dataList.clear();
-                    for (var dic in dataArray) {
-                      if (dic["BB"] == "內網") {
-                        list.add(DefaultTableCell.fromJson(dic));
-                      }
-                    }
-                    pullLoadWidgetControl.dataList.addAll(list);
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_intranet),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                   List<DefaultTableCell> list = new List();
-                    pullLoadWidgetControl.dataList.clear();
-                    for (var dic in dataArray) {
-                      if (dic["Status"] == "1") {
-                        list.add(DefaultTableCell.fromJson(dic));
-                      }
-                    }
-                    pullLoadWidgetControl.dataList.addAll(list);
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_online),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                   List<DefaultTableCell> list = new List();
-                    pullLoadWidgetControl.dataList.clear();
-                    for (var dic in dataArray) {
-                      if (dic["Status"] == "0") {
-                        list.add(DefaultTableCell.fromJson(dic));
-                      }
-                    }
-                    pullLoadWidgetControl.dataList.addAll(list);
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_offline),
-              ),
-            ],
-          );
-          
-          return dialog;
-        }
-    );
-  }
 
-  ///地區dialog, ios樣式
-  _showCityAlertSheetController(BuildContext context) {
-    showCupertinoModalPopup<String>(
-        context: context,
-        builder: (context) {
-          var dialog = CupertinoActionSheet(
-            title: Text(CommonUtils.getLocale(context).text_sort),
-            cancelButton: CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.pop(context, 'cancel');
-              },
-              child: Text('取消'),
-            ),
-            actions: <Widget>[
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    strArea = '';
-                    showRefreshLoading();
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_all),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    strArea = CommonUtils.getLocale(context).text_bq;
-                    showRefreshLoading();
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_bq),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    strArea = CommonUtils.getLocale(context).text_sc;
-                    showRefreshLoading();
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_sc),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    strArea = CommonUtils.getLocale(context).text_xz;
-                    showRefreshLoading();
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_xz),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    strArea = CommonUtils.getLocale(context).text_tc;
-                    showRefreshLoading();
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_tc),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    strArea = CommonUtils.getLocale(context).text_lu;
-                    showRefreshLoading();
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_lu),
-              ),
-            ],
-          );
-          
-          return dialog;
-        }
-    );
-  }
   var typeStr = "";
   ///執行跳轉action
   _transformDataAction(BuildContext context) {
@@ -632,32 +440,93 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
   }
   _transformDialog(BuildContext context, {to,sortStr}) {
     Future.delayed(const Duration(seconds: 1), () {
-      showDialog(
-        context: context,
-        builder: (context) {
-          var dialog = CupertinoAlertDialog(
-            content: Text('確定將選取的${toTransformArray.length}筆資料轉至\n${sortStr}'),
-            actions: <Widget>[
-              CupertinoButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                child: Text('取消', style: TextStyle(color: Colors.red),),
+      if (sortStr == "低HP") {
+        var memoText = "";
+        showDialog(
+          context: context,
+          builder: (context) {
+            var dialog = CupertinoAlertDialog(
+              content: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: '確定將選取的${toTransformArray.length}筆資料轉至\n', 
+                  style: TextStyle(color: Colors.black, fontSize: MyScreen.defaultTableCellFontSize(context),),
+                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, fontSize: MyScreen.defaultTableCellFontSize(context))),]
+                ),
               ),
-              CupertinoButton(
-                onPressed: (){
-                  postTransferAPI(to);
-                  Navigator.pop(context);
-                },
-                child: Text('確定', style: TextStyle(color: Colors.blue),),
+              // Text('確定將選取的${toTransformArray.length}筆資料轉至\n${sortStr}'),
+              actions: <Widget>[
+                CupertinoTextField(
+                  autofocus: true,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(color: Colors.grey, style: BorderStyle.solid)
+                  ),
+                  placeholder: '備註為必填',
+                  onChanged: (String value){
+                    setState(() {
+                      memoText = value;
+                    });
+                  },
+                ),
+                CupertinoButton(
+                  onPressed: (){
+                    if (memoText == "") {
+                      Fluttertoast.showToast(msg: '備註為必填唷！');
+                      return;
+                    }
+                    postTransferInputTextAPI(to, memoText);
+                    Navigator.pop(context);
+                  },
+                  child: Text('確定', style: TextStyle(color: Colors.blue),),
+                ),
+                CupertinoButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  child: Text('取消', style: TextStyle(color: Colors.red),),
+                ),
+                
+              ],
+            );
+            return dialog;
+          }
+        );
+      }
+      else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            var dialog = CupertinoAlertDialog(
+              content: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: '確定將選取的${toTransformArray.length}筆資料轉至\n', 
+                  style: TextStyle(color: Colors.black, fontSize: MyScreen.defaultTableCellFontSize(context),),
+                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, fontSize: MyScreen.defaultTableCellFontSize(context))),]
+                ),
               ),
-            ],
-          );
-          return dialog;  
-        }
-      );
+              actions: <Widget>[
+                CupertinoButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  child: Text('取消', style: TextStyle(color: Colors.red),),
+                ),
+                CupertinoButton(
+                  onPressed: (){
+                    postTransferAPI(to);
+                    Navigator.pop(context);
+                  },
+                  child: Text('確定', style: TextStyle(color: Colors.blue),),
+                ),
+              ],
+            );
+            return dialog;  
+          }
+        );
+      }
     });
-    
   } 
   ///跳轉function
   void _addTransform(String custNo) {
@@ -699,7 +568,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
       }
       setState(() {
         toTransformArray.clear();
-        clearData();
+        pullLoadWidgetControl.dataList.clear();
         vbadCount = res.data["VBAD"];
         problemCount = res.data["PROBLEM"];
         otherCount = res.data["OTHER"];
@@ -781,7 +650,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                         minWidth: MyScreen.homePageBarButtonWidth(context),
                         child: new MyToolButton(
                           padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                          text: strArea == "" ?  '區:' + CommonUtils.getLocale(context).text_all : strArea,
+                          text: strCity == "" ?  '區:' + CommonUtils.getLocale(context).text_all : strCity,
                           textColor: Colors.white,
                           color: Colors.transparent,
                           fontSize: MyScreen.normalPageFontSize(context),
@@ -790,7 +659,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                               Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                               return;
                             }
-                            _showCityAlertSheetController(context);
+                            showCityAlertSheetController(context);
                           },
                         ),
                       ),
@@ -830,6 +699,10 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
+                        if (isLoading) {
+                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                          return;
+                        }
                         _transformDataAction(context);
                       },
                     ),
@@ -847,8 +720,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                           Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                           return;
                         }
-                        _showSortAlertSheetController(context);
-                      
+                        showSortAlertSheetController(context);
                       },
                     ),
                   ),
@@ -883,7 +755,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                           Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                           return;
                         }
-                        _showSearchAlertSheetController(context);
+                        showSearchAlertSheetController(context,dataArray);
                       },
                     ),
                   ),

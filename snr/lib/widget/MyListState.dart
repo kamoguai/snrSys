@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:snr/common/config/Config.dart';
+import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 
@@ -17,6 +18,10 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
   bool isLoading = false;
 
   int page = 1;
+  ///用於區域條件查詢
+  String strCity = "";
+  ///用於sort條件查詢
+  String strSort = "";
 
   final List dataList = new List();
 
@@ -35,7 +40,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
     });
   }
   ///排序dialog, ios樣式
-  showSortAlertSheetController(BuildContext context, strSort) {
+  showSortAlertSheetController(BuildContext context) {
     showCupertinoModalPopup<String>(
         context: context,
         builder: (context) {
@@ -87,7 +92,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
   }
 
   ///查詢dialog, ios樣式
-  showSearchAlertSheetController(BuildContext context) {
+  showSearchAlertSheetController(BuildContext context, dataArray) {
     showCupertinoModalPopup<String>(
         context: context,
         builder: (context) {
@@ -100,19 +105,24 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               child: Text('取消'),
             ),
             actions: <Widget>[
+              // CupertinoActionSheetAction(
+              //   onPressed: () {
+              //     Navigator.pop(context);
+              //     _showQeuryCustNo(context);
+              //   },
+              //   child: Text(CommonUtils.getLocale(context).text_custcode),
+              // ),
               CupertinoActionSheetAction(
                 onPressed: () {
-                  setState(() {
-                    
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(CommonUtils.getLocale(context).text_custcode),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    
+                 setState(() {
+                    List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BAD_TYPE"] == "C") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
@@ -121,7 +131,14 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    
+                    List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BAD_TYPE"] == "S") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
@@ -130,7 +147,14 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    
+                    List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BB"] != "內網") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
@@ -139,7 +163,14 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    
+                   List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BB"] == "內網") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
@@ -148,16 +179,30 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    
+                   List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["Status"] == "1") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_offline),
+                child: Text(CommonUtils.getLocale(context).text_online),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    
+                   List<DefaultTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["Status"] == "0") {
+                        list.add(DefaultTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
                   });
                   Navigator.pop(context);
                 },
@@ -171,8 +216,8 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
     );
   }
 
-  ///地區dialog, ios樣式
-  showCityAlertSheetController(BuildContext context, strArea) {
+   ///地區dialog, ios樣式
+  showCityAlertSheetController(BuildContext context) {
     showCupertinoModalPopup<String>(
         context: context,
         builder: (context) {
@@ -188,7 +233,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strArea = '';
+                    strCity = '';
                     showRefreshLoading();
                   });
                   Navigator.pop(context);
@@ -198,7 +243,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strArea = CommonUtils.getLocale(context).text_bq;
+                    strCity = CommonUtils.getLocale(context).text_bq;;
                     showRefreshLoading();
                   });
                   Navigator.pop(context);
@@ -208,7 +253,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strArea = CommonUtils.getLocale(context).text_sc;
+                    strCity = CommonUtils.getLocale(context).text_sc;;
                     showRefreshLoading();
                   });
                   Navigator.pop(context);
@@ -218,7 +263,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strArea = CommonUtils.getLocale(context).text_xz;
+                    strCity = CommonUtils.getLocale(context).text_xz;;
                     showRefreshLoading();
                   });
                   Navigator.pop(context);
@@ -228,7 +273,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strArea = CommonUtils.getLocale(context).text_tc;
+                    strCity = CommonUtils.getLocale(context).text_tc;;
                     showRefreshLoading();
                   });
                   Navigator.pop(context);
@@ -238,7 +283,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strArea = CommonUtils.getLocale(context).text_lu;
+                    strCity = CommonUtils.getLocale(context).text_lu;;
                     showRefreshLoading();
                   });
                   Navigator.pop(context);
@@ -318,6 +363,8 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
   clearData() {
     if (isShow) {
       setState(() {
+        strCity = "";
+        strSort = "";
         pullLoadWidgetControl.dataList.clear();
       });
     }

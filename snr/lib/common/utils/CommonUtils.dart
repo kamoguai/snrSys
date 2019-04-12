@@ -1,17 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:redux/redux.dart';
-import 'package:snr/common/config/Config.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_statusbar/flutter_statusbar.dart';
 import 'package:snr/common/redux/ThemeRedux.dart';
@@ -19,8 +15,6 @@ import 'package:snr/common/style/MyStringBase.dart';
 import 'package:snr/common/localization/DefaultLocalizations.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/widget/MyFlexButton.dart';
-import 'package:snr/common/net/Address.dart';
-import 'package:snr/common/local/LocalStorage.dart';
 
 /**
  * 通用邏輯

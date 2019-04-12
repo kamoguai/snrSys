@@ -1,12 +1,6 @@
-import 'dart:async';
-
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:device_info/device_info.dart';
 import 'package:date_format/date_format.dart';
-import 'package:snr/common/config/Config.dart';
-import 'package:snr/common/local/LocalStorage.dart';
 
 ///地址數據
 class Address {
@@ -122,6 +116,11 @@ class Address {
     return "${kSNRHostName}SNRProcess?FunctionName=query_assign_fix_list";
   }
 
+  ///派修大樓統計
+  static getBuildAnalyse(type) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryBuildingAnalyse&Type=${type}";
+  }
+
   ///派修詳情
   static getAssignFix(area, sort, hub, accNo) {
     return "${kSNRHostName}SNRProcess?FunctionName=AssignFix&City=$area&Sort=$sort&Hub=$hub&accNo=$accNo";
@@ -199,7 +198,7 @@ class Address {
   static getSNRProblemsAllBadSignalAPI(city, sort, hub, typeValue, typeOf, accNo) {
     return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRAllBigBad&City=${city}&Sort=${sort}&Hub=${hub}&${typeOf}=${typeValue}&accNo=${accNo}";
   }
-  ///跳轉
+  ///普通跳轉
   static didTransferAPI(to, from, accNo, accName, custCDList) {
     var custCDStr = "";
     for (var str in custCDList) {
@@ -210,7 +209,19 @@ class Address {
         custCDStr = "${custCDStr},${str}";
       }
     }
-    print("to : ${to}\nfrom : ${from}\naccNo : ${accNo}\naccName : ${accName}\nCustCD : ${custCDStr}");
     return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
+  }
+  ///包含輸入匡跳轉
+  static didTransferInputTextAPI(to, from, memo, accNo, accName, custCDList) {
+    var custCDStr = "";
+    for (var str in custCDList) {
+      if (custCDStr == "") {
+        custCDStr = str;
+      }
+      else {
+        custCDStr = "${custCDStr},${str}";
+      }
+    }
+    return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&Memo=${memo}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
   }
 }

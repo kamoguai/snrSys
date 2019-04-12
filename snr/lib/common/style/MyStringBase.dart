@@ -176,4 +176,16 @@ abstract class MyStringBase {
   String text_lu;
 
   String text_all;
+
+  String text_fix2;
+
+  String text_cut;
+
+  String text_watch;
+
+  String text_total;
+
+  String text_total_s;
+
+  String text_buildingName;
 }

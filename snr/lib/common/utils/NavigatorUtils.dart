@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:snr/page/LoginPage.dart';
@@ -8,6 +6,7 @@ import 'package:snr/page/abNormal/AbnormalCardPage.dart';
 import 'package:snr/page/abNormal/AbnormalNodePage.dart';
 import 'package:snr/page/abNormal/AbnormalDetailPage.dart';
 import 'package:snr/page/problem/ProblemDetial.dart';
+import 'package:snr/page/assignFix/AssignFixListPage.dart';
 
 /**
  * 導航欄
@@ -54,5 +53,9 @@ class NavigatorUtils {
   ///問題詳情頁面
   static goProblemDetail(BuildContext context){
     NavigatorRouter(context,new ProblemDetailPage());
+  }
+  ///派修分析頁面
+  static goAssignFixList(BuildContext context) {
+    NavigatorRouter(context,new AssignFixListPage());
   }
 }

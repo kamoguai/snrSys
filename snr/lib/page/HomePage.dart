@@ -325,31 +325,6 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  List<GestureDetector> _listView() {
-    var index = 0;
-    return sdList.map((sd) {
-      var contrainer = Container(
-        decoration: new BoxDecoration(color: Colors.white),
-        child: new Row(
-          children: <Widget>[
-            new Expanded(
-              child: new Container(
-                  padding: EdgeInsets.all(5.0), child: Text(sd.Name)),
-            )
-          ],
-        ),
-      );
-      index = index + 1;
-      final getstureDetector = GestureDetector(
-        child: contrainer,
-        onTap: () {
-          print(123);
-        },
-      );
-      return getstureDetector;
-    }).toList();
-  }
-
   ///signal list body
   _buildSignalBody() {
     var miniFontSize = MyScreen.homePageFontSize(context);
@@ -843,6 +818,9 @@ class _HomePageState extends State<HomePage>
                                   color: Color(MyColors.hexFromStr("#fee6f7")),
                                   fontSize: MyConstant.smallTextSize,
                                   textColor: Colors.black,
+                                  onPress: () {
+                                    NavigatorUtils.goAssignFixList(context);
+                                  },
                                 ),
                               ),
                             ],

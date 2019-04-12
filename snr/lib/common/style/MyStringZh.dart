@@ -180,4 +180,16 @@ class MyStringZh extends MyStringBase {
   String text_lu = "蘆洲";
   @override
   String text_all = "全部";
+  @override
+  String text_fix2 = "再修";
+  @override
+  String text_cut = "拆改";
+  @override
+  String text_watch = "觀察";
+  @override
+  String text_total = "合計";
+  @override
+  String text_total_s = "小計";
+  @override
+  String text_buildingName = "大樓(套房名稱)";
 }

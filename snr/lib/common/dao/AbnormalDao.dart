@@ -12,7 +12,6 @@ class AbnormalDao {
   /// abnormalCardPage
   static getSNRSignalByCMTS(cmtsCode) async {
     Map<String, dynamic> mainDataArray = {};
-    List<dynamic> dataArray = [];
     var res = await HttpManager.netFetch(
         Address.getSNRSignalByCMTSAPI(cmtsCode),
         null,
