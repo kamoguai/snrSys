@@ -165,13 +165,37 @@ class _HomePageState extends State<HomePage>
       color: Colors.grey,
     );
   }
+  
+  ///取得裝置width並切6份
+  _deviceWidth6() {
+    var width = MediaQuery.of(context).size.width;
+    return width / 6;
+  }
+ 
+  ///取得裝置height切4分
+  _deviceHeight4() {
+    AppBar appBar = AppBar();
+    var appBarHeight = appBar.preferredSize.height;
+    var deviceHeight = MediaQuery.of(context).size.height;
+    var height = deviceHeight - appBarHeight;
 
+    return height / 4;
+  }
+  ///lsit height
+  _listHeight() {
+    var height = _deviceHeight4();
+    return height / 5;
+  }
+  ///title height
+  _titleHeight() {
+    var height = _deviceHeight4();
+    return height / 4;
+  }
   ///自動縮放text
   _buildTextFontColor(String text, Color color) {
     return AutoSizeText(
       text,
-      style:
-          TextStyle(color: color, fontSize: MyScreen.homePageFontSize(context)),
+      style: TextStyle(color: color, fontSize: MyScreen.homePageFontSize(context)),
       minFontSize: 5.0,
       textAlign: TextAlign.center,
     );
@@ -271,167 +295,109 @@ class _HomePageState extends State<HomePage>
   ///信號表頭
   _buildSignalHead() {
     return new Container(
-      height: 40.0,
+      height: _listHeight(),
       color: Color(MyColors.hexFromStr('#f5ffe9')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: _buildTextFontColor(
-                  CommonUtils.getLocale(context).home_signal_area,
-                  Colors.black),
-            ),
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_area, Colors.black),
           ),
-          new Expanded(
-              child: new Container(
-            padding: EdgeInsets.all(5.0),
-            child: _buildTextFontColor(
-                CommonUtils.getLocale(context).home_signal_online, Colors.blue),
-          )),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: _buildTextFontColor(
-                  CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
-            ),
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_online, Colors.blue),
           ),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: _buildTextFontColor(
-                  CommonUtils.getLocale(context).home_signal_upP, Colors.black),
-            ),
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor(CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
           ),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: _buildTextFontColor(
-                  CommonUtils.getLocale(context).home_signal_problem,
-                  Colors.pink),
-            ),
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_upP, Colors.black),
           ),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: _buildTextFontColor(
-                  CommonUtils.getLocale(context).home_signal_percent,
-                  Colors.blue[300]),
-            ),
-          )
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_problem, Colors.pink),
+          ),
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_percent, Colors.blue[300]),
+          ),
         ],
       ),
     );
   }
+  ///signal item
+  Widget _buildSignalItem(BuildContext context, int index) {
+    var dic = sdList[index];
+    return GestureDetector(
+      child: Container(
+        height: _listHeight(),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey,
+              width: 1.0,
+              style: BorderStyle.solid
+            )
+          )
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Container(
+              width: _deviceWidth6(),
+              child: _buildTextFontColor(dic.Name, Colors.black)
+            ),
+             Container(
+              width: _deviceWidth6(),
+              child: _buildTextFontColor(dic.OnLine, Colors.blue)
+            ),
+             Container(
+              width: _deviceWidth6(),
+              child: _buildTextFontColor(dic.Bad, Colors.red)
+            ),
+             Container(
+              width: _deviceWidth6(),
+              child: _buildTextFontColor(dic.OverPower, Colors.black)
+            ),
+             Container(
+              width: _deviceWidth6(),
+              child: _buildTextFontColor(dic.Problem, Colors.pink)
+            ),
+             Container(
+              width: _deviceWidth6(),
+              child: _buildTextFontColor('${((dic.BadRate * 1000) / 10).toStringAsFixed(1)}%', Colors.blue[300])
+            ),
+          ],
+        ),
+      ),
+      onTap: (){
+        String cmtsCode = sdList[index].CMTSCode;
+        String name = sdList[index].Name;
+        String time = sdList[index].Time;
+        NavigatorUtils.goAbnormalCard(context, cmtsCode, name, time);
+      },
+    );
+  }
 
   ///signal list body
-  _buildSignalBody() {
-    var miniFontSize = MyScreen.homePageFontSize(context);
-    var tableHeight = 120.0;
-    final deviceHeight = MediaQuery.of(context).size.height;
-    if (deviceHeight > 800) {
-      tableHeight = 210.0;
+  Widget _buildSignalBody() {
+    Widget signalList;
+    if(sdList.length > 0) {
+      signalList = Container(
+        height: _deviceHeight4(),
+        child: ListView.builder(
+          itemBuilder: _buildSignalItem,
+          itemCount: sdList.length,
+        ),
+      );
     }
-    return Container(
-      height: tableHeight,
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemBuilder: (context, index) {
-          return new GestureDetector(
-              child: new Container(
-                  height: 44.0,
-                  child: new Column(
-                    children: <Widget>[
-                      new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        mainAxisSize: MainAxisSize.max,
-                        children: sdList == null
-                            ? []
-                            : <Widget>[
-                                new Expanded(
-                                  child: new Container(
-                                      padding: EdgeInsets.all(5.0),
-                                      child: new Text(
-                                        sdList[index].Name,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: miniFontSize),
-                                      )),
-                                ),
-                                new Expanded(
-                                  child: new Container(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: new Text(
-                                      sdList[index].OnLine,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.blue,
-                                          fontSize: miniFontSize),
-                                    ),
-                                  ),
-                                ),
-                                new Expanded(
-                                  child: new Container(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: new Text(
-                                      sdList[index].Bad,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: miniFontSize),
-                                    ),
-                                  ),
-                                ),
-                                new Expanded(
-                                  child: new Container(
-                                      padding: EdgeInsets.all(5.0),
-                                      child: new Text(
-                                        sdList[index].OverPower,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: miniFontSize),
-                                      )),
-                                ),
-                                new Expanded(
-                                  child: new Container(
-                                      padding: EdgeInsets.all(5.0),
-                                      child: new Text(
-                                        sdList[index].Problem,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.pink,
-                                            fontSize: miniFontSize),
-                                      )),
-                                ),
-                                new Expanded(
-                                    child: new Container(
-                                        padding: EdgeInsets.all(5.0),
-                                        child: new Text(
-                                          '${((sdList[index].BadRate * 1000) / 10).toStringAsFixed(1)}%',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.blue[300],
-                                              fontSize: miniFontSize),
-                                        )))
-                              ],
-                      ),
-                      _buildLine()
-                    ],
-                  )),
-              onTap: () {
-                print('selected item -> ${index.toString()}');
-                String cmtsCode = sdList[index].CMTSCode;
-                String name = sdList[index].Name;
-                String time = sdList[index].Time;
-                NavigatorUtils.goAbnormalCard(context, cmtsCode, name, time);
-              });
-        },
-        itemCount: sdList == null ? 0 : sdList.length,
-      ),
-    );
+    else {
+      signalList = Container();
+    }
+    return signalList;
   }
 
   ///signal 底
@@ -457,66 +423,35 @@ class _HomePageState extends State<HomePage>
       }
     }
     return new Container(
-      height: 40.0,
+      height: _listHeight(),
       color: Color(MyColors.hexFromStr('#f0fcff')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          new Expanded(
-            child: new Container(
-                padding: EdgeInsets.all(5.0),
-                child: new Text(
-                  CommonUtils.getLocale(context).home_signal_total,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black, fontSize: miniFontSize),
-                )),
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_total, Colors.black),
           ),
-          new Expanded(
-            child: new Container(
-                padding: EdgeInsets.all(5.0),
-                child: new Text(
-                  "${intOnline}",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.blue, fontSize: miniFontSize),
-                )),
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor("${intOnline}", Colors.blue),
           ),
-          new Expanded(
-            child: new Container(
-                padding: EdgeInsets.all(5.0),
-                child: new Text(
-                  "${intBad}",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.red, fontSize: miniFontSize),
-                )),
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor("${intBad}", Colors.red),
           ),
-          new Expanded(
-            child: new Container(
-                padding: EdgeInsets.all(5.0),
-                child: new Text(
-                  "${intOverPower}",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black, fontSize: miniFontSize),
-                )),
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor("${intOverPower}", Colors.black),
           ),
-          new Expanded(
-            child: new Container(
-                padding: EdgeInsets.all(5.0),
-                child: new Text(
-                  "${intProblem}",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.pink, fontSize: miniFontSize),
-                )),
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor("${intProblem}", Colors.pink),
           ),
-          new Expanded(
-            child: new Container(
-                padding: EdgeInsets.all(5.0),
-                child: new Text(
-                  "${(((doubleRate * 1000) / 10) / sdList.length).toStringAsFixed(1)}%",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.blue[300], fontSize: miniFontSize),
-                )),
-          )
+          Container(
+            width: _deviceWidth6(),
+            child: _buildTextFontColor("${(((doubleRate * 1000) / 10) / sdList.length).toStringAsFixed(1)}%", Colors.blue[300]),
+          ),
         ],
       ),
     );
@@ -843,13 +778,12 @@ class _HomePageState extends State<HomePage>
                           ///signal table body
                           _buildSignalBody(),
 
-                          /// 高度1的分隔線
-                          _buildLine(),
+
                           new Container(
                             alignment: Alignment(0, 0),
                             padding: EdgeInsets.only(left: 5.0),
                             // padding: EdgeInsets.all(10.0),
-                            height: 40,
+                            height: _listHeight(),
                             child: _buildWrongPlace(),
                           ),
 

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:snr/common/dao/AbnormalDao.dart';
@@ -62,171 +63,146 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
       color: Colors.grey,
     );
   }
+
+   ///取得裝置width並切6份
+  _deviceWidth6() {
+    var width = MediaQuery.of(context).size.width;
+    return width / 6;
+  }
+ 
+  ///取得裝置height切4分
+  _deviceHeight4() {
+    AppBar appBar = AppBar();
+    var appBarHeight = appBar.preferredSize.height;
+    var deviceHeight = MediaQuery.of(context).size.height;
+    var height = deviceHeight - appBarHeight;
+
+    return height / 4;
+  }
+  ///lsit height
+  _listHeight() {
+    var height = _deviceHeight4();
+    return height / 5;
+  }
+  ///title height
+  _titleHeight() {
+    var height = _deviceHeight4();
+    return height / 4;
+  }
+
+  ///自動字大小
+  Widget _autoTextSize(text, color) {
+    var fontSize = MyScreen.normalPageFontSize(context);
+
+    return AutoSizeText(
+      text,
+      style: TextStyle(color: color, fontSize: fontSize),
+      minFontSize: 5.0,
+      textAlign: TextAlign.center,
+    );
+  }
+  
   ///list head
   _buildNodeHeader() {
     return new Container(
-      height: 40.0,
+      height: _titleHeight(),
       color: Color(MyColors.hexFromStr('#fef5f6')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-                CommonUtils.getLocale(context).abnormal_node_node,
-                style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize_s(context)),
-                textAlign: TextAlign.center,
-              ),
-            ),
+          Container(
+            width: _deviceWidth6(),
+            child: _autoTextSize(CommonUtils.getLocale(context).abnormal_node_node, Colors.black),
           ),
-          new Expanded(
-              child: new Container(
-            padding: EdgeInsets.all(5.0),
-            child: Text(
-              CommonUtils.getLocale(context).home_signal_online,
-              style: TextStyle(color: Colors.blue, fontSize: MyScreen.normalPageFontSize(context)),
-              textAlign: TextAlign.center,
-            ),
-          )),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-                CommonUtils.getLocale(context).home_signal_upP,
-                style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context)),
-                textAlign: TextAlign.center,
-              ),
-            ),
+          Container(
+            width: _deviceWidth6(),
+            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_online, Colors.blue),
           ),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-                CommonUtils.getLocale(context).home_signal_problem,
-                style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context)),
-                textAlign: TextAlign.center,
-              ),
-            ),
+          Container(
+            width: _deviceWidth6(),
+            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_upP, Colors.black),
           ),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-                CommonUtils.getLocale(context).home_sinal_bad,
-                style: TextStyle(color: Colors.red, fontSize: MyScreen.normalPageFontSize(context)),
-                textAlign: TextAlign.center,
-              ),
-            ),
+          Container(
+            width: _deviceWidth6(),
+            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_problem, Colors.black),
           ),
-          new Expanded(
-            child: new Container(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-                CommonUtils.getLocale(context).home_signal_percent,
-                style: TextStyle(color: Colors.pink, fontSize: MyScreen.normalPageFontSize(context)),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          )
+          Container(
+            width: _deviceWidth6(),
+            child: _autoTextSize(CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
+          ),
+          Container(
+            width: _deviceWidth6(),
+            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_percent, Colors.pink),
+          ),
+          
         ],
       ),
     );
   }
-  /// node list
-  _buildNodeList() {
-    return Container(
-      child: Expanded(
-        child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            child: Container(
-              height: 50.0,
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.max,
-                    children: dataArray == null
-                        ? []
-                        : <Widget>[
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  dataArray[index]['NODE'],
-                                  style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize_s(context)),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  dataArray[index]['OnLine'],
-                                  style: TextStyle(color: Colors.blue, fontSize: MyScreen.normalListPageFontSize(context)),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  dataArray[index]['OverPower'],
-                                  style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize(context)),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  dataArray[index]['Problem'],
-                                  style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize(context)),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  dataArray[index]['Bad'],
-                                  style: TextStyle(color: Colors.red, fontSize: MyScreen.normalListPageFontSize(context)),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  '${((double.parse(dataArray[index]['BadRate']) * 1000) / 10).toStringAsFixed(1)}%',
-                                  style: TextStyle(color: Colors.blue, fontSize: MyScreen.normalListPageFontSize(context)),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ],
-                  ),
-                  _buildLine()
-                ],
-              ),
+  ///node list item
+  Widget _buildNodeListItem(BuildContext context, int index) {
+    var dic = dataArray[index];
+    return GestureDetector(
+      child: Container(
+        height: _listHeight(),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(
+            color: Colors.grey,
+            width: 1.0,
+            style: BorderStyle.solid
+          ))
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Container(
+              width: _deviceWidth6(),
+              child: _autoTextSize(dic["NODE"], Colors.black),
             ),
-            onTap: () {
-              NavigatorUtils.goAbnormalDetail(context, widget.cmtsCodeStr, widget.cifStr, dataArray[index]['NODE'], widget.timeStr);
-            },
-          );
-        },
-        itemCount: dataArray.length,
+            Container(
+              width: _deviceWidth6(),
+              child: _autoTextSize(dic["OnLine"], Colors.blue),
+            ),
+            Container(
+              width: _deviceWidth6(),
+              child: _autoTextSize(dic["OverPower"], Colors.black),
+            ),
+            Container(
+              width: _deviceWidth6(),
+              child: _autoTextSize(dic["Problem"], Colors.black),
+            ),
+            Container(
+              width: _deviceWidth6(),
+              child: _autoTextSize(dic["Bad"], Colors.red),
+            ),
+            Container(
+              width: _deviceWidth6(),
+              child: _autoTextSize('${((double.parse(dic['BadRate']) * 1000) / 10).toStringAsFixed(1)}%', Colors.blue),
+            ),
+          ],
+        ),
       ),
-      )
-      
+      onTap: (){
+        NavigatorUtils.goAbnormalDetail(context, widget.cmtsCodeStr, widget.cifStr, dic['NODE'], widget.timeStr);
+      },
     );
+  }
+  /// node list
+  Widget _buildNodeList() {
+    Widget nodeList;
+    if (dataArray != null && dataArray.length > 0) {
+      nodeList = Expanded(
+        // height: _deviceHeight4(),
+        child: ListView.builder(
+          itemBuilder: _buildNodeListItem,
+          itemCount: dataArray.length,
+        ),
+      );
+    }
+    else {
+      nodeList = Container(child: buildEmpty());
+    }
+    return nodeList;
   }
   Widget getBodyData() {
     return isLoading ? showProgressLoading() : Column(

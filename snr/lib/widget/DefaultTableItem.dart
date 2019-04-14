@@ -58,11 +58,10 @@ class DefaultTableItem extends StatelessWidget {
 
   Widget _autoTextSize(text, style, context) {
     var fontSize = MyScreen.defaultTableCellFontSize(context);
-
+    var fontStyle = TextStyle(fontSize: fontSize);
     return AutoSizeText(
       text,
-      style: style,
-      maxFontSize: fontSize,
+      style: style.merge(fontStyle),
       minFontSize: 5.0,
       textAlign: TextAlign.center,
     );
@@ -70,11 +69,10 @@ class DefaultTableItem extends StatelessWidget {
 
   Widget _autoTextSize_s(text, style, context) {
     var fontSize = MyScreen.defaultTableCellFontSize_s(context);
-
+    var fontStyle = TextStyle(fontSize: fontSize);
     return AutoSizeText(
       text,
-      style: style,
-      maxFontSize: fontSize,
+      style: style.merge(fontStyle),
       minFontSize: 5.0,
       textAlign: TextAlign.center,
     );

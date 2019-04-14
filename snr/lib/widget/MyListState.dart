@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/model/DefaultTableCell.dart';
+import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 
@@ -38,6 +39,23 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
       refreshIndicatorKey.currentState.show().then((e) {});
       return true;
     });
+  }
+  ///空页面
+  buildEmpty() {
+    return new Expanded(
+      child: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          FlatButton(
+            onPressed: () {},
+            child: new Image(image: new AssetImage(MyICons.DEFAULT_USER_ICON), width: 70.0, height: 70.0),
+          ),
+          Container(
+            child: Text(CommonUtils.getLocale(context).app_empty, style: MyConstant.normalText),
+          ),
+        ],
+      ),
+    );
   }
   ///排序dialog, ios樣式
   showSortAlertSheetController(BuildContext context) {
