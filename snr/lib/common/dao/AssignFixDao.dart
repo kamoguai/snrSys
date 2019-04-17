@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/DaoResult.dart';
 import 'package:snr/common/net/Address.dart';
@@ -63,5 +64,29 @@ class AssignFixDao {
       return new DataResult(null, false);
     }
   }
-  
+  ///派修詳情
+  static getAssignFix(Store store, {city, sort, hub, typeValue, typeOf, accNo}) async {
+    Map<String, dynamic> mainDataArray = {};
+    var res = await HttpManager.netFetch(Address.getAssignFixOther(city, sort, hub, typeValue, typeOf, accNo), null, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("getAssignFix resp => " + res.data.toString());
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        mainDataArray = res.data["ReturnData"];
+      }
+      else {
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
+        return new DataResult(null, false);
+      }
+      if (mainDataArray.length > 0) {
+        return new DataResult(mainDataArray, true);
+      } else {
+        return new DataResult(null, false);
+      }
+    }
+    else {
+      return new DataResult(null, false);
+    }
+  }
 }

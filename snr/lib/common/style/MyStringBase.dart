@@ -188,4 +188,6 @@ abstract class MyStringBase {
   String text_total_s;
 
   String text_buildingName;
+
+  String text_finish;
 }

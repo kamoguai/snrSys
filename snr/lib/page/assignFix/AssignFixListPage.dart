@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:snr/common/dao/AssignFixDao.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 /**
@@ -62,7 +63,7 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
         }
         var time = dataArray[0]["UTime"];
         DateTime dt = DateTime.parse(time);
-        var timeStr = formatDate(dt,[hh,'-',nn]);
+        var timeStr = formatDate(dt,[hh,':',nn]);
         dataTime = timeStr;
       });
     }
@@ -233,6 +234,7 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
       ),
       onTap: (){
         print('cell click');
+        NavigatorUtils.goAssignFixDetail(context);
       },
     );
 

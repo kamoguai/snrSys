@@ -142,8 +142,9 @@ class Address {
   }
 
   ///小ping資料
-  static getPingSNR(type,str) {
+  static getPingSNR(str) {
     String paraType = "";
+    int type = 0;
     switch (type) {
       case 0: {
           paraType = "CustCode";

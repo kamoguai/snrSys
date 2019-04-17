@@ -5,6 +5,7 @@ import 'package:snr/page/HomePage.dart';
 import 'package:snr/page/abNormal/AbnormalCardPage.dart';
 import 'package:snr/page/abNormal/AbnormalNodePage.dart';
 import 'package:snr/page/abNormal/AbnormalDetailPage.dart';
+import 'package:snr/page/assignFix/AssingFixDetailPage.dart';
 import 'package:snr/page/problem/ProblemDetial.dart';
 import 'package:snr/page/assignFix/AssignFixListPage.dart';
 
@@ -57,5 +58,9 @@ class NavigatorUtils {
   ///派修分析頁面
   static goAssignFixList(BuildContext context) {
     NavigatorRouter(context,new AssignFixListPage());
+  }
+  ///派修詳情頁面
+  static goAssignFixDetail(BuildContext context){
+    NavigatorRouter(context,new AssignFixDetailPage());
   }
 }

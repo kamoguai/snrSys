@@ -1,7 +1,9 @@
 
 
 import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:snr/common/config/Config.dart';
+import 'package:snr/common/dao/DaoResult.dart';
 import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/net/Api.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
@@ -45,6 +47,31 @@ class DefaultTableDao {
     }
     else {
       // return new DataResult(null, false);
+    }
+  }
+  ///小ping
+  static getPingSNR(context, {custCode}) async{
+    Map<String, dynamic> mainDataArray = {};
+    var res = await HttpManager.netFetch(Address.getPingSNR(custCode), null, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("getPingSNR resp => " + res.data.toString());
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        mainDataArray = res.data["ReturnData"];
+      }
+      else {
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
+        return new DataResult(null, false);
+      }
+      if (mainDataArray.length > 0) {
+        return new DataResult(mainDataArray, true);
+      } else {
+        return new DataResult(null, false);
+      }
+    }
+    else {
+      return new DataResult(null, false);
     }
   }
 }
