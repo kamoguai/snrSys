@@ -89,4 +89,29 @@ class AssignFixDao {
       return new DataResult(null, false);
     }
   }
+  ///完工詳情
+  static getFinishedFix({city, sort, hub, day, accNo}) async {
+    Map<String, dynamic> mainDataArray = {};
+    var res = await HttpManager.netFetch(Address.getAssignFixFinished(city, sort, hub, day, accNo), null, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("getFinishedFix resp => " + res.data.toString());
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        mainDataArray = res.data["ReturnData"];
+      }
+      else {
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
+        return new DataResult(null, false);
+      }
+      if (mainDataArray.length > 0) {
+        return new DataResult(mainDataArray, true);
+      } else {
+        return new DataResult(null, false);
+      }
+    }
+    else {
+      return new DataResult(null, false);
+    }
+  }
 }

@@ -2,10 +2,13 @@
 
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/DaoResult.dart';
+import 'package:snr/common/model/SmallPingTableCell.dart';
 import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/net/Api.dart';
+import 'package:snr/common/redux/SmallPingTableCellReducer.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 
 class DefaultTableDao {
@@ -50,7 +53,7 @@ class DefaultTableDao {
     }
   }
   ///小ping
-  static getPingSNR(context, {custCode}) async{
+  static getPingSNR(Store store, context, {custCode}) async{
     Map<String, dynamic> mainDataArray = {};
     var res = await HttpManager.netFetch(Address.getPingSNR(custCode), null, null, new Options(method: "post"));
     if (res != null && res.result) {
@@ -65,6 +68,7 @@ class DefaultTableDao {
         return new DataResult(null, false);
       }
       if (mainDataArray.length > 0) {
+        store.dispatch(new RefreshSmallPingTableCellAction(SmallPingTableCell.fromJson(mainDataArray)));
         return new DataResult(mainDataArray, true);
       } else {
         return new DataResult(null, false);

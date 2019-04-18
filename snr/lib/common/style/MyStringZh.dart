@@ -194,4 +194,6 @@ class MyStringZh extends MyStringBase {
   String text_buildingName = "大樓(套房名稱)";
   @override
   String text_finish = "完工";
+  @override
+  String text_leave = "離開";
 }

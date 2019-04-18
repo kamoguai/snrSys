@@ -6,8 +6,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/AbnormalDao.dart';
+import 'package:snr/common/dao/DefaultTableDao.dart';
 import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/model/DefaultTableCell.dart';
+import 'package:snr/common/model/SmallPingTableCell.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
@@ -15,6 +17,7 @@ import 'package:snr/widget/DefaultTableItem.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
+import 'package:snr/widget/SmallPingTableItem.dart';
 
 class AbnormalDetailPage extends StatefulWidget {
   static final String sName = "abnormalDetial";
@@ -38,7 +41,7 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
   _renderItem(index) {
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);
   }
 
   //讀取snr config
@@ -58,6 +61,11 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
         sort: '');
     return res;
   }
+  ///呼叫小ping api
+  getPingData(custCode) async {
+    var res = await DefaultTableDao.getPingSNR(_getStore(),context, custCode: custCode);
+    return res;
+  }
   ///跳轉function 
   void _addTransform(String custNo) {
     setState(() {
@@ -72,6 +80,120 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
       print("now custNo => $toTransformArray");
     });
   }
+  ///小ping function
+  void _callPing(String custCode, int currentCellTag) async{
+    if (isLoading) {
+      Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+      return;
+    }
+    isLoading = true;
+    Fluttertoast.showToast(msg: '正在ping該筆資料中..');
+    print('第${currentCellTag}筆資料');
+    var res = await getPingData(custCode);
+    if(res != null && res.result) {
+      // var pingData = _getStore().state.pingData;
+      showDialog(
+      context: context,
+      builder: (BuildContext context) => _buildPingDialog(context,res, currentCellTag: currentCellTag)
+      );
+      isLoading = false;
+      
+    }
+    
+  }
+ ///小ping dialog
+  Widget _buildPingDialog(BuildContext context, res, {currentCellTag}) {
+    SmallPingTableCell sptc = SmallPingTableCell.fromJson(res.data);
+    PingViewModel model = PingViewModel.forMap(sptc);
+    return Material(
+      type: MaterialType.transparency,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Card(
+            color: Colors.white,
+            child: SmallPingTableItem(defaultViewModel: model, configData: config,),
+          ),
+          SizedBox(height: 20,),
+         Card(
+            color: Color(MyColors.hexFromStr("#ebf6f9")),
+            child: ButtonTheme(
+              minWidth: double.maxFinite,
+              child: FlatButton(
+                child: Text(CommonUtils.getLocale(context).text_leave, style: TextStyle(color: Colors.red, fontSize: MyScreen.homePageFontSize(context))),
+                onPressed: (){
+                  ///資料回填當前row cell
+                  var pingRes = _getStore().state.pingtData;
+                  var dic = pullLoadWidgetControl.dataList[currentCellTag];
+                
+                  setState(() {
+                    
+                    Map<String,dynamic> u = {};
+                    Map<String, dynamic> snr = {};
+                    if (pingRes.SNR != null) {
+                      u = pingRes.SNR["U0"];
+                      snr = u;
+                      dic.U0_SNR = snr["SNR"];
+                      dic.U0_PWR = snr["PWR"];
+                      u = pingRes.SNR["U1"];
+                      snr = u;
+                      dic.U1_SNR = snr["SNR"];
+                      dic.U1_PWR = snr["PWR"];
+                      u = pingRes.SNR["U2"];
+                      snr = u;
+                      dic.U2_SNR = snr["SNR"];
+                      dic.U2_PWR = snr["PWR"];
+                      u = pingRes.SNR["U3"];
+                      snr = u;
+                      dic.U3_SNR = snr["SNR"];
+                      dic.U3_PWR = snr["PWR"];
+                    }
+                    Map<String,dynamic> c = {};
+                    u = pingRes.CodeWord["U0"];
+                    c = u;
+                    dic.U0U = c["U"];
+                    dic.U0C = c["C"];
+                    u = pingRes.CodeWord["U1"];
+                    c = u;
+                    dic.U1U = c["U"];
+                    dic.U1C = c["C"];
+                    u = pingRes.CodeWord["U2"];
+                    c = u;
+                    dic.U2U = c["U"];
+                    dic.U2C = c["C"];
+                    u = pingRes.CodeWord["U3"];
+                    c = u;
+                    dic.U3U = c["U"];
+                    dic.U3C = c["C"];
+
+                    dic.DS0 = pingRes.DS0;
+                    dic.DS1 = pingRes.DS1;
+                    dic.DS2 = pingRes.DS2;
+                    dic.DS3 = pingRes.DS3;
+                    dic.DS4 = pingRes.DS4;
+                    dic.DS5 = pingRes.DS5;
+                    dic.DS6 = pingRes.DS6;
+                    dic.DS7 = pingRes.DS7;
+                    dic.DP0 = pingRes.DP0;
+                    dic.DP1 = pingRes.DP1;
+                    dic.DP2 = pingRes.DP2;
+                    dic.DP3 = pingRes.DP3;
+                    dic.DP4 = pingRes.DP4;
+                    dic.DP5 = pingRes.DP5;
+                    dic.DP6 = pingRes.DP6;
+                    dic.DP7 = pingRes.DP7;
+
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
   Store<SysState> _getStore() {
     return StoreProvider.of(context);
   }

@@ -92,7 +92,7 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
 
   ///自動字大小
   Widget _autoTextSize(text, color) {
-    var fontSize = MyScreen.normalPageFontSize(context);
+    var fontSize = MyScreen.normalPageFontSize_s(context);
 
     return AutoSizeText(
       text,

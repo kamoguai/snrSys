@@ -15,7 +15,8 @@ class DefaultTableItem extends StatelessWidget {
   final Function addTransform;
   final Function callPing;
   final List<String> addTransformArray;
-  DefaultTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing});
+  final int currentCellTag;
+  DefaultTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing, this.currentCellTag});
   ///分隔線
   _buildLine() {
     return new Container(
@@ -121,8 +122,8 @@ class DefaultTableItem extends StatelessWidget {
     }
   }
  
-  Future _openCallPingDialog(custCode) async {
-    callPing(custCode);
+  Future _openCallPingDialog(custCode, currentCellTag) async {
+    callPing(custCode, currentCellTag);
   }
 
   @override
@@ -408,7 +409,7 @@ class DefaultTableItem extends StatelessWidget {
                     // padding: EdgeInsets.all(2.0),
                     child: Image.asset('static/images/pingBtn.png', height: 40.0, width: 40.0),
                   ),
-                  onTap: (){_openCallPingDialog(defaultViewModel.custNo);},
+                  onTap: (){_openCallPingDialog(defaultViewModel.custNo, currentCellTag);},
                 ),
                 
               ],
@@ -574,22 +575,22 @@ class DefaultTableItem extends StatelessWidget {
                 _buildHeightLine(),
                 Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(defaultViewModel.u0c, TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(defaultViewModel.u1c, TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(defaultViewModel.u2c, TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(defaultViewModel.u3c, TextStyle(color: Colors.black), context),
                 ),
               ],
             ),
@@ -607,22 +608,22 @@ class DefaultTableItem extends StatelessWidget {
                 _buildHeightLine(),
                 Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(defaultViewModel.u0u, TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(defaultViewModel.u1u, TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(defaultViewModel.u2u, TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(defaultViewModel.u3u, TextStyle(color: Colors.black), context),
                 ),
               ],
             ),
@@ -736,9 +737,9 @@ class DefaultViewModel {
   String reportLogColor;
   String u0c;
   String u0u;
-  String u1C;
+  String u1c;
   String u1u;
-  String u2C;
+  String u2c;
   String u2u;
   String u3c;
   String u3u;
@@ -799,6 +800,14 @@ class DefaultViewModel {
     note4_color = data.note4_color == null ? "000000" : data.note4_color;
     note5 = data.note5 == null ? "" : data.note5;
     note5_color = data.note5_color == null ? "000000" : data.note5_color;
+    u0c = data.U0C == null ? "" : data.U0C;
+    u1c = data.U1C == null ? "" : data.U1C;
+    u2c = data.U2C == null ? "" : data.U2C;
+    u3c = data.U3C == null ? "" : data.U3C;
+    u0u = data.U0U == null ? "" : data.U0U;
+    u1u = data.U1U == null ? "" : data.U1U;
+    u2u = data.U2U == null ? "" : data.U2U;
+    u3u = data.U3U == null ? "" : data.U3U;
     dataTime2 = data.DataTime2 == null ? "" : data.DataTime2;
     usflow = data.USFLOW == null ? "" : data.USFLOW;
     dsflow = data.DSFLOW == null ? "" : data.DSFLOW;

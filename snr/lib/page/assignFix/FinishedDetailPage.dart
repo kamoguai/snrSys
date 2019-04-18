@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -6,8 +7,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
+import 'package:snr/common/dao/AssignFixDao.dart';
 import 'package:snr/common/dao/DefaultTableDao.dart';
-import 'package:snr/common/dao/ProblemDao.dart';
 import 'package:snr/common/dao/UserDao.dart';
 import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/model/DefaultTableCell.dart';
@@ -23,30 +24,32 @@ import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
 import 'package:snr/widget/SmallPingTableItem.dart';
 
-class ProblemDetailPage extends StatefulWidget {
+class FinishedDetailPage extends StatefulWidget {
   @override
-  _ProblemDetailPageState createState() => _ProblemDetailPageState();
+  _FinishedDetailPageState createState() => _FinishedDetailPageState();
 }
 
-class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKeepAliveClientMixin<ProblemDetailPage>, MyListState<ProblemDetailPage>, WidgetsBindingObserver {
-  ///snr設定檔
+class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticKeepAliveClientMixin<FinishedDetailPage>, MyListState<FinishedDetailPage>, WidgetsBindingObserver {
+ ///snr設定檔
   var config;
   ///現在按鈕enum
-  var nowType = buttonType.problem;
+  var nowType = buttonType.day;
   ///hub
   var strHub = "";
-  ///現在功能
-  var typevalue = "1";
-  ///同上
-  var typeof = "PROBLEM";
-  ///可異筆數
-  var vbadCount = "0";
-  ///問題筆數
-  var problemCount = "0";
-  ///其他筆數
-  var otherCount = "0";
-  ///追蹤筆數
-  var traceCount = "0";
+  ///api傳入時間，0:完工,1:昨日,2:前日,3:大前,4:前前
+  var day = "0";
+  ///跳轉用
+  var typeof = "";
+  ///完工筆數
+  var dayCount = "0";
+  ///昨日筆數
+  var day1Count = "0";
+  ///前日筆數
+  var day2Count = "0";
+  ///大前日筆數
+  var day3Count = "0";
+  ///前前日筆數
+  var day4Count = "0";
   /// user model
   User user;
   /// sso model
@@ -79,18 +82,18 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_problem + "-${problemCount}",
+                  .home_cmtsTitle_fix + "-${day1Count}",
               color: Color(MyColors.hexFromStr("#eeffef")),
               fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.problem ? Colors.red : Colors.grey[700],
+              textColor: nowType == buttonType.day ? Colors.red : Colors.grey[700],
               onPress: () {
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                   return;
                 }
                 setState(() {
-                  nowType = buttonType.problem;
-                  typeof = "PROBLEM";
+                  nowType = buttonType.day;
+                  day = "0";
                   showRefreshLoading();
                 });
                 
@@ -108,18 +111,18 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_vbad + "-${vbadCount}",
+                  .text_fix2 + "-${day2Count}",
               color: Color(MyColors.hexFromStr("#f0fcff")),
               fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.vbad ? Colors.red : Colors.grey[700],
+              textColor: nowType == buttonType.day1 ? Colors.red : Colors.grey[700],
               onPress: () {
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                   return;
                 }
                 setState(() {
-                  nowType = buttonType.vbad;
-                  typeof = "VBAD";
+                  nowType = buttonType.day1;
+                  day = "1";
                   showRefreshLoading();
                 });
               },
@@ -136,18 +139,18 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_trace + "-${traceCount}",
+                  .text_cut + "-${day3Count}",
               color: Color(MyColors.hexFromStr("#fafff2")),
               fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.trace ? Colors.red : Colors.grey[700],
+              textColor: nowType == buttonType.day2 ? Colors.red : Colors.grey[700],
               onPress: () {
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                   return;
                 }
                 setState(() {
-                  nowType = buttonType.trace;
-                  typeof = "TRACK";
+                  nowType = buttonType.day2;
+                  day = "2";
                   showRefreshLoading();
                 });
               },
@@ -164,18 +167,18 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_other + "-${otherCount}",
+                  .text_watch + "-${day4Count}",
               color: Color(MyColors.hexFromStr("#fef5f6")),
               fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.other ? Colors.red : Colors.grey[700],
+              textColor: nowType == buttonType.day3 ? Colors.red : Colors.grey[700],
               onPress: () {
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                   return;
                 }
                 setState(() {
-                  nowType = buttonType.other;
-                  typeof = "OTHER";
+                  nowType = buttonType.day3;
+                  day = "3";
                   showRefreshLoading();
                 });
               },
@@ -223,12 +226,11 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
   }
   ///get api data
   getApiDataList() async {
-    var res = await ProblemDao.getSNRProblemsAllBadSignal(_getStore(),
+    var res = await AssignFixDao.getFinishedFix(
     city: strCity,
     sort: strSort,
     hub: strHub,
-    typeOf: typeof,
-    typeValue: typevalue,
+    day: day,
     accNo: user.accNo,
     );
     return res;
@@ -324,7 +326,6 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
     });
   }
 
-
   var typeStr = "";
   ///執行跳轉action
   _transformDataAction(BuildContext context) {
@@ -357,32 +358,40 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
     List<String> sortArray = [];
     List<Widget> wList = [];
       switch (nowType) {
-        case buttonType.vbad: 
+        case buttonType.day: 
           if (this.toTransformArray.length >= 2) {
-            sortArray = ["正常","其他","離線","問題","可優","無下行(超時)"];
+             sortArray = ["完工","拆改","觀察","自移"];
           }
           else {
-            sortArray = ["正常","其他","離線","問題","可優","低HP","無下行(超時)"];
+            sortArray = ["完工","拆改","觀察","低HP","自移"];
           }
           break;
-        case buttonType.problem: 
+        case buttonType.day1: 
           if (this.toTransformArray.length >= 2) {
-            sortArray = ["正常","派修","可異","離線","其他","可優","無下行(超時)"];
+            sortArray = ["完工","自移"];
           }
           else {
-            sortArray = ["正常","派修","可異","離線","其他","可優","低HP","無下行(超時)"];
+            sortArray = ["完工","低HP","自移"];
           }
           break;
-        case buttonType.other:
+        case buttonType.day2:
           if (this.toTransformArray.length >= 2) {
-            sortArray = ["正常","派修","可異","離線","問題","可優","無下行(超時)"];
+            sortArray = ["完工","派修","觀察","自移"];
           }
           else {
-            sortArray = ["正常","派修","可異","離線","問題","可優","低HP","無下行(超時)"];
+            sortArray = ["完工","派修","觀察","低HP","自移"];
           }
           break;
-        case buttonType.trace:
-          sortArray = ["正常"];
+        case buttonType.day3:
+          if (this.toTransformArray.length >= 2) {
+            sortArray = ["完工","派修","拆改","其他(可異)","無下行(超時)","正常","自移"];
+          }
+          else {
+            sortArray = ["完工","派修","拆改","其他(可異)","低HP","無下行(超時)","正常","自移"];
+          }
+          break;
+        case buttonType.day4:
+        
           break;
       }
       for (var sortStr in sortArray) {
@@ -390,47 +399,50 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
           CupertinoActionSheetAction(
             onPressed: () {
               switch (sortStr) {
-                case "派修":
-                  typeStr = "FIX";
-                  break;
-                case "低HP":
-                  typeStr = "LOWHP";
-                  break;
-                case "正常":
-                  typeStr = "GOOD";
-                  break;
                 case "追蹤":
-                  typeStr = "TRACK";
-                  break;
-                case "可異":
-                  typeStr = "VBAD";
-                  break;
-                case "問題":
-                  typeStr = "PROBLEM";
-                  break;
-                case "無下行(超時)" :
-                  typeStr = "NODS";
-                  break;
-                case "離線":
-                  typeStr = "OFFLINE";
-                  break;
-                case "其他":
-                  typeStr = "OTHER";
-                  break;
-                case "測機(追蹤)":
-                  typeStr = "TRACK4";
-                  break;
-                case "觀察(派修)":
-                  typeStr = "WATCH";
-                  break;
+                    typeStr = "TRACK";
+                    break;
+                case "拆改":
+                    typeStr = "CUT";
+                    break;
                 case "完工":
-                  typeStr = "FINISH";
-                  break;
-                case "可優":
-                  typeStr = "VBAD2";
-                  break;
+                    typeStr = "FINISH";
+                    break;
+                case "派修":
+                    typeStr = "FIX";
+                    break;
+                case "可異":
+                    typeStr = "VBAD";
+                    break;
                 case "NG":
-                  typeStr = "NG";
+                    typeStr = "NG";
+                    break;
+                case "觀察":
+                    typeStr = "WATCH";
+                    break;
+                case "低HP":
+                    typeStr = "LOWHP";
+                    break;
+                case "問題(可異)":
+                    typeStr = "PROBLEM";
+                    break;
+                case "正常":
+                    typeStr = "GOOD";
+                    break;
+                case "其他(可異)":
+                    typeStr = "OTHER";
+                    break;
+                case "再修":
+                    typeStr = "FIX2";
+                    break;
+                case "可優":
+                    typeStr = "VBAD2";
+                    break;
+                case "無下行(超時)":
+                    typeStr = "NODS";
+                    break;
+                case "自移":
+                    typeStr = "WP2";
                   break;
                 default:
                   break;
@@ -447,7 +459,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
   }
   _transformDialog(BuildContext context, {to,sortStr}) {
     Future.delayed(const Duration(seconds: 1), () {
-      if (sortStr == "低HP") {
+      if (sortStr == "低HP" || sortStr == "自移") {
         var memoText = "";
         showDialog(
           context: context,
@@ -570,7 +582,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
     }
     
   }
-  ///小ping dialog
+ ///小ping dialog
   Widget _buildPingDialog(BuildContext context, res, {currentCellTag}) {
     SmallPingTableCell sptc = SmallPingTableCell.fromJson(res.data);
     PingViewModel model = PingViewModel.forMap(sptc);
@@ -662,7 +674,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
       ),
     );
   }
-
+  
   Store<SysState> _getStore() {
     return StoreProvider.of(context);
   }
@@ -689,10 +701,10 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
       setState(() {
         toTransformArray.clear();
         pullLoadWidgetControl.dataList.clear();
-        vbadCount = res.data["VBAD"];
-        problemCount = res.data["PROBLEM"];
-        otherCount = res.data["OTHER"];
-        traceCount = res.data["TRACK"] == null ? "0" : res.data["TRACK"];
+        day1Count = res.data["FIX"];
+        day2Count = res.data["FIX2"];
+        day3Count = res.data["CUT"];
+        day4Count = res.data["WATCH"];
 
         pullLoadWidgetControl.dataList.addAll(list);
         pullLoadWidgetControl.needLoadMore = false;
@@ -784,7 +796,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                         ),
                       ),
                       SizedBox(),
-                      Text(CommonUtils.getLocale(context).text_problem, style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
+                      Text(CommonUtils.getLocale(context).home_cmtsTitle_fix, style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
                       SizedBox(),
                       SizedBox(),
                       Text('筆數: ${pullLoadWidgetControl.dataList.length}', style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.white)),
@@ -845,23 +857,18 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                     ),
                   ),
                   ButtonTheme(
-                      child: new FlatButton.icon(
-                    icon: Image.asset(
-                      MyICons.DEFAULT_USER_ICON,
-                      width: 30,
-                      height: 30,
+                    minWidth: MyScreen.homePageBarButtonWidth(context),
+                    child: new MyToolButton(
+                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      text: CommonUtils.getLocale(context).text_finish,
+                      textColor: Colors.yellow,
+                      color: Colors.transparent,
+                      fontSize: MyScreen.homePageFontSize(context),
+                      onPress: () {
+                        
+                      },
                     ),
-                    textColor: Colors.white,
-                    color: Colors.transparent,
-                    label: Text(
-                      'PING',
-                      style: TextStyle(
-                          fontSize: MyScreen.homePageFontSize(context)),
-                    ),
-                    onPressed: () {
-                      print(123);
-                    },
-                  )),
+                  ),
                   ButtonTheme(
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
@@ -911,8 +918,9 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
 }
 
 enum buttonType {
-  problem,
-  vbad,
-  trace,
-  other,
+  day,
+  day1,
+  day2,
+  day3,
+  day4,
 }

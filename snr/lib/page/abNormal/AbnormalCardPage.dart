@@ -96,7 +96,7 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
 
   ///自動字大小
   Widget _autoTextSize(text, color) {
-    var fontSize = MyScreen.normalPageFontSize(context);
+    var fontSize = MyScreen.normalPageFontSize_s(context);
 
     return AutoSizeText(
       text,
@@ -280,7 +280,7 @@ Widget _buildCmtsHeader2() {
             ),
             Container(
               width: _deviceWidth6(),
-              child: _autoTextSize('${((double.parse(dic['BadRate']) * 1000) / 10).toStringAsFixed(1)}%', Colors.blue),
+              child: _autoTextSize('${dic['BadRate']}%', Colors.blue),
             ),
           ],
         ),

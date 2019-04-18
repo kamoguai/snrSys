@@ -343,6 +343,19 @@ class MyScreen {
     }
     return fontSize;
   }
+  ///首頁字體大小
+  static double homePageFontSize_s(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double fontSize = 0.0;
+    if (deviceHeight < 570) {
+      fontSize = MyConstant.tinyTextSize;
+    } else if (deviceHeight > 800) {
+      fontSize = MyConstant.normalTextSize;
+    } else {
+      fontSize = MyConstant.middleTextWhiteSize;
+    }
+    return fontSize;
+  }
   ///卡板字體大小
   static double normalPageFontSize(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;

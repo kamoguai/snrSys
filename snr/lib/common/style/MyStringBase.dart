@@ -190,4 +190,6 @@ abstract class MyStringBase {
   String text_buildingName;
 
   String text_finish;
+
+  String text_leave;
 }

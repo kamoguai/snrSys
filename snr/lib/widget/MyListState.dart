@@ -40,6 +40,13 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
       return true;
     });
   }
+  ///運用MyPullLoadWidget
+  showRefreshLoadingF() {
+    new Future.delayed(const Duration(seconds: 0), () {
+      refreshIndicatorKey.currentState.show().then((e) {});
+      return false;
+    });
+  }
   ///空页面
   buildEmpty() {
     return new Expanded(

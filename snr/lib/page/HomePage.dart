@@ -200,6 +200,15 @@ class _HomePageState extends State<HomePage>
       textAlign: TextAlign.center,
     );
   }
+   ///自動縮放text
+  _buildTextFontColor_s(String text, Color color) {
+    return AutoSizeText(
+      text,
+      style: TextStyle(color: color, fontSize: MyScreen.homePageFontSize_s(context)),
+      minFontSize: 5.0,
+      textAlign: TextAlign.center,
+    );
+  }
 
   /// cmts talbe
   _buildCmtsTable() {
@@ -352,23 +361,23 @@ class _HomePageState extends State<HomePage>
             ),
              Container(
               width: _deviceWidth6(),
-              child: _buildTextFontColor(dic.OnLine, Colors.blue)
+              child: _buildTextFontColor_s(dic.OnLine, Colors.blue)
             ),
              Container(
               width: _deviceWidth6(),
-              child: _buildTextFontColor(dic.Bad, Colors.red)
+              child: _buildTextFontColor_s(dic.Bad, Colors.red)
             ),
              Container(
               width: _deviceWidth6(),
-              child: _buildTextFontColor(dic.OverPower, Colors.black)
+              child: _buildTextFontColor_s(dic.OverPower, Colors.black)
             ),
              Container(
               width: _deviceWidth6(),
-              child: _buildTextFontColor(dic.Problem, Colors.pink)
+              child: _buildTextFontColor_s(dic.Problem, Colors.pink)
             ),
              Container(
               width: _deviceWidth6(),
-              child: _buildTextFontColor('${((dic.BadRate * 1000) / 10).toStringAsFixed(1)}%', Colors.blue[300])
+              child: _buildTextFontColor_s('${((dic.BadRate * 1000) / 10).toStringAsFixed(1)}%', Colors.blue[300])
             ),
           ],
         ),
@@ -434,23 +443,23 @@ class _HomePageState extends State<HomePage>
           ),
           Container(
             width: _deviceWidth6(),
-            child: _buildTextFontColor("${intOnline}", Colors.blue),
+            child: _buildTextFontColor_s("${intOnline}", Colors.blue),
           ),
           Container(
             width: _deviceWidth6(),
-            child: _buildTextFontColor("${intBad}", Colors.red),
+            child: _buildTextFontColor_s("${intBad}", Colors.red),
           ),
           Container(
             width: _deviceWidth6(),
-            child: _buildTextFontColor("${intOverPower}", Colors.black),
+            child: _buildTextFontColor_s("${intOverPower}", Colors.black),
           ),
           Container(
             width: _deviceWidth6(),
-            child: _buildTextFontColor("${intProblem}", Colors.pink),
+            child: _buildTextFontColor_s("${intProblem}", Colors.pink),
           ),
           Container(
             width: _deviceWidth6(),
-            child: _buildTextFontColor("${(((doubleRate * 1000) / 10) / sdList.length).toStringAsFixed(1)}%", Colors.blue[300]),
+            child: _buildTextFontColor_s("${(((doubleRate * 1000) / 10) / sdList.length).toStringAsFixed(1)}%", Colors.blue[300]),
           ),
         ],
       ),
