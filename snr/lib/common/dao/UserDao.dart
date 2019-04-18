@@ -24,6 +24,7 @@ class UserDao {
         print("sso登入resp => " + res.data.toString());
       } 
       Sso ssoInfo = Sso.fromJson(res.data);
+      await LocalStorage.save(Config.USER_ACCNAME_KEY, ssoInfo.accName);
       await LocalStorage.save(Config.USER_SSO_KEY, json.encode(ssoInfo.toJson()));
       return new DataResult(ssoInfo, true);
     }

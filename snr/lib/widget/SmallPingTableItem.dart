@@ -1,5 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:snr/common/config/Config.dart';
+import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/model/SmallPingTableCell.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
@@ -99,6 +102,74 @@ class SmallPingTableItem extends StatelessWidget {
     );
   }
  
+  ///關電按鈕dialog
+  showColsePowerDialog(BuildContext context) async{
+    var accNo = await LocalStorage.get(Config.USER_ACCNAME_KEY);
+    print('accNo => $accNo');
+    showDialog(
+      context: context,
+      builder: (context) {
+        var dialog = CupertinoAlertDialog(
+          content: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              text: '確定關閉電源？', 
+              style: TextStyle(color: Colors.black,),
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              child: Text('取消', style: TextStyle(color: Colors.red),),
+            ),
+            CupertinoButton(
+              onPressed: (){
+                // postTransferAPI(to);
+                Navigator.pop(context);
+              },
+              child: Text('確定', style: TextStyle(color: Colors.blue),),
+            ),
+          ],
+        );
+        return dialog;  
+      }
+    );
+  }
+  ///重啟按鈕dialog
+  showRestartDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        var dialog = CupertinoAlertDialog(
+          content: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              text: '確定重啟電源？', 
+              style: TextStyle(color: Colors.black,),
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              child: Text('取消', style: TextStyle(color: Colors.red),),
+            ),
+            CupertinoButton(
+              onPressed: (){
+                // postTransferAPI(to);
+                Navigator.pop(context);
+              },
+              child: Text('確定', style: TextStyle(color: Colors.blue),),
+            ),
+          ],
+        );
+        return dialog;  
+      }
+    );
+  }
   @override
   Widget build(BuildContext context) {
     var netType = 'EXT';
@@ -242,7 +313,7 @@ class SmallPingTableItem extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(5.0))
                     ),
                     child: _autoTextSize('關電', TextStyle(color: Colors.red, fontWeight: FontWeight.bold), context),
-                    onPressed: (){},
+                    onPressed: (){showColsePowerDialog(context);},
                   ),
                 ),
                 _buildHeightLine51(),
@@ -322,7 +393,7 @@ class SmallPingTableItem extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: _autoTextSize('重啟', TextStyle(color: Colors.brown, fontWeight: FontWeight.bold), context),
-                    onPressed: (){},
+                    onPressed: (){showRestartDialog(context);},
                   ),
                 ),
               ],
@@ -570,42 +641,34 @@ class SmallPingTableItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Container(
-                  child: ButtonTheme(
-                    // padding: EdgeInsets.all(1.0),
-                    minWidth: 30,
-                    height: 20,
-                    child: FlatButton(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1.0,
-                          color: Colors.grey,
-                          style: BorderStyle.solid
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(5.0))
+                  padding: EdgeInsets.all(10.0),
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 1.0,
+                        color: Colors.grey,
+                        style: BorderStyle.solid
                       ),
-                      child: _autoTextSize('大PING', TextStyle(color: Colors.red), context),
-                      onPressed: (){},
+                      borderRadius: BorderRadius.all(Radius.circular(5.0))
                     ),
+                    child: _autoTextSize('大PING', TextStyle(color: Colors.red), context),
+                    onPressed: (){},
                   ),
                 ),
                 _buildHeightLine(),
                 Container(
-                  child: ButtonTheme(
-                    // padding: EdgeInsets.all(1.0),
-                    minWidth: 30,
-                    height: 20,
-                    child: FlatButton(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1.0,
-                          color: Colors.grey,
-                          style: BorderStyle.solid
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(5.0))
+                  padding: EdgeInsets.all(10.0),
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 1.0,
+                        color: Colors.grey,
+                        style: BorderStyle.solid
                       ),
-                      child: _autoTextSize('重啟2', TextStyle(color: Colors.red), context),
-                      onPressed: (){},
+                      borderRadius: BorderRadius.all(Radius.circular(5.0))
                     ),
+                    child: _autoTextSize('重啟2', TextStyle(color: Colors.red), context),
+                    onPressed: (){},
                   ),
                 )
               ],

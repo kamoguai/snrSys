@@ -196,4 +196,12 @@ class MyStringZh extends MyStringBase {
   String text_finish = "完工";
   @override
   String text_leave = "離開";
+  @override
+  String finished_day1 = "昨日";
+  @override
+  String finished_day2 = "前日";
+  @override
+  String finished_day3 = "大前日";
+  @override
+  String finished_day4 = "前前日";
 }

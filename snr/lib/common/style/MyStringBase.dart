@@ -192,4 +192,12 @@ abstract class MyStringBase {
   String text_finish;
 
   String text_leave;
+
+  String finished_day1;
+
+  String finished_day2;
+
+  String finished_day3;
+
+  String finished_day4;
 }

@@ -68,8 +68,10 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
   ///頁面上方按鈕群
   _renderHeader() {
     return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      height: 55.0,
+      padding: EdgeInsets.all(10.0),
+      child: ListView(
+        scrollDirection: Axis.horizontal,
         children: <Widget>[
           ButtonTheme(
             minWidth: MyScreen.default4BtnWidth(context),
@@ -82,7 +84,7 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .home_cmtsTitle_fix + "-${day1Count}",
+                  .text_finish + "-${dayCount}",
               color: Color(MyColors.hexFromStr("#eeffef")),
               fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.day ? Colors.red : Colors.grey[700],
@@ -100,6 +102,7 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
               },
             ),
           ),
+          SizedBox(width: 10,),
           ButtonTheme(
             minWidth: MyScreen.default4BtnWidth(context),
             height: 35,
@@ -111,7 +114,7 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_fix2 + "-${day2Count}",
+                  .finished_day1 + "-${day1Count}",
               color: Color(MyColors.hexFromStr("#f0fcff")),
               fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.day1 ? Colors.red : Colors.grey[700],
@@ -128,6 +131,7 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
               },
             ),
           ),
+          SizedBox(width: 10,),
           ButtonTheme(
             minWidth: MyScreen.default4BtnWidth(context),
             height: 35,
@@ -139,7 +143,7 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_cut + "-${day3Count}",
+                  .finished_day2 + "-${day2Count}",
               color: Color(MyColors.hexFromStr("#fafff2")),
               fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.day2 ? Colors.red : Colors.grey[700],
@@ -156,6 +160,7 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
               },
             ),
           ),
+          SizedBox(width: 10,),
           ButtonTheme(
             minWidth: MyScreen.default4BtnWidth(context),
             height: 35,
@@ -167,7 +172,7 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_watch + "-${day4Count}",
+                  .finished_day3 + "-${day3Count}",
               color: Color(MyColors.hexFromStr("#fef5f6")),
               fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.day3 ? Colors.red : Colors.grey[700],
@@ -184,8 +189,37 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
               },
             ),
           ),
+          SizedBox(width: 10,),
+          ButtonTheme(
+            minWidth: MyScreen.default4BtnWidth(context),
+            height: 35,
+            child: new MyToolButton(
+              padding:
+                  EdgeInsets.only(left: 10.0, right: 10.0),
+              shape: new RoundedRectangleBorder(
+                  borderRadius:
+                      new BorderRadius.circular(10.0),
+                  side: BorderSide(color: Colors.grey)),
+              text: CommonUtils.getLocale(context)
+                  .finished_day4 + "-${day3Count}",
+              color: Color(MyColors.hexFromStr("#f2f2f2")),
+              fontSize: MyScreen.normalListPageFontSize(context),
+              textColor: nowType == buttonType.day3 ? Colors.red : Colors.grey[700],
+              onPress: () {
+                if (isLoading) {
+                  Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                  return;
+                }
+                setState(() {
+                  nowType = buttonType.day3;
+                  day = "3";
+                  showRefreshLoading();
+                });
+              },
+            ),
+          ),
         ],
-      ),
+      )
     );
   }
 
@@ -701,10 +735,10 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
       setState(() {
         toTransformArray.clear();
         pullLoadWidgetControl.dataList.clear();
-        day1Count = res.data["FIX"];
-        day2Count = res.data["FIX2"];
-        day3Count = res.data["CUT"];
-        day4Count = res.data["WATCH"];
+        dayCount = res.data["Day0"];
+        day1Count = res.data["Day1"];
+        day2Count = res.data["Day2"];
+        day3Count = res.data["Day3"];
 
         pullLoadWidgetControl.dataList.addAll(list);
         pullLoadWidgetControl.needLoadMore = false;
@@ -796,7 +830,7 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                         ),
                       ),
                       SizedBox(),
-                      Text(CommonUtils.getLocale(context).home_cmtsTitle_fix, style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
+                      Text(CommonUtils.getLocale(context).text_finish, style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
                       SizedBox(),
                       SizedBox(),
                       Text('筆數: ${pullLoadWidgetControl.dataList.length}', style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.white)),
@@ -844,31 +878,30 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
                       text: CommonUtils.getLocale(context).text_sort,
-                      textColor: Colors.white,
+                      textColor: Theme.of(context).primaryColor,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
-                      onPress: () {
-                        if (isLoading) {
-                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                          return;
-                        }
-                        showSortAlertSheetController(context);
-                      },
+                      onPress: () {},
                     ),
                   ),
                   ButtonTheme(
-                    minWidth: MyScreen.homePageBarButtonWidth(context),
-                    child: new MyToolButton(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: CommonUtils.getLocale(context).text_finish,
-                      textColor: Colors.yellow,
-                      color: Colors.transparent,
-                      fontSize: MyScreen.homePageFontSize(context),
-                      onPress: () {
-                        
-                      },
+                      child: new FlatButton.icon(
+                    icon: Image.asset(
+                      MyICons.DEFAULT_USER_ICON,
+                      width: 30,
+                      height: 30,
                     ),
-                  ),
+                    textColor: Colors.white,
+                    color: Colors.transparent,
+                    label: Text(
+                      'PING',
+                      style: TextStyle(
+                          fontSize: MyScreen.homePageFontSize(context)),
+                    ),
+                    onPressed: () {
+                      print(123);
+                    },
+                  )),
                   ButtonTheme(
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
