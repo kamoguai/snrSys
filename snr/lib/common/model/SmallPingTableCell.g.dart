@@ -12,7 +12,7 @@ SmallPingTableCell _$SmallPingTableCellFromJson(Map<String, dynamic> json) {
       json['CIF'] as String,
       json['NODE'] as String,
       json['CustCode'] as String,
-      json['COUNT'] as Map<String,dynamic>,
+      json['COUNT'] as Map<String, dynamic>,
       json['ONLINETIME'] as String,
       json['CMSWVER'] as String,
       json['CustName'] as String,
@@ -50,10 +50,8 @@ SmallPingTableCell _$SmallPingTableCellFromJson(Map<String, dynamic> json) {
       json['DSFLOW'] as String,
       json['Response'] as String,
       json['PacketLoss'] as String,
-      json['CodeWord'] as Map<String,dynamic>,
-          
-      json['SNR'] as Map<String,dynamic>,
-    );
+      json['CodeWord'] as Map<String, dynamic>,
+      json['SNR'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$SmallPingTableCellToJson(SmallPingTableCell instance) =>

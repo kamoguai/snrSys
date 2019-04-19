@@ -2,8 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:snr/common/config/Config.dart';
+import 'package:snr/common/dao/DefaultTableDao.dart';
+import 'package:snr/common/dao/UserDao.dart';
 import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/model/SmallPingTableCell.dart';
+import 'package:snr/common/model/User.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 
@@ -13,7 +16,7 @@ class SmallPingTableItem extends StatelessWidget {
 
   final PingViewModel defaultViewModel;
   final dynamic configData;
-
+  User user;
   SmallPingTableItem({this.defaultViewModel, this.configData, });
 
   ///分隔線
@@ -49,33 +52,22 @@ class SmallPingTableItem extends StatelessWidget {
 
   _deviceWidth3(context) {
     final deviceWidth = MediaQuery.of(context).size.width;
-    return (deviceWidth / 3) - 2;
+    return (deviceWidth / 3) - 1;
   }
 
   _deviceWidth9(context) {
     final deviceWidth = MediaQuery.of(context).size.width;
-    return (deviceWidth / 9) - 2;
+    return (deviceWidth / 9) - 1;
   }
 
    _deviceWidth92(context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     var width9 =  deviceWidth / 9;
-    return (width9 * 2) + (width9 * 0.5) - 3;
+    return (width9 * 2) + (width9 * 0.5) - 2;
   }
 
   Widget _autoTextSize(text, style, context) {
     var fontSize = MyScreen.defaultTableCellFontSize(context);
-    var fontStyle = TextStyle(fontSize: fontSize);
-    return AutoSizeText(
-      text,
-      style: style.merge(fontStyle),
-      minFontSize: 5.0,
-      textAlign: TextAlign.center,
-    );
-  }
-
-  Widget _autoTextSize_s(text, style, context) {
-    var fontSize = MyScreen.defaultTableCellFontSize_s(context);
     var fontStyle = TextStyle(fontSize: fontSize);
     return AutoSizeText(
       text,
@@ -104,9 +96,11 @@ class SmallPingTableItem extends StatelessWidget {
  
   ///關電按鈕dialog
   showColsePowerDialog(BuildContext context) async{
-    var accNo = await LocalStorage.get(Config.USER_ACCNAME_KEY);
-    print('accNo => $accNo');
-    showDialog(
+    var accName = await LocalStorage.get(Config.USER_ACCNAME_KEY);
+    var userRes = await UserDao.getUserInfoLocal();
+    user = userRes.data;
+    if (user.isCMReset == 1) 
+    await showDialog(
       context: context,
       builder: (context) {
         var dialog = CupertinoAlertDialog(
@@ -126,7 +120,7 @@ class SmallPingTableItem extends StatelessWidget {
             ),
             CupertinoButton(
               onPressed: (){
-                // postTransferAPI(to);
+                _postResetAPI(context, accName);
                 Navigator.pop(context);
               },
               child: Text('確定', style: TextStyle(color: Colors.blue),),
@@ -138,8 +132,12 @@ class SmallPingTableItem extends StatelessWidget {
     );
   }
   ///重啟按鈕dialog
-  showRestartDialog(BuildContext context) {
-    showDialog(
+  showRestartDialog(BuildContext context) async{
+    var accName = await LocalStorage.get(Config.USER_ACCNAME_KEY);
+    var userRes = await UserDao.getUserInfoLocal();
+    user = userRes.data;
+    if(user.isCMRestart == 1)
+    await showDialog(
       context: context,
       builder: (context) {
         var dialog = CupertinoAlertDialog(
@@ -159,7 +157,7 @@ class SmallPingTableItem extends StatelessWidget {
             ),
             CupertinoButton(
               onPressed: (){
-                // postTransferAPI(to);
+                _postRestartAPI(context, accName);
                 Navigator.pop(context);
               },
               child: Text('確定', style: TextStyle(color: Colors.blue),),
@@ -169,6 +167,14 @@ class SmallPingTableItem extends StatelessWidget {
         return dialog;  
       }
     );
+  }
+  ///post api 關電
+  _postResetAPI(context, accName) async{
+    await DefaultTableDao.postResetCM(context, cmts: defaultViewModel.cmts, custNo: defaultViewModel.custCode, accName: accName);
+  }
+  ///post api 重啟
+  _postRestartAPI(context, accName) async{
+    await DefaultTableDao.postRestartCM(context, cmts: defaultViewModel.cmts, custNo: defaultViewModel.custCode, accName: accName);
   }
   @override
   Widget build(BuildContext context) {
@@ -237,7 +243,7 @@ class SmallPingTableItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Container(
-                  width: (_deviceWidth3(context) * 2 + _deviceWidth9(context) * 0.5) - 1 ,
+                  width: (_deviceWidth3(context) * 2 + _deviceWidth9(context) * 0.5) - 5 ,
                   child: _autoTextSize(defaultViewModel.count["CMTS"] + defaultViewModel.count["CIF"] + defaultViewModel.count["NODE"], TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
@@ -258,7 +264,7 @@ class SmallPingTableItem extends StatelessWidget {
                 ),
                 _buildHeightLine(),
                 Container(
-                  width: (_deviceWidth3(context) + _deviceWidth9(context) * 0.5) - 1,
+                  width: (_deviceWidth3(context) + _deviceWidth9(context) * 0.5) - 5,
                   child: Row(
                     children: <Widget>[
                       Container(
@@ -269,7 +275,7 @@ class SmallPingTableItem extends StatelessWidget {
                       ),
                       _buildHeightLine(),
                       Container(
-                        width: _deviceWidth3(context) - 1,
+                        width: _deviceWidth3(context) - 5,
                         child: _autoTextSize(
                             defaultViewModel.buildingName, TextStyle(color: Colors.red), context),
                       ),

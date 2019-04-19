@@ -200,4 +200,20 @@ abstract class MyStringBase {
   String finished_day3;
 
   String finished_day4;
+
+  String text_addTotal;
+
+  String text_people;
+
+  String text_thisMonth;
+
+  String text_thisDay;
+
+  String text_bp;
+
+  String text_pipe;
+
+  String text_wkPoint;
+
+  String text_snrPoint;
 }

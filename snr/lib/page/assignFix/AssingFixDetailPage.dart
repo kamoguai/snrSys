@@ -26,6 +26,9 @@ import 'package:snr/common/model/SsoLogin.dart';
 import 'package:snr/widget/SmallPingTableItem.dart';
 
 class AssignFixDetailPage extends StatefulWidget {
+
+  
+
   @override
   _AssignFixDetailPageState createState() => _AssignFixDetailPageState();
 }

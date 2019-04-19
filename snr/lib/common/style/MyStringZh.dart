@@ -204,4 +204,20 @@ class MyStringZh extends MyStringBase {
   String finished_day3 = "大前日";
   @override
   String finished_day4 = "前前日";
+  @override
+  String text_addTotal = "加總";
+  @override
+  String text_people = "人員";
+  @override
+  String text_thisMonth = "本月";
+  @override
+  String text_thisDay = "本日";
+  @override
+  String text_bp = "扣項";
+  @override
+  String text_pipe = "區障";
+  @override
+  String text_wkPoint = "工程點數";
+  @override
+  String text_snrPoint = "SNR點數";
 }

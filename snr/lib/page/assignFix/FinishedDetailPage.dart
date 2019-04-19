@@ -25,6 +25,8 @@ import 'package:snr/common/model/SsoLogin.dart';
 import 'package:snr/widget/SmallPingTableItem.dart';
 
 class FinishedDetailPage extends StatefulWidget {
+
+
   @override
   _FinishedDetailPageState createState() => _FinishedDetailPageState();
 }
@@ -201,18 +203,18 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .finished_day4 + "-${day3Count}",
+                  .finished_day4 + "-${day4Count}",
               color: Color(MyColors.hexFromStr("#f2f2f2")),
               fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.day3 ? Colors.red : Colors.grey[700],
+              textColor: nowType == buttonType.day4 ? Colors.red : Colors.grey[700],
               onPress: () {
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                   return;
                 }
                 setState(() {
-                  nowType = buttonType.day3;
-                  day = "3";
+                  nowType = buttonType.day4;
+                  day = "4";
                   showRefreshLoading();
                 });
               },

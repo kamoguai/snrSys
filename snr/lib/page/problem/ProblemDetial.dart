@@ -24,6 +24,8 @@ import 'package:snr/common/model/SsoLogin.dart';
 import 'package:snr/widget/SmallPingTableItem.dart';
 
 class ProblemDetailPage extends StatefulWidget {
+
+
   @override
   _ProblemDetailPageState createState() => _ProblemDetailPageState();
 }

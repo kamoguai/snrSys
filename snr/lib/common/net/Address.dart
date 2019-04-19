@@ -225,4 +225,8 @@ class Address {
     }
     return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&Memo=${memo}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
   }
+  ///完工統計
+  static getQueryFinishAnalyseAPI(date) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryFinishAnalyse&QueryDate=$date";
+  }
 }

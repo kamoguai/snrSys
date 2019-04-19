@@ -7,6 +7,7 @@ import 'package:snr/page/abNormal/AbnormalNodePage.dart';
 import 'package:snr/page/abNormal/AbnormalDetailPage.dart';
 import 'package:snr/page/assignFix/AssingFixDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedDetailPage.dart';
+import 'package:snr/page/assignFix/FinishedStatisticPage.dart';
 import 'package:snr/page/problem/ProblemDetial.dart';
 import 'package:snr/page/assignFix/AssignFixListPage.dart';
 
@@ -67,5 +68,9 @@ class NavigatorUtils {
   ///完工詳情頁面
   static goFinishedDetail(BuildContext context) {
     NavigatorRouter(context, new FinishedDetailPage());
+  }
+  ///完工統計頁面
+  static goFinishedStatistic(BuildContext context) {
+     NavigatorRouter(context, new FinishedStatisticPage());
   }
 }
