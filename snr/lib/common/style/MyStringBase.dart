@@ -209,11 +209,13 @@ abstract class MyStringBase {
 
   String text_thisDay;
 
-  String text_bp;
+  String text_minus;
 
   String text_pipe;
 
   String text_wkPoint;
 
   String text_snrPoint;
+
+  String text_bp;
 }

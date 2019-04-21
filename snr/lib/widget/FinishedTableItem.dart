@@ -100,7 +100,6 @@ class FinishedTableItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 _autoContainer_full(child: _autoTextSize(defaultViewModel.address,TextStyle(color: Colors.grey), context), ),
-                _buildLine(),
               ],
             ),
           ),

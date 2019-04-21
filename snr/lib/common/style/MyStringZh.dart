@@ -213,7 +213,9 @@ class MyStringZh extends MyStringBase {
   @override
   String text_thisDay = "本日";
   @override
-  String text_bp = "扣項";
+  String text_bp = "扣點";
+  @override
+  String text_minus = "扣項";
   @override
   String text_pipe = "區障";
   @override

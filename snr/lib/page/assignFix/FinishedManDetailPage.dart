@@ -9,24 +9,18 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/AssignFixDao.dart';
-import 'package:snr/common/dao/DefaultTableDao.dart';
 import 'package:snr/common/dao/UserDao.dart';
 import 'package:snr/common/local/LocalStorage.dart';
-import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/model/FinishedTableCell.dart';
-import 'package:snr/common/model/SmallPingTableCell.dart';
 import 'package:snr/common/model/User.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
-import 'package:snr/common/utils/NavigatorUtils.dart';
-import 'package:snr/widget/DefaultTableItem.dart';
 import 'package:snr/widget/FinishedTableItem.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
-import 'package:snr/widget/SmallPingTableItem.dart';
 
 class FinishedManDetailPage extends StatefulWidget {
 
@@ -89,7 +83,7 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .home_cmtsTitle_fix + "-${finishedCount}",
+                  .text_finish + "-${finishedCount}",
               color: Color(MyColors.hexFromStr("#eeffef")),
               fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.finished ? Colors.red : Colors.grey[700],
@@ -119,7 +113,7 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_fix2 + "-${bpCount}",
+                  .text_bp + "-${bpCount}",
               color: Color(MyColors.hexFromStr("#f0fcff")),
               fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.bp ? Colors.red : Colors.grey[700],
@@ -148,7 +142,7 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_cut + "-${bigbadCount}",
+                  .home_btn_bigbad + "-${bigbadCount}",
               color: Color(MyColors.hexFromStr("#fafff2")),
               fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.bigbad ? Colors.red : Colors.grey[700],
@@ -177,7 +171,7 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_watch + "-${pipeCount}",
+                  .text_pipe + "-${pipeCount}",
               color: Color(MyColors.hexFromStr("#fef5f6")),
               fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowType == buttonType.pipe ? Colors.red : Colors.grey[700],
@@ -221,7 +215,6 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
   getUserInfoData() async {
     var res = await UserDao.getUserInfoLocal();
     user = res;
-    print("user data => ${user}");
   }
   ///初始化
   initParam() async {
@@ -247,442 +240,6 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
     );
     return res;
   }
-  /// call 跳轉api
-  postTransferAPI(to) async {
-    await DefaultTableDao.didTransfer(context, 
-    to: to, 
-    from: typeof,
-    accNo: user.accNo,
-    accName: user.accName,
-    custCDList: toTransformArray
-    );
-    
-    Future.delayed(const Duration(seconds: 1), () {
-      showRefreshLoading();
-    });
-    
-  }
-  /// call 跳轉包含輸入匡api
-  postTransferInputTextAPI(to, memo) async {
-    await DefaultTableDao.didTransferInputText(context, 
-    to: to, 
-    from: typeof,
-    memo: memo,
-    accNo: user.accNo,
-    accName: user.accName,
-    custCDList: toTransformArray
-    );
-    
-    Future.delayed(const Duration(seconds: 1), () {
-      showRefreshLoading();
-    });
-    
-  }
-  ///呼叫小ping api
-  getPingData(custCode) async {
-    var res = await DefaultTableDao.getPingSNR(_getStore(),context, custCode: custCode);
-    return res;
-  }
-  ///客編輸入匡
-  _showQeuryCustNo(BuildContext context) {
-    var custNo = "";
-    Future.delayed(const Duration(seconds: 1), () {
-      showDialog(
-        context: context,
-        builder: (context) {
-          var dialog = CupertinoAlertDialog(
-            title: Text("查詢"),
-            content: Text('請輸入客編'),
-            actions: <Widget>[
-              CupertinoTextField(
-                autofocus: true,
-                keyboardType: TextInputType.number,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  border: Border.all(color: Colors.grey, style: BorderStyle.solid)
-                ),
-                placeholder: '客編',
-                onChanged: (String value){
-                  setState(() {
-                    custNo = value;
-                  });
-                },
-              ),
-              CupertinoButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                child: Text('取消', style: TextStyle(color: Colors.red),),
-              ),
-              CupertinoButton(
-                onPressed: (){
-                  setState(() {
-                      List<DefaultTableCell> list = new List();
-                      pullLoadWidgetControl.dataList.clear();
-                      for (var dic in dataArray) {
-                        if (dic["CustNo"] == custNo) {
-                          list.add(DefaultTableCell.fromJson(dic));
-                        }
-                      }
-                      pullLoadWidgetControl.dataList.addAll(list);
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text('確定', style: TextStyle(color: Colors.blue),),
-              ),
-            ],
-          );
-          return dialog;
-        }
-      );
-    });
-  }
-
-  var typeStr = "";
-  ///執行跳轉action
-  _transformDataAction(BuildContext context) {
-    print("buttonTylpe => $nowType");
-    if (user.isTransfer == 1) {
-      if (toTransformArray.length < 1) {
-        Fluttertoast.showToast(msg: '尚未選擇欲跳轉客編');
-        return;
-      }
-      showCupertinoModalPopup<String>(
-        context: context,
-        builder: (context) {
-          var dialog = CupertinoActionSheet(
-            title: Text('將選取的資轉'),
-            cancelButton: CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.pop(context, 'cancel');
-              },
-              child: Text('取消'),
-            ),
-            actions: _transSort()
-          );
-          return dialog;
-        }
-      );
-    } 
-  }
-  ///跳轉裡的選項
-  _transSort() {
-    List<String> sortArray = [];
-    List<Widget> wList = [];
-      switch (nowType) {
-        case buttonType.finished: 
-          if (this.toTransformArray.length >= 2) {
-             sortArray = ["完工","拆改","觀察","自移"];
-          }
-          else {
-            sortArray = ["完工","拆改","觀察","低HP","自移"];
-          }
-          break;
-        case buttonType.bp: 
-          if (this.toTransformArray.length >= 2) {
-            sortArray = ["完工","自移"];
-          }
-          else {
-            sortArray = ["完工","低HP","自移"];
-          }
-          break;
-        case buttonType.bigbad:
-          if (this.toTransformArray.length >= 2) {
-            sortArray = ["完工","派修","觀察","自移"];
-          }
-          else {
-            sortArray = ["完工","派修","觀察","低HP","自移"];
-          }
-          break;
-        case buttonType.pipe:
-          if (this.toTransformArray.length >= 2) {
-            sortArray = ["完工","派修","拆改","其他(可異)","無下行(超時)","正常","自移"];
-          }
-          else {
-            sortArray = ["完工","派修","拆改","其他(可異)","低HP","無下行(超時)","正常","自移"];
-          }
-          break;
-      }
-      for (var sortStr in sortArray) {
-        wList.add(
-          CupertinoActionSheetAction(
-            onPressed: () {
-              switch (sortStr) {
-                case "追蹤":
-                    typeStr = "TRACK";
-                    break;
-                case "拆改":
-                    typeStr = "CUT";
-                    break;
-                case "完工":
-                    typeStr = "FINISH";
-                    break;
-                case "派修":
-                    typeStr = "FIX";
-                    break;
-                case "可異":
-                    typeStr = "VBAD";
-                    break;
-                case "NG":
-                    typeStr = "NG";
-                    break;
-                case "觀察":
-                    typeStr = "WATCH";
-                    break;
-                case "低HP":
-                    typeStr = "LOWHP";
-                    break;
-                case "問題(可異)":
-                    typeStr = "PROBLEM";
-                    break;
-                case "正常":
-                    typeStr = "GOOD";
-                    break;
-                case "其他(可異)":
-                    typeStr = "OTHER";
-                    break;
-                case "再修":
-                    typeStr = "FIX2";
-                    break;
-                case "可優":
-                    typeStr = "VBAD2";
-                    break;
-                case "無下行(超時)":
-                    typeStr = "NODS";
-                    break;
-                case "自移":
-                    typeStr = "WP2";
-                  break;
-                default:
-                  break;
-              }
-              print("跳轉to -> $typeStr");
-              Navigator.pop(context);
-              _transformDialog(context, to: typeStr, sortStr: sortStr);
-            },
-            child: Text(sortStr),
-          )
-        );
-      }
-      return wList;
-  }
-  _transformDialog(BuildContext context, {to,sortStr}) {
-    Future.delayed(const Duration(seconds: 1), () {
-      if (sortStr == "低HP" || sortStr == "自移") {
-        var memoText = "";
-        showDialog(
-          context: context,
-          builder: (context) {
-            var dialog = CupertinoAlertDialog(
-              content: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: '確定將選取的${toTransformArray.length}筆資料轉至\n', 
-                  style: TextStyle(color: Colors.black, fontSize: MyScreen.defaultTableCellFontSize(context),),
-                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, fontSize: MyScreen.defaultTableCellFontSize(context))),]
-                ),
-              ),
-              // Text('確定將選取的${toTransformArray.length}筆資料轉至\n${sortStr}'),
-              actions: <Widget>[
-                CupertinoTextField(
-                  autofocus: true,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(color: Colors.grey, style: BorderStyle.solid)
-                  ),
-                  placeholder: '備註為必填',
-                  onChanged: (String value){
-                    setState(() {
-                      memoText = value;
-                    });
-                  },
-                ),
-                CupertinoButton(
-                  onPressed: (){
-                    if (memoText == "") {
-                      Fluttertoast.showToast(msg: '備註為必填唷！');
-                      return;
-                    }
-                    postTransferInputTextAPI(to, memoText);
-                    Navigator.pop(context);
-                  },
-                  child: Text('確定', style: TextStyle(color: Colors.blue),),
-                ),
-                CupertinoButton(
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  child: Text('取消', style: TextStyle(color: Colors.red),),
-                ),
-                
-              ],
-            );
-            return dialog;
-          }
-        );
-      }
-      else {
-        showDialog(
-          context: context,
-          builder: (context) {
-            var dialog = CupertinoAlertDialog(
-              content: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: '確定將選取的${toTransformArray.length}筆資料轉至\n', 
-                  style: TextStyle(color: Colors.black, fontSize: MyScreen.defaultTableCellFontSize(context),),
-                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, fontSize: MyScreen.defaultTableCellFontSize(context))),]
-                ),
-              ),
-              actions: <Widget>[
-                CupertinoButton(
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  child: Text('取消', style: TextStyle(color: Colors.red),),
-                ),
-                CupertinoButton(
-                  onPressed: (){
-                    postTransferAPI(to);
-                    Navigator.pop(context);
-                  },
-                  child: Text('確定', style: TextStyle(color: Colors.blue),),
-                ),
-              ],
-            );
-            return dialog;  
-          }
-        );
-      }
-    });
-  } 
-  ///跳轉function
-  void _addTransform(String custNo) {
-    setState(() {
-      if (toTransformArray.contains(custNo)) {
-        var index = toTransformArray.indexOf(custNo);
-        toTransformArray.removeAt(index);
-      }
-      else {
-        toTransformArray.add(custNo);
-      }
-      
-      print("now custNo => $toTransformArray");
-    });
-  }
-  ///小ping function
-  void _callPing(String custCode, int currentCellTag) async{
-    if (isLoading) {
-      Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-      return;
-    }
-    isLoading = true;
-    Fluttertoast.showToast(msg: '正在ping該筆資料中..');
-    print('第${currentCellTag}筆資料');
-    var res = await getPingData(custCode);
-    if(res != null && res.result) {
-      // var pingData = _getStore().state.pingData;
-      showDialog(
-      context: context,
-      builder: (BuildContext context) => _buildPingDialog(context,res, currentCellTag: currentCellTag)
-      );
-      isLoading = false;
-      
-    }
-    
-  }
- ///小ping dialog
-  Widget _buildPingDialog(BuildContext context, res, {currentCellTag}) {
-    SmallPingTableCell sptc = SmallPingTableCell.fromJson(res.data);
-    PingViewModel model = PingViewModel.forMap(sptc);
-    return Material(
-      type: MaterialType.transparency,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Card(
-            color: Colors.white,
-            child: SmallPingTableItem(defaultViewModel: model, configData: config,),
-          ),
-          SizedBox(height: 20,),
-         Card(
-            color: Color(MyColors.hexFromStr("#ebf6f9")),
-            child: ButtonTheme(
-              minWidth: double.maxFinite,
-              child: FlatButton(
-                child: Text(CommonUtils.getLocale(context).text_leave, style: TextStyle(color: Colors.red, fontSize: MyScreen.homePageFontSize(context))),
-                onPressed: (){
-                  ///資料回填當前row cell
-                  var pingRes = _getStore().state.pingtData;
-                  var dic = pullLoadWidgetControl.dataList[currentCellTag];
-                
-                  setState(() {
-                    
-                    Map<String,dynamic> u = {};
-                    Map<String, dynamic> snr = {};
-                    if (pingRes.SNR != null) {
-                      u = pingRes.SNR["U0"];
-                      snr = u;
-                      dic.U0_SNR = snr["SNR"];
-                      dic.U0_PWR = snr["PWR"];
-                      u = pingRes.SNR["U1"];
-                      snr = u;
-                      dic.U1_SNR = snr["SNR"];
-                      dic.U1_PWR = snr["PWR"];
-                      u = pingRes.SNR["U2"];
-                      snr = u;
-                      dic.U2_SNR = snr["SNR"];
-                      dic.U2_PWR = snr["PWR"];
-                      u = pingRes.SNR["U3"];
-                      snr = u;
-                      dic.U3_SNR = snr["SNR"];
-                      dic.U3_PWR = snr["PWR"];
-                    }
-                    Map<String,dynamic> c = {};
-                    u = pingRes.CodeWord["U0"];
-                    c = u;
-                    dic.U0U = c["U"];
-                    dic.U0C = c["C"];
-                    u = pingRes.CodeWord["U1"];
-                    c = u;
-                    dic.U1U = c["U"];
-                    dic.U1C = c["C"];
-                    u = pingRes.CodeWord["U2"];
-                    c = u;
-                    dic.U2U = c["U"];
-                    dic.U2C = c["C"];
-                    u = pingRes.CodeWord["U3"];
-                    c = u;
-                    dic.U3U = c["U"];
-                    dic.U3C = c["C"];
-
-                    dic.DS0 = pingRes.DS0;
-                    dic.DS1 = pingRes.DS1;
-                    dic.DS2 = pingRes.DS2;
-                    dic.DS3 = pingRes.DS3;
-                    dic.DS4 = pingRes.DS4;
-                    dic.DS5 = pingRes.DS5;
-                    dic.DS6 = pingRes.DS6;
-                    dic.DS7 = pingRes.DS7;
-                    dic.DP0 = pingRes.DP0;
-                    dic.DP1 = pingRes.DP1;
-                    dic.DP2 = pingRes.DP2;
-                    dic.DP3 = pingRes.DP3;
-                    dic.DP4 = pingRes.DP4;
-                    dic.DP5 = pingRes.DP5;
-                    dic.DP6 = pingRes.DP6;
-                    dic.DP7 = pingRes.DP7;
-
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
   
   Store<SysState> _getStore() {
     return StoreProvider.of(context);
@@ -699,17 +256,18 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
  
     var res = await getApiDataList();
     if (res != null && res.result) {
-      List<DefaultTableCell> list = new List();
+      List<FinishedTableCell> list = new List();
       
       dataArray.addAll(res.data["Data"]);
       if (dataArray.length > 0 ) {
           for (var dic in dataArray) {
-            list.add(DefaultTableCell.fromJson(dic));
+            list.add(FinishedTableCell.fromJson(dic));
           }
       }
       setState(() {
         toTransformArray.clear();
-        pullLoadWidgetControl.dataList.clear();
+        // pullLoadWidgetControl.dataList.clear();
+        clearData();
         finishedCount = res.data["FIX"];
         bpCount = res.data["FIX2"];
         bigbadCount = res.data["CUT"];
@@ -732,7 +290,7 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
 
   @override
   void didChangeDependencies() {
-    var list = _getStore().state.defaultList;
+    var list = _getStore().state.finishedList;
     pullLoadWidgetControl.dataList = list;
     if (pullLoadWidgetControl.dataList.length == 0) {
       setState(() {});
@@ -791,21 +349,17 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
                         minWidth: MyScreen.homePageBarButtonWidth(context),
                         child: new MyToolButton(
                           padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                          text: strCity == "" ?  '區:' + CommonUtils.getLocale(context).text_all : strCity,
+                          text: widget.empName,
                           textColor: Colors.white,
                           color: Colors.transparent,
                           fontSize: MyScreen.normalPageFontSize(context),
                           onPress: () {
-                            if (isLoading) {
-                              Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                              return;
-                            }
-                            showCityAlertSheetController(context);
+                           
                           },
                         ),
                       ),
                       SizedBox(),
-                      Text(CommonUtils.getLocale(context).home_cmtsTitle_fix, style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
+                      Text(CommonUtils.getLocale(context).text_finish, style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
                       SizedBox(),
                       SizedBox(),
                       Text('筆數: ${pullLoadWidgetControl.dataList.length}', style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.white)),
@@ -831,20 +385,16 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
               child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  ButtonTheme(
+                   ButtonTheme(
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: CommonUtils.getLocale(context).text_transform,
+                      text: CommonUtils.getLocale(context).text_refresh,
                       textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
-                        if (isLoading) {
-                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                          return;
-                        }
-                        _transformDataAction(context);
+                        getApiDataList();
                       },
                     ),
                   ),
@@ -852,47 +402,42 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: CommonUtils.getLocale(context).text_sort,
+                      text: '',
                       textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
-                        if (isLoading) {
-                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                          return;
-                        }
-                        showSortAlertSheetController(context);
                       },
                     ),
+                  ),
+                 ButtonTheme(
+                    child: new FlatButton.icon(
+                      icon: Image.asset(
+                        MyICons.DEFAULT_USER_ICON,
+                        width: 30,
+                        height: 30,
+                      ),
+                      textColor: Colors.white,
+                      color: Colors.transparent,
+                      label: Text(
+                        'PING',
+                        style: TextStyle(
+                            fontSize: MyScreen.homePageFontSize(context)),
+                      ),
+                      onPressed: () {
+                        print(123);
+                      },
+                    )
                   ),
                   ButtonTheme(
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: CommonUtils.getLocale(context).text_finish,
-                      textColor: Colors.yellow,
-                      color: Colors.transparent,
-                      fontSize: MyScreen.homePageFontSize(context),
-                      onPress: () {
-                        clearData();
-                        NavigatorUtils.goFinishedDetail(context);
-                      },
-                    ),
-                  ),
-                  ButtonTheme(
-                    minWidth: MyScreen.homePageBarButtonWidth(context),
-                    child: new MyToolButton(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: CommonUtils.getLocale(context).text_search,
+                      text: '',
                       textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
-                        if (isLoading) {
-                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                          return;
-                        }
-                        showSearchAlertSheetController(context,dataArray);
                       },
                     ),
                   ),

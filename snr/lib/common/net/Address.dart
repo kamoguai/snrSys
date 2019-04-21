@@ -229,4 +229,8 @@ class Address {
   static getQueryFinishAnalyseAPI(date) {
     return "${kSNRHostName}SNRProcess?FunctionName=QueryFinishAnalyse&QueryDate=$date";
   }
+  ///工務list
+  static getPublicworksAnalyseAPI() {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryOverTimeAnalyse";
+  }
 }

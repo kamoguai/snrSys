@@ -233,7 +233,7 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
           _buildLineHeight(),
           Container(
             width: _deviceWidth8() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_bp, TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            child: _autoTextSize(CommonUtils.getLocale(context).text_minus, TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
           ),
           _buildLineHeight(),
           Container(
@@ -305,7 +305,7 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
         ),
       ),
       onTap: (){
-
+        NavigatorUtils.goFinishedManDetail(context,empName: dic["EmpName"]);
       },
     );
   }
