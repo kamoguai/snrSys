@@ -52,6 +52,26 @@ class DefaultTableDao {
       // return new DataResult(null, false);
     }
   }
+  ///工異專用
+  static didTransferPublicwork(context, {to, from, memo, accNo, accName, jsonCustCD}) async{
+    var res = await HttpManager.netFetch(Address.didTransferPublicworksAPI(to, from, memo, accNo, accName, jsonCustCD), null, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("didTransferPublicwork resp => " + res.data.toString());
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        CommonUtils.showMessageDialog(context, "", res.data['Response']['MSG']);
+        // return new DataResult(null, false);
+      }
+      else {
+        CommonUtils.showMessageDialog(context, "", res.data['Response']['MSG']);
+        // return new DataResult(null, false);
+      }
+    }
+    else {
+      // return new DataResult(null, false);
+    }
+  }
   ///小ping
   static getPingSNR(Store store, context, {custCode}) async{
     Map<String, dynamic> mainDataArray = {};

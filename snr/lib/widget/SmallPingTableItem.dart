@@ -11,7 +11,10 @@ import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 
 
-
+/**
+ * 小ping table cell
+ * Date: 2019-04-17
+ */
 class SmallPingTableItem extends StatelessWidget {
 
   final PingViewModel defaultViewModel;

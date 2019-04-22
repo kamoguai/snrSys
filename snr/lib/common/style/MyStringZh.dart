@@ -222,4 +222,16 @@ class MyStringZh extends MyStringBase {
   String text_wkPoint = "工程點數";
   @override
   String text_snrPoint = "SNR點數";
+  @override
+  String text_inst = "裝機";
+  @override
+  String text_maintain = "維修";
+  @override
+  String text_instFix = "裝維";
+  @override
+  String text_fixfix = "修維";
+  @override
+  String text_status = "狀態";
+  @override
+  String text_ww = "工程異常";
 }

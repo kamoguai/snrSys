@@ -416,7 +416,7 @@ class MyScreen {
     final deviceHeight = MediaQuery.of(context).size.height;
     double fontSize = 0.0;
     if (deviceHeight < 570) {
-      fontSize = MyConstant.tinyTextSize - 1;
+      fontSize = MyConstant.tinyTextSize;
     } else if (deviceHeight > 800) {
       fontSize = MyConstant.middleTextWhiteSize;
     } else if (deviceHeight > 600 && deviceHeight < 720) {

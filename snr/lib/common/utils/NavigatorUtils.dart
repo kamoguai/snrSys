@@ -11,6 +11,8 @@ import 'package:snr/page/assignFix/FinishedManDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedStatisticPage.dart';
 import 'package:snr/page/problem/ProblemDetial.dart';
 import 'package:snr/page/assignFix/AssignFixListPage.dart';
+import 'package:snr/page/publicworks/PublicworksDetailPage.dart';
+import 'package:snr/page/publicworks/PublicworksListPage.dart';
 
 /**
  * 導航欄
@@ -77,5 +79,13 @@ class NavigatorUtils {
   ///完工扣點頁面
   static goFinishedManDetail(BuildContext context, {empName}) {
     NavigatorRouter(context, new FinishedManDetailPage(empName));
+  }
+  ///工務列表
+  static goPublicworksList(BuildContext context) {
+    NavigatorRouter(context, new PublicworksListPage());
+  }
+  ///工務詳情頁面
+  static goPublicworksDetail(BuildContext context) {
+    NavigatorRouter(context, new PublicworksDetailPage());
   }
 }

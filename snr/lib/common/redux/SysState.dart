@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/model/FinishedTableCell.dart';
+import 'package:snr/common/model/PublicworksTableCell.dart';
 import 'package:snr/common/model/SmallPingTableCell.dart';
 import 'package:snr/common/model/User.dart';
 import 'package:snr/common/redux/SmallPingTableCellReducer.dart';
@@ -34,6 +35,9 @@ class SysState {
 
   ///完工cell
   List<FinishedTableCell> finishedList = new List();
+
+  ///工程cell
+  List<PublicworksTableCell> publicWorksList = new List();
 
   ///小ping資料緩存
   SmallPingTableCell pingtData;

@@ -218,4 +218,16 @@ abstract class MyStringBase {
   String text_snrPoint;
 
   String text_bp;
+
+  String text_inst;
+
+  String text_maintain;
+
+  String text_instFix;
+
+  String text_fixfix;
+
+  String text_status;
+
+  String text_ww;
 }
