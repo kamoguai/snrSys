@@ -151,7 +151,6 @@ class _LoginPageState extends State<LoginPage> {
                                           UserDao.getUserInfo(res.data.serverURL, res.data.ssoKey, _account, _password, store).then((res) {
                                             Navigator.pop(context);
                                             if (res != null && res.result) {
-                                                print('go to home page');
                                                 new Future.delayed(const Duration(seconds: 1),() {
                                                   NavigatorUtils.goHome(context);
                                                   return true;

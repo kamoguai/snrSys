@@ -230,4 +230,14 @@ abstract class MyStringBase {
   String text_status;
 
   String text_ww;
+
+  String text_net;
+
+  String text_overPowerBad;
+
+  String text_overTime;
+
+  String text_noDsflow;
+
+  
 }

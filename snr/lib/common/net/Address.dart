@@ -191,7 +191,7 @@ class Address {
   static getSNRDetailByCMTSAndCIFAPI(cmts, cif, node, type, sort) {
     return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRDetailByCMTSAndCIF&CMTSCode=${cmts}&CIF=${cif}&NODE=${node}&Type=${type}&Sort=${sort}";
   }
-  ///problem，
+  ///problem，overpower
   static getQueryListAPI(type, city, sort, hub) {
     return "${kSNRHostName}SNRProcess?FunctionName=QueryList&Type=${type}&city=${city}&Sort=${sort}&hub=${hub}";
   }
@@ -235,7 +235,7 @@ class Address {
   static getQueryFinishAnalyseAPI(date) {
     return "${kSNRHostName}SNRProcess?FunctionName=QueryFinishAnalyse&QueryDate=$date";
   }
-  ///工務list
+  ///工務list & 超時list
   static getPublicworksAnalyseAPI() {
     return "${kSNRHostName}SNRProcess?FunctionName=QueryOverTimeAnalyse";
   }

@@ -446,8 +446,8 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
                 textAlign: TextAlign.center,
                 text: TextSpan(
                   text: '確定將選取的${toTransformArray.length}筆資料轉至\n', 
-                  style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize(context),),
-                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, fontSize: MyScreen.normalListPageFontSize(context))),]
+                  style: TextStyle(color: Colors.black, ),
+                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, )),]
                 ),
               ),
               actions: <Widget>[
@@ -539,8 +539,8 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
                 textAlign: TextAlign.center,
                 text: TextSpan(
                   text: '確定將選取的${toTransformArray.length}筆資料轉至\n', 
-                  style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize(context),),
-                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, fontSize: MyScreen.normalListPageFontSize(context))),]
+                  style: TextStyle(color: Colors.black, ),
+                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, )),]
                 ),
               ),
               actions: <Widget>[

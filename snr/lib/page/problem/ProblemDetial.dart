@@ -209,7 +209,6 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
   getUserInfoData() async {
     var res = await UserDao.getUserInfoLocal();
     user = res;
-    print("user data => ${user}");
   }
   ///初始化
   initParam() async {
@@ -330,7 +329,6 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
   var typeStr = "";
   ///執行跳轉action
   _transformDataAction(BuildContext context) {
-    print("buttonTylpe => $nowType");
     if (user.isTransfer == 1) {
       if (toTransformArray.length < 1) {
         Fluttertoast.showToast(msg: '尚未選擇欲跳轉客編');
@@ -437,7 +435,6 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                 default:
                   break;
               }
-              print("跳轉to -> $typeStr");
               Navigator.pop(context);
               _transformDialog(context, to: typeStr, sortStr: sortStr);
             },
@@ -459,8 +456,8 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                 textAlign: TextAlign.center,
                 text: TextSpan(
                   text: '確定將選取的${toTransformArray.length}筆資料轉至\n', 
-                  style: TextStyle(color: Colors.black, fontSize: MyScreen.defaultTableCellFontSize(context),),
-                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, fontSize: MyScreen.defaultTableCellFontSize(context))),]
+                  style: TextStyle(color: Colors.black, ),
+                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, )),]
                 ),
               ),
               // Text('確定將選取的${toTransformArray.length}筆資料轉至\n${sortStr}'),
@@ -511,8 +508,8 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
                 textAlign: TextAlign.center,
                 text: TextSpan(
                   text: '確定將選取的${toTransformArray.length}筆資料轉至\n', 
-                  style: TextStyle(color: Colors.black, fontSize: MyScreen.defaultTableCellFontSize(context),),
-                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, fontSize: MyScreen.defaultTableCellFontSize(context))),]
+                  style: TextStyle(color: Colors.black, ),
+                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, )),]
                 ),
               ),
               actions: <Widget>[
@@ -547,8 +544,6 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
       else {
         toTransformArray.add(custNo);
       }
-      
-      print("now custNo => $toTransformArray");
     });
   }
   ///小ping function
@@ -559,7 +554,6 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
     }
     isLoading = true;
     Fluttertoast.showToast(msg: '正在ping該筆資料中..');
-    print('第${currentCellTag}筆資料');
     var res = await getPingData(custCode);
     if(res != null && res.result) {
       // var pingData = _getStore().state.pingData;

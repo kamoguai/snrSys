@@ -459,6 +459,22 @@ class MyScreen {
     }
     return width;
   }
+   ///四顆按鈕width
+  static double op4BtnWidth(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double width = 30.0;
+    if (deviceHeight < 570) {
+      width = 30.0;
+    } else if (deviceHeight > 800) {
+      width = 30.0;
+    } else if (deviceHeight > 600 && deviceHeight < 720) {
+      width = 30.0;
+    }
+    else {
+      width = 30.0;
+    }
+    return width;
+  }
   ///通用analyzeList字體大小
   static double analyzeListFontSize(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;

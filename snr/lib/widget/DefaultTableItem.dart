@@ -16,7 +16,8 @@ class DefaultTableItem extends StatelessWidget {
   final Function callPing;
   final List<String> addTransformArray;
   final int currentCellTag;
-  DefaultTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing, this.currentCellTag});
+  final String netType;
+  DefaultTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing, this.currentCellTag, this.netType});
   ///分隔線
   _buildLine() {
     return new Container(
@@ -128,7 +129,7 @@ class DefaultTableItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var netType = 'EXT';
+    netType == null ? 'EXT' : 'INT';
     return Container(
       padding: EdgeInsets.only(top: 2.0),
       child: Column(

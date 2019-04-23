@@ -1,4 +1,5 @@
 
+
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -7,8 +8,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
-import 'package:snr/common/dao/AssignFixDao.dart';
 import 'package:snr/common/dao/DefaultTableDao.dart';
+import 'package:snr/common/dao/OverPowerDao.dart';
 import 'package:snr/common/dao/UserDao.dart';
 import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/model/DefaultTableCell.dart';
@@ -17,6 +18,7 @@ import 'package:snr/common/model/User.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/DefaultTableItem.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
@@ -24,34 +26,37 @@ import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
 import 'package:snr/widget/SmallPingTableItem.dart';
 
-class FinishedDetailPage extends StatefulWidget {
-
-
+/**
+ * 超時詳情頁面
+ * Date: 2019-04-23
+ */
+class OverTimeDetailPage extends StatefulWidget {
+  final String dataType;
+  OverTimeDetailPage(this.dataType, {Key key}) : super(key: key);
   @override
-  _FinishedDetailPageState createState() => _FinishedDetailPageState();
+  _OverTimeDetailPageState createState() => _OverTimeDetailPageState();
 }
 
-class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticKeepAliveClientMixin<FinishedDetailPage>, MyListState<FinishedDetailPage>, WidgetsBindingObserver {
- ///snr設定檔
+class _OverTimeDetailPageState extends State<OverTimeDetailPage> with AutomaticKeepAliveClientMixin<OverTimeDetailPage>, MyListState<OverTimeDetailPage>, WidgetsBindingObserver {
+  ///snr設定檔
   var config;
   ///現在按鈕enum
-  var nowType = buttonType.day;
+  var nowBtnType = buttonType.extra;
+  var nowAppBarBtnType = appBarBtnType.ovettime;
   ///hub
   var strHub = "";
-  ///api傳入時間，0:完工,1:昨日,2:前日,3:大前,4:前前
-  var day = "0";
-  ///跳轉用
+  ///現在功能
+  var typevalue = "";
+  ///同上
   var typeof = "";
-  ///完工筆數
-  var dayCount = "0";
-  ///昨日筆數
-  var day1Count = "0";
-  ///前日筆數
-  var day2Count = "0";
-  ///大前日筆數
-  var day3Count = "0";
-  ///前前日筆數
-  var day4Count = "0";
+  ///外網
+  var fEXT = 0.0;
+  ///內網
+  var fINT = 0.0;
+  ///config snr顏色
+  var netType = "EXT";
+  /// 判斷是否外網
+  var isExt = false;
   /// user model
   User user;
   /// sso model
@@ -60,21 +65,23 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
   final List<String> toTransformArray = [];
   ///數據資料arr
   final List<dynamic> dataArray = [];
+  final List<dynamic> firstArray = [];
+  final List<dynamic> secondArray = [];
+  final List<dynamic> originalArray = [];
   ///列表顯示的物件
   _renderItem(index) {
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,netType: netType ,);
   }
 
   ///頁面上方按鈕群
   _renderHeader() {
     return Container(
-      height: 55.0,
-      padding: EdgeInsets.all(10.0),
-      child: ListView(
-        scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          SizedBox(width: 10.0,),
           ButtonTheme(
             minWidth: MyScreen.default4BtnWidth(context),
             height: 35,
@@ -86,25 +93,24 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_finish + "-${dayCount}",
+                  .text_extranet,
               color: Color(MyColors.hexFromStr("#eeffef")),
               fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.day ? Colors.red : Colors.grey[700],
+              textColor: nowBtnType == buttonType.extra ? Colors.red : Colors.grey[700],
               onPress: () {
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                   return;
                 }
                 setState(() {
-                  nowType = buttonType.day;
-                  day = "0";
-                  showRefreshLoading();
+                  nowBtnType = buttonType.extra;
+                  _extraBtnEvent();
                 });
                 
               },
             ),
           ),
-          SizedBox(width: 10,),
+          SizedBox(width: 10.0,),
           ButtonTheme(
             minWidth: MyScreen.default4BtnWidth(context),
             height: 35,
@@ -116,112 +122,24 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .finished_day1 + "-${day1Count}",
-              color: Color(MyColors.hexFromStr("#f0fcff")),
-              fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.day1 ? Colors.red : Colors.grey[700],
-              onPress: () {
-                if (isLoading) {
-                  Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                  return;
-                }
-                setState(() {
-                  nowType = buttonType.day1;
-                  day = "1";
-                  showRefreshLoading();
-                });
-              },
-            ),
-          ),
-          SizedBox(width: 10,),
-          ButtonTheme(
-            minWidth: MyScreen.default4BtnWidth(context),
-            height: 35,
-            child: new MyToolButton(
-              padding:
-                  EdgeInsets.only(left: 10.0, right: 10.0),
-              shape: new RoundedRectangleBorder(
-                  borderRadius:
-                      new BorderRadius.circular(10.0),
-                  side: BorderSide(color: Colors.grey)),
-              text: CommonUtils.getLocale(context)
-                  .finished_day2 + "-${day2Count}",
-              color: Color(MyColors.hexFromStr("#fafff2")),
-              fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.day2 ? Colors.red : Colors.grey[700],
-              onPress: () {
-                if (isLoading) {
-                  Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                  return;
-                }
-                setState(() {
-                  nowType = buttonType.day2;
-                  day = "2";
-                  showRefreshLoading();
-                });
-              },
-            ),
-          ),
-          SizedBox(width: 10,),
-          ButtonTheme(
-            minWidth: MyScreen.default4BtnWidth(context),
-            height: 35,
-            child: new MyToolButton(
-              padding:
-                  EdgeInsets.only(left: 10.0, right: 10.0),
-              shape: new RoundedRectangleBorder(
-                  borderRadius:
-                      new BorderRadius.circular(10.0),
-                  side: BorderSide(color: Colors.grey)),
-              text: CommonUtils.getLocale(context)
-                  .finished_day3 + "-${day3Count}",
+                  .text_intranet,
               color: Color(MyColors.hexFromStr("#fef5f6")),
               fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.day3 ? Colors.red : Colors.grey[700],
+              textColor: nowBtnType == buttonType.intra ? Colors.red : Colors.grey[700],
               onPress: () {
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                   return;
                 }
                 setState(() {
-                  nowType = buttonType.day3;
-                  day = "3";
-                  showRefreshLoading();
-                });
-              },
-            ),
-          ),
-          SizedBox(width: 10,),
-          ButtonTheme(
-            minWidth: MyScreen.default4BtnWidth(context),
-            height: 35,
-            child: new MyToolButton(
-              padding:
-                  EdgeInsets.only(left: 10.0, right: 10.0),
-              shape: new RoundedRectangleBorder(
-                  borderRadius:
-                      new BorderRadius.circular(10.0),
-                  side: BorderSide(color: Colors.grey)),
-              text: CommonUtils.getLocale(context)
-                  .finished_day4 + "-${day4Count}",
-              color: Color(MyColors.hexFromStr("#f2f2f2")),
-              fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.day4 ? Colors.red : Colors.grey[700],
-              onPress: () {
-                if (isLoading) {
-                  Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                  return;
-                }
-                setState(() {
-                  nowType = buttonType.day4;
-                  day = "4";
-                  showRefreshLoading();
+                  nowBtnType = buttonType.intra;
+                  _intraBtnEvent();
                 });
               },
             ),
           ),
         ],
-      )
+      ),
     );
   }
 
@@ -258,20 +176,33 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
     final configData = await LocalStorage.get(Config.SNR_CONFIG);
     final dic = json.decode(configData);
     config = dic;
+    fEXT = double.parse(config["USDB_MAX_EXT"]);
+    fINT = double.parse(config["USDB_MAX_INT"]);
+    isExt = true;
+    typeof = widget.dataType;
+    typevalue = widget.dataType;
+    if (typeof == "OverTime") {
+      nowAppBarBtnType = appBarBtnType.ovettime;
+    }
+    else {
+      nowAppBarBtnType = appBarBtnType.notime;
+    }
   }
   ///get api data
   getApiDataList() async {
-    var res = await AssignFixDao.getFinishedFix(
+    var res = await OverPowerDao.getQueryList(_getStore(),
     city: strCity,
     sort: strSort,
     hub: strHub,
-    day: day,
-    accNo: user.accNo,
+    type: typevalue
     );
     return res;
   }
   /// call 跳轉api
   postTransferAPI(to) async {
+    if (typeof == "NoTime") {
+      typeof = "NODS";
+    }
     await DefaultTableDao.didTransfer(context, 
     to: to, 
     from: typeof,
@@ -389,97 +320,37 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
   }
   ///跳轉裡的選項
   _transSort() {
-    List<String> sortArray = [];
+    List<String> sortArray = ["正常","其他(可異)","派修","NG","無下行(超時)"];
     List<Widget> wList = [];
-      switch (nowType) {
-        case buttonType.day: 
-          if (this.toTransformArray.length >= 2) {
-             sortArray = ["完工","拆改","觀察","自移"];
-          }
-          else {
-            sortArray = ["完工","拆改","觀察","低HP","自移"];
-          }
-          break;
-        case buttonType.day1: 
-          if (this.toTransformArray.length >= 2) {
-            sortArray = ["完工","自移"];
-          }
-          else {
-            sortArray = ["完工","低HP","自移"];
-          }
-          break;
-        case buttonType.day2:
-          if (this.toTransformArray.length >= 2) {
-            sortArray = ["完工","派修","觀察","自移"];
-          }
-          else {
-            sortArray = ["完工","派修","觀察","低HP","自移"];
-          }
-          break;
-        case buttonType.day3:
-          if (this.toTransformArray.length >= 2) {
-            sortArray = ["完工","派修","拆改","其他(可異)","無下行(超時)","正常","自移"];
-          }
-          else {
-            sortArray = ["完工","派修","拆改","其他(可異)","低HP","無下行(超時)","正常","自移"];
-          }
-          break;
-        case buttonType.day4:
-        
-          break;
-      }
+      
       for (var sortStr in sortArray) {
         wList.add(
           CupertinoActionSheetAction(
             onPressed: () {
               switch (sortStr) {
-                case "追蹤":
-                    typeStr = "TRACK";
-                    break;
-                case "拆改":
-                    typeStr = "CUT";
-                    break;
-                case "完工":
-                    typeStr = "FINISH";
-                    break;
                 case "派修":
-                    typeStr = "FIX";
-                    break;
+                  typeStr = "FIX";
+                  break;
                 case "可異":
-                    typeStr = "VBAD";
-                    break;
-                case "NG":
-                    typeStr = "NG";
-                    break;
-                case "觀察":
-                    typeStr = "WATCH";
-                    break;
-                case "低HP":
-                    typeStr = "LOWHP";
-                    break;
-                case "問題(可異)":
-                    typeStr = "PROBLEM";
-                    break;
+                  typeStr = "VBAD";
+                  break;
                 case "正常":
-                    typeStr = "GOOD";
-                    break;
+                  typeStr = "GOOD";
+                  break;
                 case "其他(可異)":
-                    typeStr = "OTHER";
-                    break;
-                case "再修":
-                    typeStr = "FIX2";
-                    break;
-                case "可優":
-                    typeStr = "VBAD2";
-                    break;
+                  typeStr = "OTHER";
+                  break;
+                case "觀察(派修)":
+                  typeStr = "WATCH";
+                  break;
+                case "NG":
+                  typeStr = "NG";
+                  break;
                 case "無下行(超時)":
-                    typeStr = "NODS";
-                    break;
-                case "自移":
-                    typeStr = "WP2";
+                  typeStr = "NODS";
                   break;
                 default:
-                  break;
+                    break;
               }
               Navigator.pop(context);
               _transformDialog(context, to: typeStr, sortStr: sortStr);
@@ -580,6 +451,59 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
       }
     });
   } 
+  ///外網按鈕event
+  _extraBtnEvent() {
+    dataArray.clear();
+    secondArray.clear();
+    firstArray.clear();
+    isExt = true;
+    List<DefaultTableCell> list = new List();
+    for (var dic in originalArray) {
+      if (dic["BB"] != null && dic["BB"] != "") {
+        if (dic["BB"] != "內網") {
+          secondArray.add(dic);
+        }
+      }
+    }
+    secondArray.sort((a,b) => b["BB"].length.compareTo(a["BB"].length));
+    netType = "EXT";
+    dataArray.addAll(secondArray);
+    if (dataArray.length > 0 ) {
+      for (var dic in dataArray) {
+        list.add(DefaultTableCell.fromJson(dic));
+      }
+    }
+    ///將資料塞回dataList
+    pullLoadWidgetControl.dataList.clear();
+    pullLoadWidgetControl.dataList.addAll(list);
+  }
+  ///內網按鈕event
+  _intraBtnEvent() {
+    dataArray.clear();
+    secondArray.clear();
+    firstArray.clear();
+    isExt = false;
+    List<DefaultTableCell> list = new List();
+    for (var dic in originalArray) {
+      if (dic["BB"] != null && dic["BB"] != "") {
+        if (dic["BB"] == "內網") {
+          secondArray.add(dic);
+        }
+      }
+    }
+
+    netType = "INT";
+    dataArray.addAll(secondArray);
+    if (dataArray.length > 0 ) {
+      for (var dic in dataArray) {
+        list.add(DefaultTableCell.fromJson(dic));
+      }
+    }
+    ///將資料塞回dataList
+    pullLoadWidgetControl.dataList.clear();
+    pullLoadWidgetControl.dataList.addAll(list);
+  }
+  
   ///跳轉function
   void _addTransform(String custNo) {
     setState(() {
@@ -610,7 +534,6 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
       isLoading = false;
       
     }
-    
   }
  ///小ping dialog
   Widget _buildPingDialog(BuildContext context, res, {currentCellTag}) {
@@ -713,6 +636,9 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
   @override
   Future<Null> handleRefresh() async {
     dataArray.clear();
+    firstArray.clear();
+    secondArray.clear();
+    originalArray.clear();
     if (isLoading) {
       return null;
     }
@@ -721,8 +647,24 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
     var res = await getApiDataList();
     if (res != null && res.result) {
       List<DefaultTableCell> list = new List();
-      
-      dataArray.addAll(res.data["Data"]);
+      originalArray.addAll(res.data["Data"]);
+      for (var dic in originalArray) {
+        if (dic["BB"] != null && dic["BB"] != "") {
+          if (dic["BB"] != "內網") {
+            firstArray.add(dic);
+          }
+          else {
+            secondArray.add(dic);
+          }
+        }
+      }
+      firstArray.sort((a,b) => b["BB"].length.compareTo(a["BB"].length));
+      dataArray.addAll(firstArray);
+      ///如果是內網就進入
+      if (!isExt) {
+        dataArray.clear();
+        dataArray.addAll(secondArray);
+      }
       if (dataArray.length > 0 ) {
           for (var dic in dataArray) {
             list.add(DefaultTableCell.fromJson(dic));
@@ -731,11 +673,6 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
       setState(() {
         toTransformArray.clear();
         pullLoadWidgetControl.dataList.clear();
-        dayCount = res.data["Day0"];
-        day1Count = res.data["Day1"];
-        day2Count = res.data["Day2"];
-        day3Count = res.data["Day3"];
-
         pullLoadWidgetControl.dataList.addAll(list);
         pullLoadWidgetControl.needLoadMore = false;
       });
@@ -812,8 +749,8 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                         minWidth: MyScreen.homePageBarButtonWidth(context),
                         child: new MyToolButton(
                           padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                          text: strCity == "" ?  '區:' + CommonUtils.getLocale(context).text_all : strCity,
-                          textColor: Colors.white,
+                          text: CommonUtils.getLocale(context).text_overTime,
+                          textColor: nowAppBarBtnType == appBarBtnType.ovettime ? Colors.yellow : Colors.white,
                           color: Colors.transparent,
                           fontSize: MyScreen.normalPageFontSize(context),
                           onPress: () {
@@ -821,12 +758,40 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                               Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                               return;
                             }
-                            showCityAlertSheetController(context);
+                            setState(() {
+                              typeof = "OverTime";
+                              typevalue = "OverTime";
+                              nowAppBarBtnType = appBarBtnType.ovettime;
+                              showRefreshLoading();
+                            });
                           },
                         ),
                       ),
                       SizedBox(),
-                      Text(CommonUtils.getLocale(context).text_finish, style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
+                      ButtonTheme(
+                        minWidth: MyScreen.homePageBarButtonWidth(context),
+                        child: new MyToolButton(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          text: CommonUtils.getLocale(context).text_noDsflow,
+                          textColor: nowAppBarBtnType == appBarBtnType.notime ? Colors.yellow : Colors.white,
+                          color: Colors.transparent,
+                          fontSize: MyScreen.normalPageFontSize(context),
+                          onPress: () {
+                            if (isLoading) {
+                              Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                              return;
+                            }
+                            setState(() {
+                              typeof = "NoTime";
+                              typevalue = "NoTime";
+                              nowAppBarBtnType = appBarBtnType.notime;
+                              showRefreshLoading();
+                            });
+                            
+                          },
+                        ),
+                      ),
+                      SizedBox(),
                       SizedBox(),
                       SizedBox(),
                       Text('筆數: ${pullLoadWidgetControl.dataList.length}', style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.white)),
@@ -874,30 +839,37 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
                       text: CommonUtils.getLocale(context).text_sort,
-                      textColor: Theme.of(context).primaryColor,
+                      textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
-                      onPress: () {},
+                      onPress: () {
+                        if (isLoading) {
+                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                          return;
+                        }
+                        showSortAlertSheetController(context);
+                      },
                     ),
                   ),
                   ButtonTheme(
-                      child: new FlatButton.icon(
-                    icon: Image.asset(
-                      MyICons.DEFAULT_USER_ICON,
-                      width: 30,
-                      height: 30,
-                    ),
-                    textColor: Colors.white,
-                    color: Colors.transparent,
-                    label: Text(
-                      'PING',
-                      style: TextStyle(
-                          fontSize: MyScreen.homePageFontSize(context)),
-                    ),
-                    onPressed: () {
-                      print(123);
-                    },
-                  )),
+                    child: new FlatButton.icon(
+                      icon: Image.asset(
+                        MyICons.DEFAULT_USER_ICON,
+                        width: 30,
+                        height: 30,
+                      ),
+                      textColor: Colors.white,
+                      color: Colors.transparent,
+                      label: Text(
+                        'PING',
+                        style: TextStyle(
+                            fontSize: MyScreen.homePageFontSize(context)),
+                      ),
+                      onPressed: () {
+                        print(123);
+                      },
+                    )
+                  ),
                   ButtonTheme(
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
@@ -947,9 +919,10 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
 }
 
 enum buttonType {
-  day,
-  day1,
-  day2,
-  day3,
-  day4,
+  extra,
+  intra,
+}
+enum appBarBtnType {
+  ovettime,
+  notime,
 }

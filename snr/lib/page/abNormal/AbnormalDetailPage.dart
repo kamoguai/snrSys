@@ -76,8 +76,6 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
       else {
         toTransformArray.add(custNo);
       }
-      
-      print("now custNo => $toTransformArray");
     });
   }
   ///小ping function
@@ -88,7 +86,6 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
     }
     isLoading = true;
     Fluttertoast.showToast(msg: '正在ping該筆資料中..');
-    print('第${currentCellTag}筆資料');
     var res = await getPingData(custCode);
     if(res != null && res.result) {
       // var pingData = _getStore().state.pingData;

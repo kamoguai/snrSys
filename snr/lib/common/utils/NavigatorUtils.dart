@@ -9,6 +9,9 @@ import 'package:snr/page/assignFix/AssingFixDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedManDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedStatisticPage.dart';
+import 'package:snr/page/overpower/OverPowerDetailPage.dart';
+import 'package:snr/page/overpower/OverPowerListPage.dart';
+import 'package:snr/page/overpower/OverTimeDetailPage.dart';
 import 'package:snr/page/problem/ProblemDetial.dart';
 import 'package:snr/page/assignFix/AssignFixListPage.dart';
 import 'package:snr/page/publicworks/PublicworksDetailPage.dart';
@@ -28,9 +31,13 @@ class NavigatorUtils {
   static pushNamed(BuildContext context, String routeName) {
     Navigator.pushNamed(context, routeName);
   }
-
+  ///一般跳轉頁面
   static NavigatorRouter(BuildContext context, Widget widget) {
     return Navigator.push(context, new CupertinoPageRoute(builder: (context) => widget));
+  }
+  ///跳轉至頁面並移除上一頁
+  static NavigatorRemoveRouter(BuildContext context, Widget widget) {
+    Navigator.pushAndRemoveUntil(context, new CupertinoPageRoute(builder: (context) => widget), null);
   }
 
   ///登入頁
@@ -87,5 +94,17 @@ class NavigatorUtils {
   ///工務詳情頁面
   static goPublicworksDetail(BuildContext context) {
     NavigatorRouter(context, new PublicworksDetailPage());
+  }
+  ///overpower列表頁面
+  static goOverPowerList(BuildContext context) {
+    NavigatorRouter(context, new OverPowerListPage());
+  }
+  ///overpower詳情頁面
+  static goOverPowerDetail(BuildContext context) {
+    NavigatorRouter(context, new OverPowerDetailPage());
+  }
+  ///overtime詳情頁面
+  static goOverTimeDetail(BuildContext context, {dataType}) {
+    NavigatorRouter(context, new OverTimeDetailPage(dataType));
   }
 }

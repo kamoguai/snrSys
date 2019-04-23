@@ -252,7 +252,6 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
         ),
       ),
       onTap: () {
-        print('cell click');
         NavigatorUtils.goAssignFixDetail(context);
       },
     );

@@ -484,7 +484,6 @@ class _HomePageState extends State<HomePage>
         }
       }
       noSdList = [];
-      print("無對應 -> ${str}");
       return GestureDetector(
         child: ListView(
           scrollDirection: Axis.vertical,
@@ -689,7 +688,7 @@ class _HomePageState extends State<HomePage>
                                   text: CommonUtils.getLocale(context)
                                       .home_btn_bigbad,
                                   color: Color(MyColors.hexFromStr("#fee9fa")),
-                                  fontSize: MyConstant.smallTextSize,
+                                  fontSize: MyScreen.homePageFontSize(context),
                                   textColor: Colors.black,
                                 ),
                               ),
@@ -706,8 +705,11 @@ class _HomePageState extends State<HomePage>
                                   text: CommonUtils.getLocale(context)
                                       .home_btn_upP,
                                   color: Color(MyColors.hexFromStr("#f5ffe9")),
-                                  fontSize: MyConstant.smallTextSize,
+                                  fontSize: MyScreen.homePageFontSize(context),
                                   textColor: Colors.black,
+                                  onPress: () {
+                                    NavigatorUtils.goOverPowerList(context);
+                                  },
                                 ),
                               ),
                               ButtonTheme(
@@ -723,7 +725,7 @@ class _HomePageState extends State<HomePage>
                                   text: CommonUtils.getLocale(context)
                                       .home_btn_publicwork,
                                   color: Color(MyColors.hexFromStr("#e8fcff")),
-                                  fontSize: MyConstant.smallTextSize,
+                                  fontSize: MyScreen.homePageFontSize(context),
                                   textColor: Colors.black,
                                   onPress: () {
                                     NavigatorUtils.goPublicworksList(context);
@@ -743,7 +745,7 @@ class _HomePageState extends State<HomePage>
                                   text: CommonUtils.getLocale(context)
                                       .home_btn_problem,
                                   color: Color(MyColors.hexFromStr("#fff7dc")),
-                                  fontSize: MyConstant.smallTextSize,
+                                  fontSize: MyScreen.homePageFontSize(context),
                                   textColor: Colors.black,
                                   onPress: () {
                                     NavigatorUtils.goProblemDetail(context);
@@ -763,7 +765,7 @@ class _HomePageState extends State<HomePage>
                                   text: CommonUtils.getLocale(context)
                                       .home_btn_assignFix,
                                   color: Color(MyColors.hexFromStr("#fee6f7")),
-                                  fontSize: MyConstant.smallTextSize,
+                                  fontSize: MyScreen.homePageFontSize(context),
                                   textColor: Colors.black,
                                   onPress: () {
                                     NavigatorUtils.goAssignFixList(context);

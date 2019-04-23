@@ -45,7 +45,7 @@ class _PublicworksListPageState extends State<PublicworksListPage>
     var res = await PublicworksDao.getQueryOverTimeAnalyse();
     if (res != null && res.result) {
       setState(() {
-        dataArray = res.data;
+        dataArray = res.data["Data"];
         for (var dic in dataArray) {
           if (dic["INST"] != null && dic["INST"] != "") {
             instCount = instCount + int.parse(dic["INST"]);

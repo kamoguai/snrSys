@@ -234,4 +234,13 @@ class MyStringZh extends MyStringBase {
   String text_status = "狀態";
   @override
   String text_ww = "工程異常";
+
+  @override
+  String text_net = "網路";
+  @override
+  String text_overPowerBad = "上P異常";
+  @override
+  String text_overTime = "超時";
+  @override
+  String text_noDsflow = "無下行";
 }
