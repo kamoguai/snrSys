@@ -213,6 +213,8 @@ class MyStringZh extends MyStringBase {
   @override
   String text_thisDay = "本日";
   @override
+  String text_thisWeek = "本日";
+  @override
   String text_bp = "扣點";
   @override
   String text_minus = "扣項";
@@ -243,4 +245,17 @@ class MyStringZh extends MyStringBase {
   String text_overTime = "超時";
   @override
   String text_noDsflow = "無下行";
+  @override
+  String text_situation = "現況";
+  @override
+  String text_sendReoprt = "發報";
+  @override
+  String text_checkReport = "查修回報";
+  @override
+  String text_position = "位置";
+  @override
+  String text_register = "立案";
+  @override
+  String text_affectLight = "影響光點";
+  
 }

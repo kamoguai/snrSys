@@ -209,6 +209,8 @@ abstract class MyStringBase {
 
   String text_thisDay;
 
+  String text_thisWeek;
+
   String text_minus;
 
   String text_pipe;
@@ -239,5 +241,16 @@ abstract class MyStringBase {
 
   String text_noDsflow;
 
+  String text_situation;
+
+  String text_sendReoprt;
+
+  String text_checkReport;
+
+  String text_position;
+
+  String text_register;
+
+  String text_affectLight;
   
 }

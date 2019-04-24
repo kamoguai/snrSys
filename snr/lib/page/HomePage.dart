@@ -509,72 +509,75 @@ class _HomePageState extends State<HomePage>
     if (deviceHeight > 800) {
       tableHeight = 110;
     }
-    return new Container(
-      height: tableHeight,
-      child: new ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemBuilder: (context, index) {
-          return new GestureDetector(
-            child: new Container(
-                child: new Column(
-              children: <Widget>[
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: bigbadList == null
-                      ? []
-                      : <Widget>[
-                          new Container(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                "${bigbadList[index].Name}-${bigbadList[index].CIF}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: miniFontSize),
-                              )),
-                          new Container(
-                              padding: EdgeInsets.all(5.0),
-                              child: new Text(
-                                bigbadList[index].DATE,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: miniFontSize),
-                              )),
-                          new Container(
-                              padding: EdgeInsets.all(5.0),
-                              child: new Text(
-                                bigbadList[index].Time,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.red, fontSize: miniFontSize),
-                              )),
-                          new Container(
-                              child: new Text(
-                            "~",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black, fontSize: miniFontSize),
-                          )),
-                          new Container(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                bigbadList[index].RTIME == null
-                                    ? "--:--"
-                                    : bigbadList[index].RTIME,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.blue, fontSize: miniFontSize),
-                              ))
-                        ],
-                ),
-                _buildLine()
-              ],
-            )),
-          );
-        },
-        itemCount: bigbadList == null ? 0 : bigbadList.length,
+    return new GestureDetector(
+      child: Container(
+        color: Color(MyColors.hexFromStr('#fafff9')),
+        height: tableHeight,
+        child: new ListView.builder(
+          scrollDirection: Axis.vertical,
+          itemBuilder: (context, index) {
+            return  new Column(
+                children: <Widget>[
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: bigbadList == null
+                        ? []
+                        : <Widget>[
+                            new Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  "${bigbadList[index].Name}-${bigbadList[index].CIF}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: miniFontSize),
+                                )),
+                            new Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: new Text(
+                                  bigbadList[index].DATE,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: miniFontSize),
+                                )),
+                            new Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: new Text(
+                                  bigbadList[index].Time,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.red, fontSize: miniFontSize),
+                                )),
+                            new Container(
+                                child: new Text(
+                              "~",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: miniFontSize),
+                            )),
+                            new Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  bigbadList[index].RTIME == null
+                                      ? "--:--"
+                                      : bigbadList[index].RTIME,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.blue, fontSize: miniFontSize),
+                                ))
+                          ],
+                  ),
+                  _buildLine()
+                ],
+              );
+          },
+          itemCount: bigbadList == null ? 0 : bigbadList.length,
+        ),
       ),
+      onTap: () {
+        NavigatorUtils.goBigBadList(context);
+      },
     );
   }
 
@@ -690,6 +693,9 @@ class _HomePageState extends State<HomePage>
                                   color: Color(MyColors.hexFromStr("#fee9fa")),
                                   fontSize: MyScreen.homePageFontSize(context),
                                   textColor: Colors.black,
+                                  onPress: () {
+                                    NavigatorUtils.goBigBadList(context);
+                                  },
                                 ),
                               ),
                               ButtonTheme(
@@ -810,6 +816,7 @@ class _HomePageState extends State<HomePage>
                           /// 高度1的分隔線
                           _buildLine(),
                           new Container(
+                            color: Color(MyColors.hexFromStr('#fafff9')),
                             padding: EdgeInsets.only(bottom: 1.0),
                             child: Text(
                               CommonUtils.getLocale(context)

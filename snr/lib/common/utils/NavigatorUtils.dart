@@ -9,6 +9,8 @@ import 'package:snr/page/assignFix/AssingFixDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedManDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedStatisticPage.dart';
+import 'package:snr/page/bigbad/BigbadDetailPage.dart';
+import 'package:snr/page/bigbad/BigbadListPage.dart';
 import 'package:snr/page/overpower/OverPowerDetailPage.dart';
 import 'package:snr/page/overpower/OverPowerListPage.dart';
 import 'package:snr/page/overpower/OverTimeDetailPage.dart';
@@ -106,5 +108,13 @@ class NavigatorUtils {
   ///overtime詳情頁面
   static goOverTimeDetail(BuildContext context, {dataType}) {
     NavigatorRouter(context, new OverTimeDetailPage(dataType));
+  }
+  ///重大列表頁面
+  static goBigBadList(BuildContext context) {
+    NavigatorRouter(context, new BigBadListPage());
+  }
+  ///重大詳情頁面
+  static goBigBadDetail(BuildContext context) {
+    NavigatorRouter(context, new BigBadDetailPage());
   }
 }
