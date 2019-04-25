@@ -12,6 +12,8 @@ import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/MyListState.dart';
+import 'package:snr/widget/dialog/BigbadHistoryDialog.dart';
+import 'package:snr/widget/dialog/BigbadResultDialog.dart';
 
 /**
  * 重大異常詳情頁面
@@ -26,6 +28,8 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
 
   ///data 相關
   List<dynamic> dataArray = new List();
+  ///是否顯示收按按鈕
+  var isShowAccept = false;
  
   @override
   bool get isRefreshFirst => false;
@@ -75,6 +79,12 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     );
   }
 
+   ///取得裝置width並切6份
+  _deviceWidth2() {
+    var width = MediaQuery.of(context).size.width;
+    return width / 2;
+  }
+
   ///取得裝置width並切6份
   _deviceWidth6() {
     var width = MediaQuery.of(context).size.width;
@@ -110,12 +120,12 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
   }
 
   ///自動字大小
-  Widget _autoTextSize(text, color) {
+  Widget _autoTextSize(text, color, {fontWeight}) {
     var fontSize = MyScreen.normalPageFontSize_s(context);
 
     return AutoSizeText(
       text,
-      style: TextStyle(color: color, fontSize: fontSize),
+      style: TextStyle(color: color, fontSize: fontSize, fontWeight: fontWeight),
       minFontSize: 5.0,
       textAlign: TextAlign.center,
     );
@@ -295,6 +305,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
           Container(
             height: _listHeight(),
             child: ListView(
+              padding: EdgeInsets.only(left: 5.0),
               scrollDirection: Axis.horizontal,
               children: <Widget>[
                 _autoTextSize('text', Colors.black)
@@ -330,6 +341,245 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     );
     return mans;
   }
+  ///reportMan item
+  Widget _buildReportManItem(BuildContext context, int index) {
+    Widget item;
+    item = Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey, width: 1.0, style: BorderStyle.solid)
+          )
+        ),
+      height: _listHeight(),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Container(
+            width: (_deviceWidth6() * 1.5) - 1,
+            child: ListView(
+              padding: EdgeInsets.only(left: 5.0),
+              scrollDirection: Axis.horizontal,
+              children: <Widget>[
+                _autoTextSize('time and man time and man', Colors.blueAccent),
+              ],
+            )
+          ),
+          _buildLineHeight(),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.only(left: 5.0),
+              scrollDirection: Axis.horizontal,
+              children: <Widget>[
+                 _autoTextSizeLeft('memo view,memo view,memo view,memo view,memo view,memo view,memo view,memo view,memo view,', Colors.black)
+              ],
+            )
+            
+          )
+          // ListView(
+          //   scrollDirection: Axis.horizontal,
+          //   children: <Widget>[
+          //     Expanded(
+          //       child: _autoTextSizeLeft('memo view,', Colors.black),
+          //     )
+          //   ],
+          // ),
+          
+        ],
+      ),
+    );
+    return item;
+  }
+  ///reportMan list
+  Widget _buildReportManList() {
+    Widget list;
+    // if (dataArray.length > 0) {
+      list = Container(
+        height: _listHeight() * 3,
+        child: ListView.builder(
+          itemBuilder: _buildReportManItem,
+          itemCount: dataArray.length + 2,
+        ),
+      );
+    // }
+    // else {
+    //   list = Container(height: _listHeight() * 3,);
+    // }
+    return list;
+  }
+  ///發報時間
+  Widget _buildHQTime() {
+    Widget hq;
+    hq = Container(
+      height: _listHeight(),
+      color: Color(MyColors.hexFromStr('#f2f2f2')),
+      child: ListView(
+        padding: EdgeInsets.only(left: 5.0),
+        scrollDirection: Axis.horizontal,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              _autoTextSize('發報時間:', Colors.black, fontWeight: FontWeight.bold),
+              _autoTextSize('開始時間', Colors.red,),
+              _autoTextSize('~', Colors.black,),
+              _autoTextSize('結束時間', Colors.blueAccent,),
+              SizedBox(width: 10.0,),
+              _autoTextSize('(耗時:h:mm)', Colors.black,),
+            ],
+          ),
+        ],
+      )
+    );
+    return hq;
+  }
+  ///查修人員 item
+  Widget _buildCheckManItem(BuildContext context, int index) {
+    Widget item;
+    item = Container(
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(
+            color: Colors.grey, width: 1.0, style: BorderStyle.solid
+          )
+        )
+      ),
+      width: _deviceWidth6(),
+      height: _listHeight(),
+      child: _autoTextSize('查修人', Colors.black),
+    );
+    return item;
+  }
+  /// 查修人員list
+  Widget _buildCheckManList() {
+    Widget list;
+    // if(dataArray.length > 0) {
+      list = GestureDetector(
+        child: Container(
+          height: _listHeight(),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: _buildCheckManItem,
+            itemCount: dataArray.length + 10,
+          ),
+        ),
+        onTap: (){
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => _buildMantoFinishedDialog(context)
+          );
+        },
+      );
+      
+      
+    // }
+    // else {
+    //   list = Container(height: _listHeight(),);
+    // }
+    return list;
+  }
+  ///查修結果
+  Widget _buildCheckResult() {
+    Widget result;
+    result = GestureDetector(
+      child: Container(
+        height: _listHeight() * 2.5,
+        color: Color(MyColors.hexFromStr('#fff7f6')),
+        child: ListView(
+          padding: EdgeInsets.only(left: 5.0, right: 5.0),
+          scrollDirection: Axis.vertical,
+          children: <Widget>[
+            _autoTextSizeLeft('查修結果: 此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，', Colors.grey),
+          ],
+        ),
+      ),
+      onTap: (){
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => checkReportDialog(context)
+        );
+      },
+    );
+    return result;
+  }
+  ///歷史title
+  Widget _buildHistoryTitle() {
+    Widget title;
+    title = Container(
+      color: Color(MyColors.hexFromStr('#f0fcff')),
+      height: _listHeight(),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          _autoTextSize('過去查修歷史', Colors.black, fontWeight: FontWeight.bold),
+        ],
+      ),
+    );
+    return title;
+  }
+  ///歷史item
+  Widget _buildHistoryItem(BuildContext context, int index) {
+    Widget item;
+    var value = index % 2;
+
+    item = Container(
+      color: value > 0 ? Color(MyColors.hexFromStr('#f2f2f2')) : Colors.white ,
+      height: _listHeight() * 2,
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: _listHeight() - 1,
+            child: ListView(
+              padding: EdgeInsets.only(left: 5.0,),
+              scrollDirection: Axis.horizontal,
+              children: <Widget>[
+                _autoTextSizeLeft('日期/ 開始時間~結束時間 (耗時) 人員a,人員b', Colors.grey),
+              ],
+            )
+          ),
+          _buildLine(),
+          Container(
+            height: _listHeight() - 1,
+            child: ListView(
+              padding: EdgeInsets.only(left: 5.0,),
+              scrollDirection: Axis.horizontal,
+              children: <Widget>[
+                _autoTextSizeLeft('查修結果', Colors.grey),
+              ],
+            )
+          ),
+          _buildLine(),
+        ],
+      ),
+    );
+    return item;
+  }
+  ///歷史list
+  Widget _buildHistoryList() {
+    Widget list;
+    // if(dataArray.length > 0) {
+      list = GestureDetector(
+        child: Container(
+          height: _listHeight() * 6,
+          child: ListView.builder(
+            itemBuilder: _buildHistoryItem,
+            itemCount: dataArray.length + 4,
+          ),
+        ),
+        onTap: (){
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => _buildHistoryDialog(context)
+          );
+        },
+      );
+      
+    // }
+    // else {
+    //   list = Expanded(child: Container(),);
+    // }
+    return list;
+  }
   ///將body寫在這裡
   Widget getBody() {
     Widget body;
@@ -351,13 +601,117 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
             _buildLine(),
             _buildMans(),
             _buildLine(),
+            _buildReportManList(),
+            _buildLine(),
+            _buildHQTime(),
+            _buildLine(),
+            _buildCheckManList(),
+            _buildLine(),
+            _buildCheckResult(),
+            _buildLine(),
+            _buildHistoryTitle(),
+            _buildLine(),
+            _buildHistoryList()
           ],
         ),
       );
     }
     return body;
   }
+  ///查修回報dialog
+  Widget checkReportDialog(BuildContext context) {
+    return GestureDetector(
+      child: Material(
+        type: MaterialType.transparency,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Card(
+              child: BigBadResultDialog(3),
+            )
+          ],
+        ),
+      ),
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+    );
+  }
+  ///人員至完工記點
+  Widget _buildMantoFinished() {
+    Widget dialog;
+    dialog = Container(
+      width: double.maxFinite,
+      height: _titleHeight() * 2,
+      padding: EdgeInsets.only(top: 2.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            height: _titleHeight(),
+            child: _autoTextSize("是否要將本案轉至完工記點", Colors.black),
+          ),
+          _buildLine(),
+          _buildCheckManList(),
+          _buildLine(),
+        ],
+      ),
+    );
+    return dialog;
+  }
+  ///人員至完工記點dialog
+  Widget _buildMantoFinishedDialog(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Card(
+            child: _buildMantoFinished(),
+          ),
+          SizedBox(height: 20.0,),
+          Card(
+            child: Container(
+              height: _titleHeight() * 1.5,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    // width: _deviceWidth2() - 3,
+                    child: FlatButton(
+                      child: Text('確定', style: TextStyle(color: Colors.blueAccent)),
+                      onPressed: (){
 
+                      },
+                    ),
+                  ),
+                  _buildLineHeight(),
+                  Container(
+                    // width: _deviceWidth2() - 3,
+                    child: FlatButton(
+                      child: Text('離開', style: TextStyle(color: Colors.red)),
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+  ///歷史dialog
+  Widget _buildHistoryDialog(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Card(
+        child: BigBadHistoryDialog(),
+      ),
+    );  
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -379,7 +733,9 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
                       color: Colors.transparent,
                       fontSize: MyScreen.normalPageFontSize(context),
                       onPress: () {
-                      
+                       setState(() {
+                         isShowAccept = true;
+                       });
                       },
                     ),
                   ),
@@ -538,6 +894,13 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
             ],
           ),
         ),
+        floatingActionButton: isShowAccept ?  FloatingActionButton(
+          backgroundColor: Colors.red,
+          child: Text('收案'),
+          onPressed: (){
+            Fluttertoast.showToast(msg: '收取案件！');
+          },
+        ) : null,
       )
     );
   }

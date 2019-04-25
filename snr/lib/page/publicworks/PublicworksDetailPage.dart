@@ -23,7 +23,7 @@ import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
 import 'package:snr/widget/PublicworksTableItem.dart';
-import 'package:snr/widget/SmallPingTableItem.dart';
+import 'package:snr/widget/dialog/SmallPingTableItem.dart';
 
 class PublicworksDetailPage extends StatefulWidget {
   @override

@@ -40,7 +40,9 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
   void initState() {
     super.initState();
     isLoading = true;
-    getApiDataList();
+    Future.delayed(const Duration(seconds: 1), () {
+      getApiDataList();
+    });
   }
 
   @override
