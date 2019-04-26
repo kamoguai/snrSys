@@ -491,4 +491,20 @@ class MyScreen {
     }
     return fontSize;
   }
+  ///appbar button size
+  static double appBarFontSize(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    double fontSize = 0.0;
+    if (deviceHeight < 570) {
+      fontSize = MyConstant.minTextSize;
+    } else if (deviceHeight > 800) {
+      fontSize = MyConstant.bigTextSize;
+    } else if (deviceHeight > 600 && deviceHeight < 720) {
+      fontSize = MyConstant.normalTextSize;
+    }
+    else {
+      fontSize = MyConstant.smallTextSize;
+    }
+    return fontSize;
+  }
 }

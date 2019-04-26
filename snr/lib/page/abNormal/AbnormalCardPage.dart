@@ -58,6 +58,11 @@ class _AbnormalCardPageState extends State<AbnormalCardPage> with AutomaticKeepA
         isLoading = false;
       });
     }
+    else {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   ///分隔線

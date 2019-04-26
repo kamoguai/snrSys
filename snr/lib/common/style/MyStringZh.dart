@@ -225,6 +225,8 @@ class MyStringZh extends MyStringBase {
   @override
   String text_snrPoint = "SNR點數";
   @override
+  String text_point = "點數";
+  @override
   String text_inst = "裝機";
   @override
   String text_maintain = "維修";
@@ -257,5 +259,16 @@ class MyStringZh extends MyStringBase {
   String text_register = "立案";
   @override
   String text_affectLight = "影響光點";
-  
+  @override
+  String text_wp1 = "錯誤";
+  @override
+  String text_wp2 = "自移";
+  @override 
+  String text_wp3 = "停訊";
+  @override 
+  String text_statistic = "統計";
+  @override 
+  String text_hp = "鎖HP";
+  @override 
+  String text_noPlace = "無對應";
 }

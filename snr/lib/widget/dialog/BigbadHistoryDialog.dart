@@ -133,8 +133,11 @@ class _BigBadHistoryDialogState extends State<BigBadHistoryDialog> with Automati
     );
   }
   ///內容
-  Widget _buildHistoryBody(context, index) {
-    var value = index % 2;
+  Widget _buildHistoryBody(context, {index}) {
+    var value;
+    if (index != null) {
+      value = index;
+    }
     Widget body;
     body = GestureDetector(
       child: Container(
@@ -209,7 +212,7 @@ class _BigBadHistoryDialogState extends State<BigBadHistoryDialog> with Automati
   Widget _buildItem(BuildContext context, int index) {
     
     Widget item;
-    item = _buildHistoryBody(context, index);
+    item = _buildHistoryBody(context, index: index);
     return item;
   }
   ///list

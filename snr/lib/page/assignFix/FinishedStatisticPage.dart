@@ -71,9 +71,15 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
       });
     }
     if (dataArray != null && dataArray != []) {
-      isLoading = false;
+       setState(() {
+        isLoading = false;
+      });
     }
-    
+    else {
+       setState(() {
+        isLoading = false;
+      });
+    }
   }
 
     ///分隔線
@@ -449,7 +455,10 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
     super.initState();
     isLoading = true;
     isToday = true;
-    getApiDataList();
+    Future.delayed(const Duration(seconds: 1),() {
+      getApiDataList();
+    });
+    
   }
 
   @override

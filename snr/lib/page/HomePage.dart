@@ -167,6 +167,12 @@ class _HomePageState extends State<HomePage>
   }
   
   ///取得裝置width並切6份
+  _deviceWidth5() {
+    var width = MediaQuery.of(context).size.width;
+    return width / 5;
+  }
+
+  ///取得裝置width並切6份
   _deviceWidth6() {
     var width = MediaQuery.of(context).size.width;
     return width / 6;
@@ -500,85 +506,105 @@ class _HomePageState extends State<HomePage>
       );
     }
   }
-
-  ///重大信息
-  _buildBigbadListView() {
+  ///重大信息item
+  Widget _buildBigbadItem(BuildContext context, int index) {
+    var dic = bigbadList[index];
     var miniFontSize = MyScreen.homePageFontSize(context);
     var tableHeight = 70.0;
     final deviceHeight = MediaQuery.of(context).size.height;
     if (deviceHeight > 800) {
       tableHeight = 110;
     }
-    return new GestureDetector(
+    return GestureDetector(
       child: Container(
-        color: Color(MyColors.hexFromStr('#fafff9')),
-        height: tableHeight,
-        child: new ListView.builder(
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index) {
-            return  new Column(
-                children: <Widget>[
-                  new Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: bigbadList == null
-                        ? []
-                        : <Widget>[
-                            new Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  "${bigbadList[index].Name}-${bigbadList[index].CIF}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: miniFontSize),
-                                )),
-                            new Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: new Text(
-                                  bigbadList[index].DATE,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: miniFontSize),
-                                )),
-                            new Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: new Text(
-                                  bigbadList[index].Time,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.red, fontSize: miniFontSize),
-                                )),
-                            new Container(
-                                child: new Text(
-                              "~",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: miniFontSize),
-                            )),
-                            new Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  bigbadList[index].RTIME == null
-                                      ? "--:--"
-                                      : bigbadList[index].RTIME,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.blue, fontSize: miniFontSize),
-                                ))
-                          ],
-                  ),
-                  _buildLine()
-                ],
-              );
-          },
-          itemCount: bigbadList == null ? 0 : bigbadList.length,
+        height: 25.0,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey, width: 1.0, style: BorderStyle.solid))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            new Container(
+              padding: EdgeInsets.all(5.0),
+              child: Text(
+                "${dic.Name}-${dic.CIF}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: miniFontSize),
+              )),
+            new Container(
+              padding: EdgeInsets.all(5.0),
+              child: new Text(
+                dic.DATE,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: miniFontSize),
+              )),
+            new Container(
+              padding: EdgeInsets.all(5.0),
+              child: new Text(
+                dic.Time,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.red, fontSize: miniFontSize),
+              )),
+            new Container(
+              child: new Text(
+              "~",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.black, fontSize: miniFontSize),
+            )),
+            new Container(
+              padding: EdgeInsets.all(5.0),
+              child: Text(
+                dic.RTIME == null
+                    ? "--:--"
+                    : dic.RTIME,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.blue, fontSize: miniFontSize),
+              ))
+          ],
         ),
       ),
       onTap: () {
         NavigatorUtils.goBigBadList(context);
       },
     );
+  }
+  ///重大信息list
+  Widget _buildBigbadListView() {
+    Widget list;
+    var miniFontSize = MyScreen.homePageFontSize(context);
+    var tableHeight = 70.0;
+    final deviceHeight = MediaQuery.of(context).size.height;
+    if (deviceHeight > 800) {
+      tableHeight = 110;
+    }
+    if(bigbadList.length > 0) {
+      list = Container(
+        color: Color(MyColors.hexFromStr('#fafff9')),
+        height: tableHeight,
+        child: ListView.builder(
+          itemBuilder: _buildBigbadItem,
+          itemCount: bigbadList.length,
+        ),
+      );
+    }
+    else {
+      list = GestureDetector(
+        child: Container(height: tableHeight,color: Color(MyColors.hexFromStr('#fafff9'))),
+        onTap: (){
+          NavigatorUtils.goBigBadList(context);
+        },
+      );
+      
+    }
+    return list;
   }
 
   @override
@@ -600,67 +626,50 @@ class _HomePageState extends State<HomePage>
                     child: new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        ButtonTheme(
-                          minWidth: MyScreen.homePageBarButtonWidth(context),
-                          child: new MyToolButton(
-                            text: selectArea,
-                            textColor: Colors.white,
-                            color: Colors.transparent,
-                            fontSize: MyScreen.homePageFontSize(context),
-                            onPress: () {
-                              _showAlertSheetController(context);
-                            },
+                        GestureDetector(
+                          child: Container(
+                            width: _deviceWidth5(),
+                            child: _buildTextFontColor(selectArea, Colors.white),
                           ),
+                          onTap: (){
+                             _showAlertSheetController(context);
+                          },
                         ),
-                        ButtonTheme(
-                          minWidth: MyScreen.homePageBarButtonWidth(context),
-                          child: new MyToolButton(
-                            text: "自移",
-                            textColor: Colors.white,
-                            color: Colors.transparent,
-                            fontSize: MyScreen.homePageFontSize(context),
-                            onPress: () {
-                              print("123");
-                            },
+                        GestureDetector(
+                          child: Container(
+                            width: _deviceWidth5(),
+                            child: _buildTextFontColor(CommonUtils.getLocale(context).text_wp2, Colors.white),
                           ),
-                        ),
-                        ButtonTheme(
-                          minWidth: MyScreen.homePageBarButtonWidth(context),
-                          child: new MyToolButton(
-                            text: "點數",
-                            textColor: Colors.white,
-                            color: Colors.transparent,
-                            fontSize: MyScreen.homePageFontSize(context),
-                            onPress: () {
-                              print("123");
-                            },
+                          onTap: (){
+                             NavigatorUtils.goWrongPlaceDetail(context);
+                          },
+                        ),                    
+                        GestureDetector(
+                          child: Container(
+                            width: _deviceWidth5(),
+                            child: _buildTextFontColor(CommonUtils.getLocale(context).text_point, Colors.white),
                           ),
-                        ),
-                        ButtonTheme(
-                          minWidth: MyScreen.homePageBarButtonWidth(context),
-                          child: new MyToolButton(
-                            text: "鎖HP",
-                            textColor: Colors.white,
-                            color: Colors.transparent,
-                            fontSize: MyScreen.homePageFontSize(context),
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            onPress: () {
+                          onTap: (){
                               print("123");
-                            },
+                          },
+                        ),                    
+                        GestureDetector(
+                          child: Container(
+                            width: _deviceWidth5(),
+                            child: _buildTextFontColor(CommonUtils.getLocale(context).text_hp, Colors.white),
                           ),
-                        ),
-                        ButtonTheme(
-                          minWidth: MyScreen.homePageBarButtonWidth(context),
-                          child: new MyToolButton(
-                            text: sdList.length == 0 ? "資料" : sdList[0].Time,
-                            textColor: Colors.white,
-                            color: Colors.transparent,
-                            fontSize: MyScreen.homePageFontSize(context),
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            onPress: () {
+                          onTap: (){
                               print("123");
-                            },
+                          },
+                        ), 
+                        GestureDetector(
+                          child: Container(
+                            width: _deviceWidth5(),
+                            child: _buildTextFontColor(sdList.length == 0 ? "資料" : sdList[0].Time, Colors.white),
                           ),
+                          onTap: (){
+                              print("123");
+                          },
                         ),
                       ],
                     ),
@@ -830,6 +839,7 @@ class _HomePageState extends State<HomePage>
                           /// 高度1的分隔線
                           _buildLine(),
                           _buildBigbadListView(),
+                          _buildLine(),
                         ],
                       ),
                     ),

@@ -252,5 +252,18 @@ abstract class MyStringBase {
   String text_register;
 
   String text_affectLight;
+
+  String text_wp1;
   
+  String text_wp2;
+
+  String text_wp3;
+
+  String text_noPlace;
+  
+  String text_statistic;
+
+  String text_point;
+
+  String text_hp;
 }

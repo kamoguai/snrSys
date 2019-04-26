@@ -18,6 +18,7 @@ import 'package:snr/page/problem/ProblemDetial.dart';
 import 'package:snr/page/assignFix/AssignFixListPage.dart';
 import 'package:snr/page/publicworks/PublicworksDetailPage.dart';
 import 'package:snr/page/publicworks/PublicworksListPage.dart';
+import 'package:snr/page/wrongPlace/WrongPlaceDetailPage.dart';
 
 /**
  * 導航欄
@@ -116,5 +117,9 @@ class NavigatorUtils {
   ///重大詳情頁面
   static goBigBadDetail(BuildContext context) {
     NavigatorRouter(context, new BigBadDetailPage());
+  }
+  ///自宜詳情頁面
+  static goWrongPlaceDetail(BuildContext context) {
+    NavigatorRouter(context, new WrongPlaceDetailPage());
   }
 }

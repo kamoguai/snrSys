@@ -76,6 +76,12 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
       }
       
     }
+    else {
+      setState(() {
+        isLoading = false;
+      }); 
+      
+    }
   }
 
   ///分隔線

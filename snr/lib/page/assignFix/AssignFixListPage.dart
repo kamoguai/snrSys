@@ -74,7 +74,14 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
       });
     }
     if (dataArray != [] && dataArray2 != []) {
-      isLoading = false;
+      setState(() {
+        isLoading = false;
+      });
+    }
+    else {
+       setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -505,7 +512,9 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
   void initState() {
     super.initState();
     isLoading = true;
-    getApiDataList();
+    Future.delayed(const Duration(seconds: 1),() {
+      getApiDataList();
+    });
   }
 
   @override

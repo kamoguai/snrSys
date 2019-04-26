@@ -4,6 +4,7 @@ import 'package:snr/common/model/FinishedTableCell.dart';
 import 'package:snr/common/model/PublicworksTableCell.dart';
 import 'package:snr/common/model/SmallPingTableCell.dart';
 import 'package:snr/common/model/User.dart';
+import 'package:snr/common/model/WrongPlaceTableCell.dart';
 import 'package:snr/common/redux/SmallPingTableCellReducer.dart';
 import 'package:snr/common/redux/UserRedux.dart';
 import 'package:snr/common/redux/ThemeRedux.dart';
@@ -38,6 +39,9 @@ class SysState {
 
   ///工程cell
   List<PublicworksTableCell> publicWorksList = new List();
+
+  ///位置錯誤cell
+  List<WrongPlaceTableCell> wrongPlaceList = new List();
 
   ///小ping資料緩存
   SmallPingTableCell pingtData;

@@ -119,6 +119,11 @@ class _OverPowerListPageState extends State<OverPowerListPage> with AutomaticKee
         isLoading = false;
       });
     }
+    else {
+       setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   ///分隔線

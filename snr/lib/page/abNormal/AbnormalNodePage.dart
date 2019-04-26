@@ -54,6 +54,11 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
         isLoading = false;
       });
     }
+    else {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   ///分隔線

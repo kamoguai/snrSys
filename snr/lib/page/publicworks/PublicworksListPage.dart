@@ -63,6 +63,11 @@ class _PublicworksListPageState extends State<PublicworksListPage>
         isLoading = false;
       });
     }
+    else {
+       setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   ///分隔線

@@ -210,8 +210,7 @@ class Address {
         custCDStr = "${custCDStr},${str}";
       }
     }
-    return '';
-    // return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
+    return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
   }
   ///包含輸入匡跳轉
   static didTransferInputTextAPI(to, from, memo, accNo, accName, custCDList) {
@@ -228,8 +227,7 @@ class Address {
   }
   ///工異跳轉
   static didTransferPublicworksAPI(to, from, memo, accNo, accName, jsonCustCD) {
-    return '';
-    // return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&Memo=${memo}&CustCD=${jsonCustCD}&SenderID=${accNo}&SenderName=${accName}";
+    return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&Memo=${memo}&CustCD=${jsonCustCD}&SenderID=${accNo}&SenderName=${accName}";
   }
   ///完工統計
   static getQueryFinishAnalyseAPI(date) {
@@ -242,5 +240,13 @@ class Address {
   ///工務詳情
   static getQueryWorkWarningAPI(type, city, sort, hub) {
     return "${kSNRHostName}SNRProcess?FunctionName=QueryWorkWarning&type=${type}&City=${city}&Sort=${sort}&Hub=${hub}";
+  }
+  ///無對應
+  static getQueryNoNodeAPI() {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryNoNode";
+  }
+  ///無對應刷新
+  static getRefreshDataAPI(type, custNo) {
+    return "${kSNRHostPingName}/SNRping.php?Action=Refresh&Custno=$custNo&Type=$type";
   }
 }
