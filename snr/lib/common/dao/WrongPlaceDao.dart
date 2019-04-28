@@ -47,4 +47,54 @@ class WrongPlaceDao {
       return new DataResult(null, false);
     }
   }
+  ///位置錯誤 - 詳情頁
+  static getQueryWrongPlaceDetail({page}) async {
+    Map<String, dynamic> mainDataArray = {};
+    var res = await HttpManager.netFetch(Address.getQueryWrongPlaceDetailAPI(page), null, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("getQueryWrongPlaceDetail resp => " + res.data.toString());
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        if (res.data["ReturnData"].length == 0) {
+          return new DataResult(null, false);
+        }
+        else {
+          mainDataArray = res.data["ReturnData"];
+          return new DataResult(mainDataArray, true);
+        }
+      }
+      else {
+        Fluttertoast.showToast(msg: res.data['MSG']);
+        return new DataResult(null, false);
+      }
+    } else {
+      return new DataResult(null, false);
+    }
+  }
+  ///位置錯誤 - Node列表
+  static getQueryWrongPlaceList({page}) async {
+    Map<String, dynamic> mainDataArray = {};
+    var res = await HttpManager.netFetch(Address.getQueryWrongPlaceListAPI(), null, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("getQueryWrongPlaceList resp => " + res.data.toString());
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        if (res.data["ReturnData"].length == 0) {
+          return new DataResult(null, false);
+        }
+        else {
+          mainDataArray = res.data["ReturnData"];
+          return new DataResult(mainDataArray, true);
+        }
+      }
+      else {
+        Fluttertoast.showToast(msg: res.data['MSG']);
+        return new DataResult(null, false);
+      }
+    } else {
+      return new DataResult(null, false);
+    }
+  }
 }

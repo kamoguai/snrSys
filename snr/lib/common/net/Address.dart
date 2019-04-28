@@ -249,4 +249,12 @@ class Address {
   static getRefreshDataAPI(type, custNo) {
     return "${kSNRHostPingName}/SNRping.php?Action=Refresh&Custno=$custNo&Type=$type";
   }
+  ///位置錯誤 - 詳情頁
+  static getQueryWrongPlaceDetailAPI(page) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryWrongPlaceDetail&Page=$page";
+  }
+  ///位置錯誤 - Node列表
+  static getQueryWrongPlaceListAPI() {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryWrongPlaceList&Level2=&PageCode=ALL";
+  }
 }

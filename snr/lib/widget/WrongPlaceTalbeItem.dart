@@ -5,7 +5,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:snr/common/model/WrongPlaceTableCell.dart';
 import 'package:snr/common/style/MyStyle.dart';
-import 'package:snr/common/utils/CommonUtils.dart';
 /**
  * 位置錯誤tableItem
  * Date: 2019-04-26
@@ -101,6 +100,10 @@ final WrongPlaceViewModel defaultViewModel;
     else {
       return Colors.white;
     }
+  }
+
+  Future _refreshAction(custNo, currentCellTag) async{
+    callRefreshAPI(custNo, currentCellTag);
   }
   @override
   Widget build(BuildContext context) {
@@ -264,7 +267,7 @@ final WrongPlaceViewModel defaultViewModel;
                     ),
                     child: _autoTextSize('刷新', TextStyle(color: Colors.blue), context),
                     onPressed: (){
-                      callRefreshAPI(defaultViewModel.custNo);
+                      _refreshAction(defaultViewModel.custNo, currentCellTag);
                     },
                   ),
                 ),

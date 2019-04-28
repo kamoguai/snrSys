@@ -4,11 +4,13 @@ import 'package:snr/common/model/FinishedTableCell.dart';
 import 'package:snr/common/model/PublicworksTableCell.dart';
 import 'package:snr/common/model/SmallPingTableCell.dart';
 import 'package:snr/common/model/User.dart';
+import 'package:snr/common/model/WrongPlaceNodeTableCell.dart';
 import 'package:snr/common/model/WrongPlaceTableCell.dart';
 import 'package:snr/common/redux/SmallPingTableCellReducer.dart';
 import 'package:snr/common/redux/UserRedux.dart';
 import 'package:snr/common/redux/ThemeRedux.dart';
 import 'package:snr/common/redux/LocaleReducer.dart';
+import 'package:snr/common/redux/WrongPlaceTableCellReducer.dart';
 /**
  * Redux全局State
  * Date: 2019-03-11
@@ -43,14 +45,20 @@ class SysState {
   ///位置錯誤cell
   List<WrongPlaceTableCell> wrongPlaceList = new List();
 
+  ///位置錯誤Nodecell
+  List<WrongPlaceNodeTableCell> wrongPlaceNodeList = new List();
+
   ///小ping資料緩存
   SmallPingTableCell pingtData;
+
+  ///位置錯誤
+  WrongPlaceTableCell refreshData;
   
   ///cell 的index
   int currentCellTag;
 
   ///構造方法
-  SysState({this.userInfo, this.themeData,this.locale, this.pingtData });
+  SysState({this.userInfo, this.themeData,this.locale, this.pingtData, this.refreshData});
 
 }
 ///創建 Reducer
@@ -72,6 +80,9 @@ SysState appReducer(SysState state, action) {
 
     ///通過 DefaultTableCellReducer 將 SysState 內的 defaultList 和 action 關聯在一起
     pingtData: SmallPingTableCellReducer(state.pingtData, action),
+
+    ///通過 WrongPlaceTableCellReducer 將 SysState 內的 defaultList 和 action 關聯在一起
+    refreshData: WrongPlaceTableCellReducer(state.refreshData, action),
 
   );
 }

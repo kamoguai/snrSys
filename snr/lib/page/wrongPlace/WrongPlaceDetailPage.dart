@@ -15,6 +15,7 @@ import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/model/SmallPingTableCell.dart';
 import 'package:snr/common/model/User.dart';
+import 'package:snr/common/model/WrongPlaceNodeTableCell.dart';
 import 'package:snr/common/model/WrongPlaceTableCell.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
@@ -24,6 +25,7 @@ import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
+import 'package:snr/widget/WrongPlaceNodeTableCell.dart';
 import 'package:snr/widget/WrongPlaceTalbeItem.dart';
 import 'package:snr/widget/dialog/SmallPingTableItem.dart';
 
@@ -46,16 +48,16 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
   var typevalue = "1";
   ///同上
   var typeof = "NONODE";
-  ///可異筆數
-  var vbadCount = "0";
-  ///問題筆數
-  var problemCount = "0";
-  ///其他筆數
-  var otherCount = "0";
-  ///追蹤筆數
-  var traceCount = "0";
+  ///錯誤筆數
+  var wp1Count = "0";
+  ///自移筆數
+  var wp2Count = "0";
+  ///停訊筆數
+  var wp3Count = "0";
   ///是否顯示header按鈕
   var isEnableHeadBtns = false;
+  ///詳情page
+  var wpPage = "1";
   /// user model
   User user;
   /// sso model
@@ -67,9 +69,17 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
   ///列表顯示的物件
   _renderItem(index) {
     if (isEnableHeadBtns) {
-      DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
-      DefaultViewModel model = DefaultViewModel.forMap(dtc);
-      return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);
+      if(nowType != buttonType.statistic) {
+        DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
+        DefaultViewModel model = DefaultViewModel.forMap(dtc);
+        return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);
+      }
+      else {
+        WrongPlaceNodeTableCell dtc = pullLoadWidgetControl.dataList[index];
+        WrongPlaceNodeViewModel model = WrongPlaceNodeViewModel.forMap(dtc);
+        return new WrongPlaceNodeTableItem(defaultViewModel: model,dataCount: pullLoadWidgetControl.dataList.length,);
+      }
+      
     }
     else {
       WrongPlaceTableCell wptc = pullLoadWidgetControl.dataList[index];
@@ -98,7 +108,11 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                   clearData();
                   isEnableHeadBtns = false;
                   nowAppBarType = appBarBtnType.noplace;
-                  showRefreshLoading();
+                  var list = _getStore().state.wrongPlaceList;
+                  pullLoadWidgetControl.dataList = list;
+                  if (pullLoadWidgetControl.dataList.length == 0) {
+                    showRefreshLoading();
+                  }
                 });
               },
             ),
@@ -115,7 +129,11 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                   clearData();
                   isEnableHeadBtns = true;
                   nowAppBarType = appBarBtnType.wp2;
-                  showRefreshLoading();
+                  var list = _getStore().state.defaultList;
+                  pullLoadWidgetControl.dataList = list;
+                  if (pullLoadWidgetControl.dataList.length == 0) {
+                    showRefreshLoading();
+                  }
                 });
               },
             ),
@@ -132,7 +150,11 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                   clearData();
                   isEnableHeadBtns = false;
                   nowAppBarType = appBarBtnType.cm;
-                  showRefreshLoading();
+                  var list = _getStore().state.wrongPlaceList;
+                  pullLoadWidgetControl.dataList = list;
+                  if (pullLoadWidgetControl.dataList.length == 0) {
+                    showRefreshLoading();
+                  }
                 });
               },
             ),
@@ -149,7 +171,11 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                   clearData();
                   isEnableHeadBtns = false;
                   nowAppBarType = appBarBtnType.stb;
-                  showRefreshLoading();
+                  var list = _getStore().state.wrongPlaceList;
+                  pullLoadWidgetControl.dataList = list;
+                  if (pullLoadWidgetControl.dataList.length == 0) {
+                    showRefreshLoading();
+                  }
                 });
               },
             ),
@@ -177,7 +203,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                         new BorderRadius.circular(10.0),
                     side: BorderSide(color: Colors.grey)),
                 text: CommonUtils.getLocale(context)
-                    .text_wp1 + "-${problemCount}",
+                    .text_wp1 + "-${wp1Count}",
                 color: Color(MyColors.hexFromStr("#eeffef")),
                 fontSize: MyScreen.normalListPageFontSize(context),
                 textColor: nowType == buttonType.wp1 ? Colors.red : Colors.grey[700],
@@ -186,10 +212,16 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                     Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                     return;
                   }
+                  clearData();
                   setState(() {
                     nowType = buttonType.wp1;
+                    wpPage = "1";
                     typeof = "WP1";
-                    showRefreshLoading();
+                    var list = _getStore().state.defaultList;
+                    pullLoadWidgetControl.dataList = list;
+                    if (pullLoadWidgetControl.dataList.length == 0) {
+                      showRefreshLoading();
+                    }
                   });
                   
                 },
@@ -206,7 +238,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                         new BorderRadius.circular(10.0),
                     side: BorderSide(color: Colors.grey)),
                 text: CommonUtils.getLocale(context)
-                    .text_wp2 + "-${vbadCount}",
+                    .text_wp2 + "-${wp2Count}",
                 color: Color(MyColors.hexFromStr("#f0fcff")),
                 fontSize: MyScreen.normalListPageFontSize(context),
                 textColor: nowType == buttonType.wp2 ? Colors.red : Colors.grey[700],
@@ -215,10 +247,16 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                     Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                     return;
                   }
+                  clearData();
                   setState(() {
                     nowType = buttonType.wp2;
+                    wpPage = "2";
                     typeof = "WP2";
-                    showRefreshLoading();
+                    var list = _getStore().state.defaultList;
+                    pullLoadWidgetControl.dataList = list;
+                    if (pullLoadWidgetControl.dataList.length == 0) {
+                      showRefreshLoading();
+                    }
                   });
                 },
               ),
@@ -234,7 +272,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                         new BorderRadius.circular(10.0),
                     side: BorderSide(color: Colors.grey)),
                 text: CommonUtils.getLocale(context)
-                    .text_wp3 + "-${traceCount}",
+                    .text_wp3 + "-${wp3Count}",
                 color: Color(MyColors.hexFromStr("#fafff2")),
                 fontSize: MyScreen.normalListPageFontSize(context),
                 textColor: nowType == buttonType.wp3 ? Colors.red : Colors.grey[700],
@@ -243,10 +281,16 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                     Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                     return;
                   }
+                  clearData();
                   setState(() {
                     nowType = buttonType.wp3;
+                    wpPage = "3";
                     typeof = "WP3";
-                    showRefreshLoading();
+                    var list = _getStore().state.defaultList;
+                    pullLoadWidgetControl.dataList = list;
+                    if (pullLoadWidgetControl.dataList.length == 0) {
+                      showRefreshLoading();
+                    }
                   });
                 },
               ),
@@ -262,7 +306,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                         new BorderRadius.circular(10.0),
                     side: BorderSide(color: Colors.grey)),
                 text: CommonUtils.getLocale(context)
-                    .text_statistic + "-${otherCount}",
+                    .text_statistic,
                 color: Color(MyColors.hexFromStr("#fef5f6")),
                 fontSize: MyScreen.normalListPageFontSize(context),
                 textColor: nowType == buttonType.statistic ? Colors.red : Colors.grey[700],
@@ -271,10 +315,15 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                     Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                     return;
                   }
+                  clearData();
                   setState(() {
                     nowType = buttonType.statistic;
                     typeof = "statistic";
-                    showRefreshLoading();
+                    var list = _getStore().state.wrongPlaceNodeList;
+                    pullLoadWidgetControl.dataList = list;
+                    if (pullLoadWidgetControl.dataList.length == 0) {
+                      showRefreshLoading();
+                    }
                   });
                 },
               ),
@@ -321,6 +370,94 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
       textAlign: TextAlign.center,
     );
   }
+   ///高分隔線
+  _buildLineHeight(context) {
+    return new Container(
+      height: _titleHeight(context),
+      width: 1.0,
+      color: Colors.grey,
+    );
+  }
+  ///取得裝置width並切10份
+  _deviceWidth10(context) {
+    var width = MediaQuery.of(context).size.width;
+    return width / 10;
+  }
+
+  ///取得裝置height切4分
+  _deviceHeight4(context) {
+    AppBar appBar = AppBar();
+    var appBarHeight = appBar.preferredSize.height;
+    var deviceHeight = MediaQuery.of(context).size.height;
+    var height = deviceHeight - appBarHeight;
+
+    return height / 4;
+  }
+  ///lsit height
+  _listHeight(context) {
+    var height = _deviceHeight4(context);
+    return height / 5;
+  }
+
+  ///title height
+  _titleHeight(context) {
+    var height = _deviceHeight4(context);
+    return height / 4;
+  }
+
+  Widget _autoTextSizeH(text, style, context) {
+    var fontSize = MyScreen.defaultTableCellFontSize(context);
+    var fontStyle = TextStyle(fontSize: fontSize);
+    return AutoSizeText(
+      text,
+      style: style.merge(fontStyle),
+      minFontSize: 5.0,
+      textAlign: TextAlign.center,
+    );
+  }
+  Widget _container({child, width, height, color}) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(width: 1.0,style: BorderStyle.solid,color: Colors.grey)
+        )
+      ),
+      height: height == null ? 25.0 : height,
+      width: width,
+      color: color,
+      child: child,
+    );
+  }
+  Widget _statisticHead() {
+    if (isEnableHeadBtns && nowType == buttonType.statistic) {
+      return Container(
+        height: _titleHeight(context) * 0.7,
+        color: Color(MyColors.hexFromStr('#fdf5f6')),
+        child: Row(
+        children: <Widget>[
+          Container(
+            width: (_deviceWidth10(context) * 4) - 1,
+            child: _autoTextSizeH('光點', TextStyle(color: Colors.black, fontWeight: FontWeight.bold), context),
+          ),
+          _buildLineHeight(context),
+          Container(
+            width: (_deviceWidth10(context) * 3) - 1,
+            child: _autoTextSizeH('BOSS卡板', TextStyle(color: Colors.blue, fontWeight: FontWeight.bold), context),
+          ),
+          _buildLineHeight(context),
+          Container(
+            width: (_deviceWidth10(context) * 3),
+            child: _autoTextSizeH('上線卡板', TextStyle(color: Colors.brown, fontWeight: FontWeight.bold), context),
+          ),
+          
+        ],
+      )
+      );
+    }
+    else {
+      return Container();
+    }
+  }
   ///取得使用者信息
   getUserInfoData() async {
     var res = await UserDao.getUserInfoLocal();
@@ -342,12 +479,21 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
   }
   ///get api data
   getApiDataList() async {
+    //自移之外
     if(!isEnableHeadBtns) {
       var res = await WrongPlaceDao.getQueryNoNode();
       return res;
     }
     else {
-
+      //統計按鈕之外
+      if (nowType != buttonType.statistic) {
+        var res = await WrongPlaceDao.getQueryWrongPlaceDetail(page: wpPage);
+        return res;
+      }
+      else {
+         var res = await WrongPlaceDao.getQueryWrongPlaceList();
+         return res;
+      }
     }
   }
 
@@ -471,33 +617,40 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
   }
   ///跳轉裡的選項
   _transSort() {
-    List<String> sortArray = [];
+    List<String> sortArray = ["正常"];
     List<Widget> wList = [];
     if(isEnableHeadBtns) {
       switch (nowType) {
         case buttonType.wp1: 
-          if (this.toTransformArray.length >= 2) {
-            sortArray = ["正常","其他","離線","問題","可優","無下行(超時)"];
-          }
-          else {
-            sortArray = ["正常","其他","離線","問題","可優","低HP","無下行(超時)"];
+          if (user.isTransFromWP1 == 1) {
+            if (this.toTransformArray.length < 2) {
+            sortArray = ["自移","正常"];
+            }
+            else {
+              sortArray = ["正常"];
+            }
           }
           break;
         case buttonType.wp2: 
-          if (this.toTransformArray.length >= 2) {
-            sortArray = ["正常","派修","可異","離線","其他","可優","無下行(超時)"];
-          }
-          else {
-            sortArray = ["正常","派修","可異","離線","其他","可優","低HP","無下行(超時)"];
+          if (user.isTransFromWP2 == 1) {
+            if (this.toTransformArray.length >= 2) {
+              sortArray = ["正常"];
+            }
+            else {
+              sortArray = ["停訊","正常"];
+            }
           }
           break;
         case buttonType.wp3:
-          if (this.toTransformArray.length >= 2) {
-            sortArray = ["正常","派修","可異","離線","問題","可優","無下行(超時)"];
+          if (user.isTransFromWP3 == 1) {
+            if (this.toTransformArray.length >= 2) {
+              sortArray = ["正常"];
+            }
+            else {
+              sortArray = ["刷新授權","正常"];
+            }
           }
-          else {
-            sortArray = ["正常","派修","可異","離線","問題","可優","低HP","無下行(超時)"];
-          }
+          
           break;
         case buttonType.statistic:
           sortArray = ["正常"];
@@ -691,14 +844,19 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
     return res;
   }
   ///刷新function
-  void _callRefreshAPI(String custNo) async{
+  void _callRefreshAPI(String custNo, int currentCellTag) async{
+    isLoading = true;
+    Fluttertoast.showToast(msg: '正在刷新該筆資料中..');
     var res = await getRefreshData(custNo);
     if(res != null && res.result) {
-
+      var returnData = res.data["BossNodePath"];
+      var dic = pullLoadWidgetControl.dataList[currentCellTag];
+      setState(() {
+        dic.BossNodePath = returnData;
+        isLoading = false;
+      });
     }
-    setState(() {
-      
-    });
+    
   }
   ///小ping function
   void _callPing(String custCode, int currentCellTag) async{
@@ -710,7 +868,6 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
     Fluttertoast.showToast(msg: '正在ping該筆資料中..');
     var res = await getPingData(custCode);
     if(res != null && res.result) {
-      // var pingData = _getStore().state.pingData;
       showDialog(
       context: context,
       builder: (BuildContext context) => _buildPingDialog(context,res, currentCellTag: currentCellTag)
@@ -826,30 +983,55 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
     }
     isLoading = true;
     if(isEnableHeadBtns) {
-      var res = await getApiDataList();
-      if (res != null && res.result) {
-        List<DefaultTableCell> list = new List();
-        
-        dataArray.addAll(res.data["Data"]);
-        if (dataArray.length > 0 ) {
+      //統計按鈕之外都call這
+      if (nowType != buttonType.statistic) {
+        var res = await getApiDataList();
+        if (res != null && res.result) {
+          List<DefaultTableCell> list = new List();
+          if (res.data["Data"] != null && res.data["Data"] != []) {
+            dataArray.addAll(res.data["Data"]);
+            wp1Count = res.data["WP1"];
+            wp2Count = res.data["WP2"];
+            wp3Count = res.data["WP3"];
+          }
+          if (dataArray.length > 0 ) {
             for (var dic in dataArray) {
               list.add(DefaultTableCell.fromJson(dic));
             }
-        }
-        setState(() {
-          toTransformArray.clear();
-          pullLoadWidgetControl.dataList.clear();
-          vbadCount = res.data["VBAD"];
-          problemCount = res.data["PROBLEM"];
-          otherCount = res.data["OTHER"];
-          traceCount = res.data["TRACK"] == null ? "0" : res.data["TRACK"];
+          }
+          
+          setState(() {
+            toTransformArray.clear();
+            pullLoadWidgetControl.dataList.clear();
+            clearData();
 
-          pullLoadWidgetControl.dataList.addAll(list);
-          pullLoadWidgetControl.needLoadMore = false;
-        });
+            pullLoadWidgetControl.dataList.addAll(list);
+            pullLoadWidgetControl.needLoadMore = false;
+          });
+        }
+      }
+      else{
+        //統計按鈕call這
+        var res = await getApiDataList();
+        if (res != null && res.result) {
+          List<WrongPlaceNodeTableCell> list = new List();
+          dataArray.addAll(res.data["Data"]);
+          if (dataArray.length > 0 ) {
+            for (var dic in dataArray) {
+              list.add(WrongPlaceNodeTableCell.fromJson(dic));
+            }
+          }
+          setState(() {
+            toTransformArray.clear();
+            pullLoadWidgetControl.dataList.clear();
+            pullLoadWidgetControl.dataList.addAll(list);
+            pullLoadWidgetControl.needLoadMore = false;
+          });
+        }
       }
     }
     else {
+      //統計按鈕之外都call這
       var res = await getApiDataList();
       if (res != null && res.result) {
         List<WrongPlaceTableCell> list = new List();
@@ -867,8 +1049,6 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
         });
       }
     }
-    
-   
     isLoading = false;
     return null;
   }
@@ -899,6 +1079,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
     }
     super.didChangeDependencies();
   }
+  
   
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -948,6 +1129,8 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
             body: Column(
               children: <Widget>[
                 _renderHeader(),
+                _buildLine(),
+                _statisticHead(),
                 _buildLine(),
                 Expanded(
                   child: _renderBody(),
