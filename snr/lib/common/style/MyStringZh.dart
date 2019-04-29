@@ -271,4 +271,10 @@ class MyStringZh extends MyStringBase {
   String text_hp = "鎖HP";
   @override 
   String text_noPlace = "無對應";
+  @override 
+  String text_confirm = "待確認";
+  @override 
+  String text_bpAnalize = "扣點統計";
+  @override 
+  String text_assign = "指派";
 }

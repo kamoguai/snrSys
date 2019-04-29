@@ -82,13 +82,13 @@ final WrongPlaceViewModel defaultViewModel;
 
     return Container(
       decoration: BoxDecoration(
+        color: color,
         border: Border(
           bottom: BorderSide(width: 1.0,style: BorderStyle.solid,color: Colors.grey)
         )
       ),
       height: height == null ? 25.0 : height,
       width: width,
-      color: color,
       child: child,
     );
   }

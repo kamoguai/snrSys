@@ -25,9 +25,10 @@ import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
-import 'package:snr/widget/WrongPlaceNodeTableCell.dart';
+import 'package:snr/widget/WrongPlaceNodeTableItem.dart';
 import 'package:snr/widget/WrongPlaceTalbeItem.dart';
 import 'package:snr/widget/dialog/SmallPingTableItem.dart';
+import 'package:snr/widget/dialog/WrongPlaceDialog.dart';
 
 
 class WrongPlaceDetailPage extends StatefulWidget {
@@ -418,13 +419,13 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
   Widget _container({child, width, height, color}) {
     return Container(
       decoration: BoxDecoration(
+        color: color,
         border: Border(
           bottom: BorderSide(width: 1.0,style: BorderStyle.solid,color: Colors.grey)
         )
       ),
       height: height == null ? 25.0 : height,
       width: width,
-      color: color,
       child: child,
     );
   }
@@ -647,7 +648,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
               sortArray = ["正常"];
             }
             else {
-              sortArray = ["刷新授權","正常"];
+              sortArray = ["重啟授權","正常"];
             }
           }
           
@@ -738,55 +739,11 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
   }
   _transformDialog(BuildContext context, {to,sortStr}) {
     Future.delayed(const Duration(seconds: 1), () {
-      if (sortStr == "低HP") {
-        var memoText = "";
+      if (sortStr == "自移" || sortStr == "停訊") {
         showDialog(
           context: context,
           builder: (context) {
-            var dialog = CupertinoAlertDialog(
-              content: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: '確定將選取的${toTransformArray.length}筆資料轉至\n', 
-                  style: TextStyle(color: Colors.black, ),
-                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, )),]
-                ),
-              ),
-              // Text('確定將選取的${toTransformArray.length}筆資料轉至\n${sortStr}'),
-              actions: <Widget>[
-                CupertinoTextField(
-                  autofocus: true,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(color: Colors.grey, style: BorderStyle.solid)
-                  ),
-                  placeholder: '備註為必填',
-                  onChanged: (String value){
-                    setState(() {
-                      memoText = value;
-                    });
-                  },
-                ),
-                CupertinoButton(
-                  onPressed: (){
-                    if (memoText == "") {
-                      Fluttertoast.showToast(msg: '備註為必填唷！');
-                      return;
-                    }
-                    postTransferInputTextAPI(to, memoText);
-                    Navigator.pop(context);
-                  },
-                  child: Text('確定', style: TextStyle(color: Colors.blue),),
-                ),
-                CupertinoButton(
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  child: Text('取消', style: TextStyle(color: Colors.red),),
-                ),
-                
-              ],
-            );
+            var dialog = _buildWPDialog(context, sortStr);
             return dialog;
           }
         );
@@ -856,7 +813,15 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
         isLoading = false;
       });
     }
-    
+  }
+  ///自移，停訊dialog
+  Widget _buildWPDialog(BuildContext context,wpType) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Card(
+        child: WrongPlaceDialog(wpType),
+      ),
+    );
   }
   ///小ping function
   void _callPing(String custCode, int currentCellTag) async{

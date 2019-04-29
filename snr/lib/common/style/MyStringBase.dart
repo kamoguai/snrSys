@@ -266,4 +266,10 @@ abstract class MyStringBase {
   String text_point;
 
   String text_hp;
+
+  String text_confirm;
+
+  String text_bpAnalize;
+
+  String text_assign;
 }

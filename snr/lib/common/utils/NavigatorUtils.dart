@@ -9,6 +9,7 @@ import 'package:snr/page/assignFix/AssingFixDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedManDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedStatisticPage.dart';
+import 'package:snr/page/badPoint/bpDetailPage.dart';
 import 'package:snr/page/bigbad/BigbadDetailPage.dart';
 import 'package:snr/page/bigbad/BigbadListPage.dart';
 import 'package:snr/page/overpower/OverPowerDetailPage.dart';
@@ -121,5 +122,9 @@ class NavigatorUtils {
   ///自宜詳情頁面
   static goWrongPlaceDetail(BuildContext context) {
     NavigatorRouter(context, new WrongPlaceDetailPage());
+  }
+  ///點數詳情頁面
+  static goBpDetail(BuildContext context) {
+    NavigatorRouter(context, new BpDetailPage());
   }
 }

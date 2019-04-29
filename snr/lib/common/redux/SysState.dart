@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:snr/common/model/BpAnalyzeTableCell.dart';
+import 'package:snr/common/model/BpTableCell.dart';
 import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/model/FinishedTableCell.dart';
 import 'package:snr/common/model/PublicworksTableCell.dart';
@@ -53,6 +55,12 @@ class SysState {
 
   ///位置錯誤
   WrongPlaceTableCell refreshData;
+
+  ///點數
+  List<BpTableCell> bpList = new List();
+
+  ///點數統計
+  List<BpAnalyzeTableCell> bpaList = new List();
   
   ///cell 的index
   int currentCellTag;

@@ -257,4 +257,13 @@ class Address {
   static getQueryWrongPlaceListAPI() {
     return "${kSNRHostName}SNRProcess?FunctionName=QueryWrongPlaceList&Level2=&PageCode=ALL";
   }
+  ///待確認，扣點
+  static getQueryDeductDetailAPI(yeaMonth, page) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryDeductDetail&YearMonth=$yeaMonth&Page=$page";
+  }
+  ///扣點統計
+  static getQueryDeductAnalyseAPI(yeaMonth) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryDeductAnalyse&YearMonth=$yeaMonth";
+  }
+  
 }

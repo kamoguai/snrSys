@@ -650,7 +650,7 @@ class _HomePageState extends State<HomePage>
                             child: _buildTextFontColor(CommonUtils.getLocale(context).text_point, Colors.white),
                           ),
                           onTap: (){
-                              print("123");
+                              NavigatorUtils.goBpDetail(context);
                           },
                         ),                    
                         GestureDetector(

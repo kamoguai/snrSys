@@ -13,34 +13,10 @@ class WrongPlaceNodeTableItem extends StatelessWidget {
   final int dataCount;
   WrongPlaceNodeTableItem({this.defaultViewModel,this.dataCount});
 
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-  ///分隔線red
-  _buildLineRed() {
-    return new Container(
-      height: 1.0,
-      color: Colors.red,
-    );
-  }
-
   ///高分隔線
   _buildLineHeight(context) {
     return new Container(
       height: _titleHeight(context),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///高分隔線
-  _buildLineHeightDouble(context) {
-    return new Container(
-      height: _titleHeight(context) * 2,
       width: 1.0,
       color: Colors.grey,
     );
@@ -88,13 +64,13 @@ class WrongPlaceNodeTableItem extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
+        color: color,
         border: Border(
           bottom: BorderSide(width: 1.0,style: BorderStyle.solid,color: Colors.grey)
         )
       ),
       height: height == null ? 25.0 : height,
       width: width,
-      color: color,
       child: child,
     );
   }
