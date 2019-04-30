@@ -272,4 +272,8 @@ abstract class MyStringBase {
   String text_bpAnalize;
 
   String text_assign;
+
+  String text_pipeA;
+
+  String text_noFix;
 }

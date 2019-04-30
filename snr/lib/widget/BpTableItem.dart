@@ -77,7 +77,7 @@ class BpTableItem extends StatelessWidget {
           bottom: BorderSide(width: 1.0,style: BorderStyle.solid,color: Colors.grey)
         )
       ),
-      height: height == null ? 40.0 : height,
+      height: height == null ? 30.0 : height,
       width: width,
       child: child,
     );
@@ -140,7 +140,8 @@ class BpTableItem extends StatelessWidget {
               ],
             ),
           ),
-          _container(
+          Container(
+            decoration: BoxDecoration(border: Border()),
             child: Row(
               children: <Widget>[
                 Container(
@@ -149,18 +150,20 @@ class BpTableItem extends StatelessWidget {
                 ),
                 _buildHeightLine(),
                 Container(
-                  width: (_deviceWidth10(context) * 5) - 1,
+                  width: (_deviceWidth10(context) * 4) - 1,
                   child: _autoTextSize(defaultViewModel.installDate, TextStyle(color: Colors.grey), context),
                 ),
                 _buildHeightLine(),
                 Container(
-                  width: _deviceWidth10(context) * 2,
+                  width: _deviceWidth10(context) * 3,
                   child: _autoTextSize(defaultViewModel.saleMan, TextStyle(color: Colors.grey), context),
                 ),
               ],
             )
           ),
-          _container(
+          _buildLine(),
+          Container(
+            decoration: BoxDecoration(border: Border()),
             child: Row(
               children: <Widget>[
                 Container(
@@ -169,16 +172,16 @@ class BpTableItem extends StatelessWidget {
                 ),
                 _buildHeightLine(),
                 Container(
-                  width: (_deviceWidth10(context) * 5) - 1,
+                  width: (_deviceWidth10(context) * 4) - 1,
                   child: Row(
                     children: <Widget>[
                       Container(
-                        width: (_deviceWidth10(context) * 2) - 1,
+                        width: (_deviceWidth10(context) * 1.5) - 1,
                         child: _autoTextSize(defaultViewModel.note6, TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.note6_color))), context),
                       ),
                       _buildHeightLine(),
                       Container(
-                        width: (_deviceWidth10(context) * 3) - 1,
+                        width: (_deviceWidth10(context) * 2.5) - 1,
                         child: _autoTextSize(defaultViewModel.fixDate, TextStyle(color: Colors.brown), context),
                       ),
                     ],
@@ -192,7 +195,9 @@ class BpTableItem extends StatelessWidget {
               ],
             )
           ),
-          _container(
+          _buildLine(),
+          Container(
+            decoration: BoxDecoration(border: Border()),
             child: Row(
               children: <Widget>[
                 Container(
@@ -201,17 +206,18 @@ class BpTableItem extends StatelessWidget {
                 ),
                 _buildHeightLine(),
                 Container(
-                  width: (_deviceWidth10(context) * 5) - 1,
+                  width: (_deviceWidth10(context) * 4) - 1,
                   child: Row(
                     children: <Widget>[
                       Container(
+                        padding: EdgeInsets.all(5.0),
                         color: Colors.blue[100],
                         width: _deviceWidth10(context) - 1,
                         child: _autoTextSize('', TextStyle(color: Colors.red), context),
                       ),
                       _buildHeightLine(),
                       Container(
-                        width: (_deviceWidth10(context) * 4) - 1,
+                        width: (_deviceWidth10(context) * 3) - 1,
                         child: _autoTextSize(defaultViewModel.custClass, TextStyle(color: Colors.red), context),
                       ),
                     ],
@@ -219,23 +225,21 @@ class BpTableItem extends StatelessWidget {
                 ),
                 _buildHeightLine(),
                 Container(
-                  width: _deviceWidth10(context) * 2,
+                  width: _deviceWidth10(context) * 3,
                   child: _autoTextSize(defaultViewModel.name, TextStyle(color: Colors.black), context),
                 )
               ],
             )
           ),
-
+          _buildLine(),
           Container(
-            // decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.0,color: Colors.grey,style: BorderStyle.solid))),
-            // height: _buildHeight(),
+           
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(left: 5.0, right: 5.0),
-            child: _autoTextSize('BOSS: ${defaultViewModel.bossLog}', TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.bossLogColor))), context),
+            child: _autoTextSizeLeft('BOSS: ${defaultViewModel.bossLog}', TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.bossLogColor))), context),
           ),
           _buildLine(),
           Container(
-            // decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.0,color: Colors.grey,style: BorderStyle.solid))),
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(left: 5.0, right: 5.0),
             child: _autoTextSizeLeft('維修記錄: ${defaultViewModel.reportLog}', TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.reportLogColor))), context),

@@ -12,6 +12,8 @@ import 'package:snr/page/assignFix/FinishedStatisticPage.dart';
 import 'package:snr/page/badPoint/bpDetailPage.dart';
 import 'package:snr/page/bigbad/BigbadDetailPage.dart';
 import 'package:snr/page/bigbad/BigbadListPage.dart';
+import 'package:snr/page/hiPass/HiPassDetailPage.dart';
+import 'package:snr/page/hiPass/HiPassListPage.dart';
 import 'package:snr/page/overpower/OverPowerDetailPage.dart';
 import 'package:snr/page/overpower/OverPowerListPage.dart';
 import 'package:snr/page/overpower/OverTimeDetailPage.dart';
@@ -126,5 +128,13 @@ class NavigatorUtils {
   ///點數詳情頁面
   static goBpDetail(BuildContext context) {
     NavigatorRouter(context, new BpDetailPage());
+  }
+  ///鎖HP列表頁面
+  static goHiPassList(BuildContext context) {
+    NavigatorRouter(context, new HiPassListPage());
+  }
+  ///鎖HP詳情頁面
+  static goHiPassDetail(BuildContext context,) {
+    NavigatorRouter(context, new HiPassDetailPage());
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:snr/common/config/Config.dart';
@@ -241,7 +242,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
     );
   }
 
-   ///地區dialog, ios樣式
+  ///地區dialog, ios樣式
   showCityAlertSheetController(BuildContext context) {
     showCupertinoModalPopup<String>(
         context: context,
@@ -323,6 +324,90 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
     );
   }
   
+   ///分隔線
+  buildLine() {
+    return new Container(
+      height: 1.0,
+      color: Colors.grey,
+    );
+  }
+  ///分隔線red
+  buildLineRed() {
+    return new Container(
+      height: 1.0,
+      color: Colors.red,
+    );
+  }
+
+  ///高分隔線
+  buildLineHeight() {
+    return new Container(
+      height: titleHeight(),
+      width: 1.0,
+      color: Colors.grey,
+    );
+  }
+
+  ///高分隔線
+  buildLineHeightDouble() {
+    return new Container(
+      height: titleHeight() * 2,
+      width: 1.0,
+      color: Colors.grey,
+    );
+  }
+
+  ///取得裝置width並切6份
+  deviceWidth4() {
+    var width = MediaQuery.of(context).size.width;
+    return width / 4;
+  }
+
+  ///取得裝置width並切6份
+  deviceWidth6() {
+    var width = MediaQuery.of(context).size.width;
+    return width / 6;
+  }
+
+  ///取得裝置width並切9份
+  deviceWidth9() {
+    var width = MediaQuery.of(context).size.width;
+    return width / 9;
+  }
+
+  ///取得裝置height切4分
+  deviceHeight4() {
+    AppBar appBar = AppBar();
+    var appBarHeight = appBar.preferredSize.height;
+    var deviceHeight = MediaQuery.of(context).size.height;
+    var height = deviceHeight - appBarHeight;
+
+    return height / 4;
+  }
+
+  ///lsit height
+  listHeight() {
+    var height = deviceHeight4();
+    return height / 5;
+  }
+
+  ///title height
+  titleHeight() {
+    var height = deviceHeight4();
+    return height / 4;
+  }
+
+  ///自動字大小
+  autoTextSize(text, color) {
+    var fontSize = MyScreen.normalPageFontSize_s(context);
+
+    return AutoSizeText(
+      text,
+      style: TextStyle(color: color, fontSize: fontSize),
+      minFontSize: 5.0,
+      textAlign: TextAlign.center,
+    );
+  }
   
   @protected
   resolveRefreshResult(res) {

@@ -265,5 +265,12 @@ class Address {
   static getQueryDeductAnalyseAPI(yeaMonth) {
     return "${kSNRHostName}SNRProcess?FunctionName=QueryDeductAnalyse&YearMonth=$yeaMonth";
   }
-  
+  ///鎖HP統計
+  static getQueryHiPassAnalyseAPI() {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryHiPassAnalyse";
+  }
+  ///鎖HP詳情頁面
+  static getQueryHiPASSAPI(strHiPass, area, sort, hub) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryHiPass&HiPass=${strHiPass}&City=${area}&Sort=${sort}&Hub=${hub}";
+  }
 }

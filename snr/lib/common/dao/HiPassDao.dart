@@ -1,28 +1,49 @@
-
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/DaoResult.dart';
 import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/net/Api.dart';
 /**
- * 工務 dao
- * Date: 2014-03-20
+ * 鎖HP dao
+ * Date: 2014-04-30
  */
-class PublicworksDao {
-
-  ///工務異常list
-  static getQueryOverTimeAnalyse() async {
+class HiPassDao {
+  ///鎖HP列表
+  static getHiBuildAnalys() async {
     Map<String, dynamic> mainDataArray = {};
-    List<dynamic> dataArray = [];
-    var res = await HttpManager.netFetch(Address.getPublicworksAnalyseAPI(), null, null, new Options(method: "post"));
+    Map<String, dynamic> dataArray = {};
+    var res = await HttpManager.netFetch(Address.getQueryHiPassAnalyseAPI(), null, null, new Options(method: "post"));
     if (res != null && res.result) {
       if (Config.DEBUG) {
-        print("getQueryOverTimeAnalyse resp => " + res.data.toString());
+        print("getHiBuildAnalys resp => " + res.data.toString());
       }
       if (res.data['Response']['ReturnCode'] == "0") {
         mainDataArray = res.data["ReturnData"];
+        if (mainDataArray != null && mainDataArray.length > 0) {
+          dataArray = mainDataArray["Data"];
+        }
+        return new DataResult(dataArray, true);
+      }
+      else {
+        Fluttertoast.showToast(msg: res.data['MSG']);
+        return new DataResult(null, false);
+      }
+    } else {
+      return new DataResult(null, false);
+    } 
+  }
+  ///鎖HP詳情
+  static getQueryHiPASS({strHiPass, area, sort, hub}) async{
+    Map<String, dynamic> mainDataArray = {};
+    var res = await HttpManager.netFetch(Address.getQueryHiPASSAPI(strHiPass, area, sort, hub), null, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("getHiBuildAnalys resp => " + res.data.toString());
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        mainDataArray = res.data["ReturnData"];
+        
         return new DataResult(mainDataArray, true);
       }
       else {
@@ -31,31 +52,6 @@ class PublicworksDao {
       }
     } else {
       return new DataResult(null, false);
-    }
-  }
-  ///工務詳情
-  static getQueryWorkWarning(Store store, {type, city, sort, hub}) async {
-    Map<String, dynamic> mainDataArray = {};
-    var res = await HttpManager.netFetch(Address.getQueryWorkWarningAPI(type, city, sort, hub), null, null, new Options(method: "post"));
-    if (res != null && res.result) {
-      if (Config.DEBUG) {
-        print("getQueryWorkWarning resp => " + res.data.toString());
-      }
-      if (res.data['Response']['ReturnCode'] == "0") {
-        mainDataArray = res.data["ReturnData"];
-      }
-      else {
-        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
-        return new DataResult(null, false);
-      }
-      if (mainDataArray.length > 0) {
-        return new DataResult(mainDataArray, true);
-      } else {
-        return new DataResult(null, false);
-      }
-    }
-    else {
-      return new DataResult(null, false);
-    }
+    } 
   }
 }

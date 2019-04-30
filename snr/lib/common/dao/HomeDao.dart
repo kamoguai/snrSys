@@ -7,7 +7,10 @@ import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/model/HomeCmtsTitleInfo.dart';
 import 'package:snr/common/model/HomeSignal.dart';
 import 'dart:convert';
-
+/**
+ * 首頁dao
+ * Date: 2014-03-20
+ */
 class HomeDao {
   ///取得首頁cmtsTitleInfo筆數
   static getQueryCMTSMainTitleInfoAPI() async {

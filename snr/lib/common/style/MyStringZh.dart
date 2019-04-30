@@ -277,4 +277,8 @@ class MyStringZh extends MyStringBase {
   String text_bpAnalize = "扣點統計";
   @override 
   String text_assign = "指派";
+  @override 
+  String text_pipeA = "管障";
+  @override 
+  String text_noFix = "拒修";
 }

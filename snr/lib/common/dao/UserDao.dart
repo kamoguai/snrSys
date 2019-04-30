@@ -12,7 +12,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/model/SsoLogin.dart';
 
-
+/**
+ * 使用者信息 dao
+ * Date: 2014-03-20
+ */
 class UserDao {
   static login(account, password, store, context) async {
     // 先儲存account至手機內存

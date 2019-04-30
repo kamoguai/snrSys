@@ -10,7 +10,10 @@ import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/net/Api.dart';
 import 'package:snr/common/redux/SmallPingTableCellReducer.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
-
+/**
+ * 通用表dao
+ * Date: 2014-03-20
+ */
 class DefaultTableDao {
   ///普通跳轉
   static didTransfer(context, {to, from, accNo, accName, custCDList}) async {

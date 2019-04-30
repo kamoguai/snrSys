@@ -5,7 +5,10 @@ import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/DaoResult.dart';
 import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/net/Api.dart';
-
+/**
+ * 位置錯誤 dao
+ * Date: 2014-04-28
+ */
 class WrongPlaceDao {
   ///無對應
   static getQueryNoNode() async {

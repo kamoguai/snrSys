@@ -7,7 +7,10 @@ import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/net/Api.dart';
 import 'package:snr/common/redux/DefaultTableCellReducer.dart';
-
+/**
+ * 重大普通dao
+ * Date: 2014-03-20
+ */
 class AbnormalDao {
   /// abnormalCardPage
   static getSNRSignalByCMTS(cmtsCode) async {

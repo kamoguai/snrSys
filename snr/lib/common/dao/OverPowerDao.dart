@@ -3,10 +3,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/DaoResult.dart';
-import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/net/Api.dart';
-import 'package:snr/common/redux/DefaultTableCellReducer.dart';
 /**
  * >51 dao
  * Date: 2019-04-23

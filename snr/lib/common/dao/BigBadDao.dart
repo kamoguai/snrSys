@@ -4,6 +4,10 @@ import 'package:snr/common/dao/DaoResult.dart';
 import 'package:snr/common/net/Api.dart';
 import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/model/BigBad.dart';
+/**
+ * 重大dao
+ * Date: 2014-03-20
+ */
 class BigbadDao {
   ///重大現況資料
   static getQueryBigBadAPI() async {

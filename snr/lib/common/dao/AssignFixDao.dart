@@ -7,7 +7,10 @@ import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/DaoResult.dart';
 import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/net/Api.dart';
-
+/**
+ * 派修dao
+ * Date: 2014-03-21
+ */
 class AssignFixDao {
   ///派修列表
   static getQueryAssignFixList() async {

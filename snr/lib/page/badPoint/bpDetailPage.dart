@@ -57,6 +57,14 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
   var confirmCount = "0";
   ///扣點筆數
   var bpCount = "0";
+  ///小計總數
+  var totalCount = 0;
+  ///裝機總數
+  var instCount = 0;
+  ///維修總數
+  var fixCount = 0;
+  ///扣點總數
+  var pointCount = 0;
   //所選日期
   var selectDate = formatDate(DateTime.now(), [yyyy,'-',mm]);
   ///是否是今日
@@ -101,11 +109,11 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            child: Text(CommonUtils.getLocale(context).text_wkPoint, style: TextStyle(color: Colors.white, fontSize: MyScreen.normalPageFontSize(context))),
+            child: Text(CommonUtils.getLocale(context).text_wkPoint, style: TextStyle(color: Colors.yellow, fontSize: MyScreen.normalPageFontSize(context))),
           ),
           SizedBox(),
           Container(
-            child: Text(CommonUtils.getLocale(context).text_snrPoint, style: TextStyle(color: Colors.yellow,fontSize: MyScreen.normalPageFontSize(context))),
+            child: Text(CommonUtils.getLocale(context).text_snrPoint, style: TextStyle(color: Colors.white,fontSize: MyScreen.normalPageFontSize(context))),
           ),
           SizedBox(),
           ButtonTheme(
@@ -153,6 +161,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                 }
                 clearData();
                 setState(() {
+                  isEnableStatistic = false;
                   nowBtnType = buttonType.confirm;
                   bpPage = "1";
                   var list = _getStore().state.bpList;
@@ -186,6 +195,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                 }
                 clearData();
                 setState(() {
+                  isEnableStatistic = false;
                   nowBtnType = buttonType.bp;
                   bpPage = "2";
                   var list = _getStore().state.bpList;
@@ -220,8 +230,8 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                 clearData();
                 setState(() {
                   isEnableStatistic = true;
-                  nowBtnType = buttonType.bp;
-                  bpPage = "2";
+                  nowBtnType = buttonType.list;
+                  bpPage = "3";
                   var list = _getStore().state.bpaList;
                   pullLoadWidgetControl.dataList = list;
                   if (pullLoadWidgetControl.dataList.length == 0) {
@@ -441,7 +451,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
               children: <Widget>[
                 Container(
                   width: (_deviceWidth8() * 2) - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_total + "人", TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(CommonUtils.getLocale(context).text_total + "${dataArray.length}人", TextStyle(color: Colors.black), context),
                 ),
                 _buildLineHeight(),
                 Container(
@@ -451,17 +461,17 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                 _buildLineHeight(),
                 Container(
                   width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_total_s, TextStyle(color: Colors.black), context),
+                  child: _autoTextSize("$totalCount", TextStyle(color: Colors.black), context),
                 ),
                 _buildLineHeightRed(),
                 Container(
                   width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_inst, TextStyle(color: Colors.black), context),
+                  child: _autoTextSize("$instCount", TextStyle(color: Colors.black), context),
                 ),
                 _buildLineHeightRed(),
                 Container(
                   width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_maintain, TextStyle(color: Colors.black), context),
+                  child: _autoTextSize("$fixCount", TextStyle(color: Colors.black), context),
                 ),
                 _buildLineHeight(),
                 Container(
@@ -471,7 +481,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                 _buildLineHeight(),
                 Container(
                   width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_bp, TextStyle(color: Colors.red), context),
+                  child: _autoTextSize("$pointCount", TextStyle(color: Colors.red), context),
                 ),
               ],
             ),
@@ -567,6 +577,13 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
     final dic = json.decode(configData);
     config = dic;
   } 
+  ///清除資料
+  cleanData() {
+    totalCount = 0;
+    fixCount = 0;
+    instCount = 0;
+    pointCount = 0;
+  }
   ///get api data
   getApiDataList() async {
     //自移之外
@@ -611,6 +628,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
       }
     }
     else {
+      cleanData();
       //統計按鈕call這
       var res = await getApiDataList();
       if (res != null && res.result) {
@@ -621,6 +639,10 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
         
         if (dataArray.length > 0 ) {
           for (var dic in dataArray) {
+            totalCount += int.parse(dic["Total"]);
+            fixCount += int.parse(dic["Fix"]);
+            pointCount += int.parse(dic["Points"]);
+            instCount += int.parse(dic['Inst']);
             list.add(BpAnalyzeTableCell.fromJson(dic));
           }
         }
@@ -662,7 +684,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: CommonUtils.getLocale(context).text_transform,
+                      text: CommonUtils.getLocale(context).text_refresh,
                       textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
@@ -679,16 +701,11 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: CommonUtils.getLocale(context).text_sort,
+                      text: '',
                       textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
-                        if (isLoading) {
-                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                          return;
-                        }
-                        showSortAlertSheetController(context);
                       },
                     ),
                   ),
@@ -714,16 +731,11 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: CommonUtils.getLocale(context).text_search,
+                      text: '',
                       textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
-                        if (isLoading) {
-                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                          return;
-                        }
-                        showSearchAlertSheetController(context,dataArray);
                       },
                     ),
                   ),

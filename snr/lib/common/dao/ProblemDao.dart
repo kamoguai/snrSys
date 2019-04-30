@@ -9,7 +9,10 @@ import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/net/Api.dart';
 import 'package:snr/common/redux/DefaultTableCellReducer.dart';
-
+/**
+ * 問題 dao
+ * Date: 2014-04-10
+ */
 class ProblemDao {
   ///地區問題
   static getProblemList(Store store, {type, city, sort, hub}) async {
