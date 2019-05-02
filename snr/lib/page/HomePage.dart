@@ -854,7 +854,7 @@ class _HomePageState extends State<HomePage>
                       minWidth: MyScreen.homePageBarButtonWidth(context),
                       child: new MyToolButton(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                        text: "刷新",
+                        text: CommonUtils.getLocale(context).text_refresh,
                         textColor: Colors.white,
                         color: Colors.transparent,
                         fontSize: MyScreen.homePageFontSize(context),
@@ -872,7 +872,7 @@ class _HomePageState extends State<HomePage>
                       minWidth: MyScreen.homePageBarButtonWidth(context),
                       child: new MyToolButton(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                        text: "分析",
+                        text: CommonUtils.getLocale(context).common_toolBar_analyze,
                         textColor: Colors.white,
                         color: Colors.transparent,
                         fontSize: MyScreen.homePageFontSize(context),
@@ -903,12 +903,12 @@ class _HomePageState extends State<HomePage>
                       minWidth: MyScreen.homePageBarButtonWidth(context),
                       child: new MyToolButton(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                        text: "設定",
+                        text: CommonUtils.getLocale(context).common_toolBar_set,
                         textColor: Colors.white,
                         color: Colors.transparent,
                         fontSize: MyScreen.homePageFontSize(context),
                         onPress: () {
-                          print("123");
+                          NavigatorUtils.goInstructions(context);
                         },
                       ),
                     ),
@@ -916,7 +916,7 @@ class _HomePageState extends State<HomePage>
                       minWidth: MyScreen.homePageBarButtonWidth(context),
                       child: new MyToolButton(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                        text: "返回",
+                        text: CommonUtils.getLocale(context).text_back,
                         textColor: Colors.white,
                         color: Colors.transparent,
                         fontSize: MyScreen.homePageFontSize(context),

@@ -276,4 +276,12 @@ abstract class MyStringBase {
   String text_pipeA;
 
   String text_noFix;
+
+  String text_intructions;
+
+  String text_jumpSetting;
+
+  String text_paramSetting;
+
+  String text_standar;
 }

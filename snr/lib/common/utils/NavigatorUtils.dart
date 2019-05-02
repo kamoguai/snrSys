@@ -21,6 +21,7 @@ import 'package:snr/page/problem/ProblemDetial.dart';
 import 'package:snr/page/assignFix/AssignFixListPage.dart';
 import 'package:snr/page/publicworks/PublicworksDetailPage.dart';
 import 'package:snr/page/publicworks/PublicworksListPage.dart';
+import 'package:snr/page/setting/InstructionsPage.dart';
 import 'package:snr/page/wrongPlace/WrongPlaceDetailPage.dart';
 
 /**
@@ -136,5 +137,9 @@ class NavigatorUtils {
   ///鎖HP詳情頁面
   static goHiPassDetail(BuildContext context,) {
     NavigatorRouter(context, new HiPassDetailPage());
+  }
+  ///設定說明頁面
+  static goInstructions(BuildContext context) {
+    NavigatorRouter(context, new InstructionsPage());
   }
 }

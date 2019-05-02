@@ -25,7 +25,7 @@ class AssignFixDao {
         mainDataArray = res.data["ReturnData"];
       }
       else {
-        Fluttertoast.showToast(msg: res.data['MSG']);
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
         return new DataResult(null, false);
       }
       if (mainDataArray.length > 0) {
@@ -53,7 +53,7 @@ class AssignFixDao {
         mainDataArray = res.data["ReturnData"];
       }
       else {
-        Fluttertoast.showToast(msg: res.data['MSG']);
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
         return new DataResult(null, false);
       }
       if (mainDataArray.length > 0) {
@@ -130,7 +130,7 @@ class AssignFixDao {
         mainDataArray = res.data["ReturnData"];
       }
       else {
-        Fluttertoast.showToast(msg: res.data['MSG']);
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
         return new DataResult(null, false);
       }
       if (mainDataArray.length > 0) {

@@ -503,7 +503,7 @@ class MyScreen {
       fontSize = MyConstant.normalTextSize;
     }
     else {
-      fontSize = MyConstant.smallTextSize;
+      fontSize = MyConstant.normalTextSize;
     }
     return fontSize;
   }

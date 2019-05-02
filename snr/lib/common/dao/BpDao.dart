@@ -23,7 +23,7 @@ class BpDao {
         return new DataResult(mainDataArray, true);
       }
       else {
-        Fluttertoast.showToast(msg: res.data['MSG']);
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
         return new DataResult(null, false);
       }
     } else {
@@ -43,7 +43,7 @@ class BpDao {
         return new DataResult(mainDataArray, true);
       }
       else {
-        Fluttertoast.showToast(msg: res.data['MSG']);
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
         return new DataResult(null, false);
       }
     } else {

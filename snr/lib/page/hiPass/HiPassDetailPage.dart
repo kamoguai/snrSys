@@ -41,23 +41,25 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
   ///snr設定檔
   var config;
   ///現在按鈕enum
-  var nowType = buttonType.wp1;
+  var nowType = buttonType.intranet;
   ///現在appbar按鈕enum
-  var nowAppBarType = appBarBtnType.noplace;
+  var nowAppBarType = appBarBtnType.hp;
   ///hub
   var strHub = "";
   ///現在功能
   var typevalue = "1";
   ///同上
-  var typeof = "NONODE";
+  var typeof = "HP";
   ///內網筆數
-  var intraCount = "0";
+  var intraCount = 0;
   ///外網筆數
-  var extraCount = "0";
+  var extraCount = 0;
   ///管障筆數
-  var pipeCount = "0";
+  var pipeCount = 0;
   ///拒修筆數
-  var noFixCount = "0";
+  var noFixCount = 0;
+  ///config snr顏色
+  var netType = "EXT";
   /// user model
   User user;
   /// sso model
@@ -66,11 +68,13 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
   final List<String> toTransformArray = [];
   ///數據資料arr
   final List<dynamic> dataArray = [];
+  final List<dynamic> extraArray = [];
+  final List<dynamic> intraArray = [];
   ///列表顯示的物件
   _renderItem(index) {
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,netType: netType ,);
   }
 
   ///appbar按鈕群
@@ -82,31 +86,33 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
           Container(
             width: deviceWidth4(),
               child: MyToolButton(
-              text: CommonUtils.getLocale(context).text_noPlace,
+              text: strCity == "" ?  '區:' + CommonUtils.getLocale(context).text_all : strCity,
               fontSize: MyScreen.appBarFontSize(context),
-              textColor: nowAppBarType == appBarBtnType.noplace ? Colors.yellow : Colors.white,
+              textColor: Colors.white,
               padding: EdgeInsets.only(left: 5.0, right: 5.0),
-              onPress: (){
-                
+              onPress: () {
+                if (isLoading) {
+                  Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                  return;
+                }
+                showCityAlertSheetController(context);
               },
             ),
           ),
           Container(
             width: deviceWidth4(),
               child: MyToolButton(
-              text: CommonUtils.getLocale(context).text_wp2,
+              text: CommonUtils.getLocale(context).text_hp,
               fontSize: MyScreen.appBarFontSize(context),
-              textColor: nowAppBarType == appBarBtnType.wp2 ? Colors.yellow : Colors.white,
+              textColor: nowAppBarType == appBarBtnType.hp ? Colors.yellow : Colors.white,
               padding: EdgeInsets.only(left: 5.0, right: 5.0),
               onPress: (){
                 setState(() {
-                  clearData();
-                  nowAppBarType = appBarBtnType.wp2;
-                  var list = _getStore().state.defaultList;
-                  pullLoadWidgetControl.dataList = list;
-                  if (pullLoadWidgetControl.dataList.length == 0) {
-                    showRefreshLoading();
-                  }
+                  pullLoadWidgetControl.dataList.clear();
+                  nowAppBarType = appBarBtnType.hp;
+                  nowType = buttonType.intranet;
+                  typevalue = "1";
+                  showRefreshLoading();
                 });
               },
             ),
@@ -114,19 +120,17 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
           Container(
             width: deviceWidth4(),
               child: MyToolButton(
-              text: 'CM-NG',
-              textColor: nowAppBarType == appBarBtnType.cm ? Colors.yellow : Colors.white,
+              text: CommonUtils.getLocale(context).home_cmtsTitle_lhp,
+              textColor: nowAppBarType == appBarBtnType.lowhp ? Colors.yellow : Colors.white,
               fontSize: MyScreen.appBarFontSize(context),
               padding: EdgeInsets.only(left: 5.0, right: 5.0),
               onPress: (){
                 setState(() {
-                  clearData();
-                  nowAppBarType = appBarBtnType.cm;
-                  var list = _getStore().state.wrongPlaceList;
-                  pullLoadWidgetControl.dataList = list;
-                  if (pullLoadWidgetControl.dataList.length == 0) {
-                    showRefreshLoading();
-                  }
+                  pullLoadWidgetControl.dataList.clear();
+                  nowAppBarType = appBarBtnType.lowhp;
+                  nowType = buttonType.intranet;
+                  typevalue = "0";
+                  showRefreshLoading();
                 });
               },
             ),
@@ -134,20 +138,12 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
           Container(
             width: deviceWidth4(),
               child: MyToolButton(
-              text: 'STB-NG',
-              textColor: nowAppBarType == appBarBtnType.stb ? Colors.yellow : Colors.white,
+              text: '',
+              textColor: Colors.white,
               fontSize: MyScreen.appBarFontSize(context),
               padding: EdgeInsets.only(left: 5.0, right: 5.0),
               onPress: (){
-                setState(() {
-                  clearData();
-                  nowAppBarType = appBarBtnType.stb;
-                  var list = _getStore().state.wrongPlaceList;
-                  pullLoadWidgetControl.dataList = list;
-                  if (pullLoadWidgetControl.dataList.length == 0) {
-                    showRefreshLoading();
-                  }
-                });
+               
               },
             ),
           ),
@@ -172,25 +168,19 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
                   borderRadius:
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
-              text: CommonUtils.getLocale(context)
-                  .text_intranet + "-${intraCount}",
+              text: CommonUtils.getLocale(context).text_intranet + "-${intraCount}",
               color: Color(MyColors.hexFromStr("#eeffef")),
               fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.wp1 ? Colors.red : Colors.grey[700],
+              textColor: nowType == buttonType.intranet ? Colors.red : Colors.grey[700],
               onPress: () {
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                   return;
                 }
-                clearData();
+                pullLoadWidgetControl.dataList.clear();
                 setState(() {
-                  nowType = buttonType.wp1;
-                  typeof = "WP1";
-                  var list = _getStore().state.defaultList;
-                  pullLoadWidgetControl.dataList = list;
-                  if (pullLoadWidgetControl.dataList.length == 0) {
-                    showRefreshLoading();
-                  }
+                  nowType = buttonType.intranet;
+                  _intraBntEvent();
                 });
               },
             ),
@@ -205,25 +195,19 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
                   borderRadius:
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
-              text: CommonUtils.getLocale(context)
-                  .text_extranet + "-${extraCount}",
+              text: CommonUtils.getLocale(context).text_extranet + "-${extraCount}",
               color: Color(MyColors.hexFromStr("#f0fcff")),
               fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.wp2 ? Colors.red : Colors.grey[700],
+              textColor: nowType == buttonType.extranet ? Colors.red : Colors.grey[700],
               onPress: () {
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                   return;
                 }
-                clearData();
+                pullLoadWidgetControl.dataList.clear();
                 setState(() {
-                  nowType = buttonType.wp2;
-                  typeof = "WP2";
-                  var list = _getStore().state.defaultList;
-                  pullLoadWidgetControl.dataList = list;
-                  if (pullLoadWidgetControl.dataList.length == 0) {
-                    showRefreshLoading();
-                  }
+                  nowType = buttonType.extranet;
+                  _extraBntEvent();
                 });
               },
             ),
@@ -242,21 +226,16 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
                   .text_pipeA + "-${pipeCount}",
               color: Color(MyColors.hexFromStr("#fafff2")),
               fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.wp3 ? Colors.red : Colors.grey[700],
+              textColor: nowType == buttonType.pipe ? Colors.red : Colors.grey[700],
               onPress: () {
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                   return;
                 }
-                clearData();
+                pullLoadWidgetControl.dataList.clear();
                 setState(() {
-                  nowType = buttonType.wp3;
-                  typeof = "WP3";
-                  var list = _getStore().state.defaultList;
-                  pullLoadWidgetControl.dataList = list;
-                  if (pullLoadWidgetControl.dataList.length == 0) {
-                    showRefreshLoading();
-                  }
+                  nowType = buttonType.pipe;
+                  _pipeBtnEvent();
                 });
               },
             ),
@@ -271,24 +250,19 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
                   borderRadius:
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
-              text: CommonUtils.getLocale(context).text_noFix,
+              text: CommonUtils.getLocale(context).text_noFix + "-$noFixCount",
               color: Color(MyColors.hexFromStr("#fef5f6")),
               fontSize: MyScreen.normalListPageFontSize(context),
-              textColor: nowType == buttonType.statistic ? Colors.red : Colors.grey[700],
+              textColor: nowType == buttonType.nofix ? Colors.red : Colors.grey[700],
               onPress: () {
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                   return;
                 }
-                clearData();
+                pullLoadWidgetControl.dataList.clear();
                 setState(() {
-                  nowType = buttonType.statistic;
-                  typeof = "statistic";
-                  var list = _getStore().state.wrongPlaceNodeList;
-                  pullLoadWidgetControl.dataList = list;
-                  if (pullLoadWidgetControl.dataList.length == 0) {
-                    showRefreshLoading();
-                  }
+                  nowType = buttonType.nofix;
+                  _noFixBtnEvent();
                 });
               },
             ),
@@ -460,19 +434,19 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
     List<String> sortArray = ["正常"];
     List<Widget> wList = [];
     
-    switch(nowAppBarType) {
-      case appBarBtnType.noplace:
-        sortArray = ["正常","派修","問題(可異)"];
+    switch(nowType) {
+      case buttonType.extranet:
+        sortArray = ["正常","可異","派修","觀察","管障","拒修(低HP)","追蹤"];
         break;
-      case appBarBtnType.wp2:
-      
-        // break;
-      case appBarBtnType.cm:
-
+      case buttonType.intranet:
+        sortArray = ["正常","可異","派修","觀察","管障","拒修(低HP)","追蹤"];
         break;
-      case appBarBtnType.stb:
-
-      break;
+      case buttonType.pipe:
+        sortArray = ["正常","低HP","可異","派修","追蹤","觀察","拒修(低HP)"];
+        break;
+      case buttonType.nofix:
+        sortArray = ["正常","低HP","可異","派修","追蹤","觀察","管障"];
+        break;
     }
       
     for (var sortStr in sortArray) {
@@ -480,50 +454,29 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
         CupertinoActionSheetAction(
           onPressed: () {
             switch (sortStr) {
-              case "派修":
-                typeStr = "FIX";
-                break;
-              case "低HP":
-                typeStr = "LOWHP";
-                break;
-              case "正常":
-                typeStr = "GOOD";
-                break;
               case "追蹤":
                 typeStr = "TRACK";
+                break;
+              case "管障":
+                typeStr = "PIPE";
+                break;
+              case "拒修(低HP)":
+                typeStr = "SUITE";
+                break;
+              case "派修":
+                typeStr = "FIX";
                 break;
               case "可異":
                 typeStr = "VBAD";
                 break;
-              case "問題":
-                typeStr = "PROBLEM";
+              case "正常":
+                typeStr = "GOOD";
                 break;
-              case "無下行(超時)" :
-                typeStr = "NODS";
+              case "低HP":
+                typeStr = "LOWHP";
                 break;
-              case "離線":
-                typeStr = "OFFLINE";
-                break;
-              case "其他":
-                typeStr = "OTHER";
-                break;
-              case "測機(追蹤)":
-                typeStr = "TRACK4";
-                break;
-              case "觀察(派修)":
-                typeStr = "WATCH";
-                break;
-              case "完工":
-                typeStr = "FINISH";
-                break;
-              case "可優":
-                typeStr = "VBAD2";
-                break;
-              case "NG":
-                typeStr = "NG";
-                break;
-              case "問題(可異)":
-                typeStr = "PROBLEM";
+              case "觀察":
+                typeStr = "LWATCH";
                 break;
               default:
                 break;
@@ -539,42 +492,38 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
   }
   _transformDialog(BuildContext context, {to,sortStr}) {
     Future.delayed(const Duration(seconds: 1), () {
-      if (sortStr == "自移" || sortStr == "停訊") {
-        
-      }
-      else {
-        showDialog(
-          context: context,
-          builder: (context) {
-            var dialog = CupertinoAlertDialog(
-              content: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: '確定將選取的${toTransformArray.length}筆資料轉至\n', 
-                  style: TextStyle(color: Colors.black, ),
-                  children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, )),]
-                ),
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          var dialog = CupertinoAlertDialog(
+            content: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                text: '確定將選取的${toTransformArray.length}筆資料轉至\n', 
+                style: TextStyle(color: Colors.black, ),
+                children: <TextSpan>[TextSpan(text: '${sortStr}', style: TextStyle(color: Colors.blue, )),]
               ),
-              actions: <Widget>[
-                CupertinoButton(
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  child: Text('取消', style: TextStyle(color: Colors.red),),
-                ),
-                CupertinoButton(
-                  onPressed: (){
-                    postTransferAPI(to);
-                    Navigator.pop(context);
-                  },
-                  child: Text('確定', style: TextStyle(color: Colors.blue),),
-                ),
-              ],
-            );
-            return dialog;  
-          }
-        );
-      }
+            ),
+            actions: <Widget>[
+              CupertinoButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+                child: Text('取消', style: TextStyle(color: Colors.red),),
+              ),
+              CupertinoButton(
+                onPressed: (){
+                  postTransferAPI(to);
+                  Navigator.pop(context);
+                },
+                child: Text('確定', style: TextStyle(color: Colors.blue),),
+              ),
+            ],
+          );
+          return dialog;  
+        }
+      );
     });
   } 
   ///跳轉function
@@ -701,12 +650,55 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
       ),
     );
   }
+  ///外網按鈕event
+  _extraBntEvent() {
+    extraArray.clear();
+    intraArray.clear();
+    if(nowAppBarType == appBarBtnType.hp) {
+      typevalue = "1";
+      typeof = "HP";
+    }
+    else {
+      typevalue = "0";
+      typeof = "LOWHP";
+    }
+    showRefreshLoading();
+    
+  }
+  ///外網按鈕event
+  _intraBntEvent() {
+    extraArray.clear();
+    intraArray.clear();
+    if(nowAppBarType == appBarBtnType.hp) {
+      typevalue = "1";
+      typeof = "HP";
+    }
+    else {
+      typevalue = "0";
+      typeof = "LOWHP";
+    }
+    showRefreshLoading();
+    
+  }
+  ///區障
+  _pipeBtnEvent() {
+    typevalue = "2";
+    typeof = "PIPE";
+    showRefreshLoading();
+  }
+  ///拒修
+  _noFixBtnEvent() {
+    typevalue = "3";
+    typeof = "SUITE";
+    showRefreshLoading();
+  }
   ///body內容
   Widget getBody() {
      Widget body;
      body = Column(
        children: <Widget>[
         _renderHeader(),
+        buildLine(),
         Expanded(
           child: _renderBody(),
         ),
@@ -722,38 +714,76 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
   @override
   Future<Null> handleRefresh() async {
     dataArray.clear();
+
     if (isLoading) {
       return null;
     }
     isLoading = true;
-      //統計按鈕之外都call這
-      if (nowType != buttonType.statistic) {
-        var res = await getApiDataList();
-        if (res != null && res.result) {
-          List<DefaultTableCell> list = new List();
-          if (res.data["Data"] != null && res.data["Data"] != []) {
-            dataArray.addAll(res.data["Data"]);
-            intraCount = res.data["WP1"];
-            extraCount = res.data["WP2"];
-            pipeCount = res.data["WP3"];
+    //統計按鈕之外都call這
+    var res = await getApiDataList();
+    if (res != null && res.result) {
+      List<DefaultTableCell> list = new List();
+      
+      if (res.data["Data"] != null && res.data["Data"] != []) {
+        dataArray.addAll(res.data["Data"]);
+        pipeCount = res.data["PIPE"];
+        noFixCount = res.data["SUITE"];
+      }
+      if (dataArray.length > 0 ) {
+        if (typevalue == "0" || typevalue == "1") {
+          extraArray.clear();
+          intraArray.clear();
+          for (var dic in dataArray) {
+            if (dic['BB'] != '內網'){
+              extraArray.add(dic);
+            }
+            else {
+              intraArray.add(dic);
+            }
           }
-          if (dataArray.length > 0 ) {
+          extraCount = extraArray.length;
+          intraCount = intraArray.length;
+        }
+      }
+      extraArray.sort((a,b) => b["BB"].length.compareTo(a["BB"].length));
+      if (dataArray.length > 0) {
+        switch (nowType) {
+          case buttonType.intranet:
+            for (var dic in dataArray) {
+              intraArray.add(dic);
+            }
+            for (var dic in intraArray) {
+              list.add(DefaultTableCell.fromJson(dic));
+            }
+            break;
+          case buttonType.extranet:
+          for (var dic in dataArray) {
+              extraArray.add(dic);
+            }
+            for (var dic in extraArray) {
+              list.add(DefaultTableCell.fromJson(dic));
+            }
+            break;
+          default:
             for (var dic in dataArray) {
               list.add(DefaultTableCell.fromJson(dic));
             }
-          }
-          
-          setState(() {
-            toTransformArray.clear();
-            pullLoadWidgetControl.dataList.clear();
-            clearData();
-
-            pullLoadWidgetControl.dataList.addAll(list);
-            pullLoadWidgetControl.needLoadMore = false;
-          });
+            break;
         }
       }
       
+      setState(() {
+        toTransformArray.clear();
+        pullLoadWidgetControl.dataList.clear();
+        pullLoadWidgetControl.dataList.addAll(list);
+        pullLoadWidgetControl.needLoadMore = false;
+      });
+    }
+    else {
+      setState(() {
+        pullLoadWidgetControl.dataList.clear();
+      });
+    }
     isLoading = false;
     return null;
   }
@@ -849,16 +879,12 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
                     minWidth: MyScreen.homePageBarButtonWidth(context),
                     child: new MyToolButton(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      text: CommonUtils.getLocale(context).text_sort,
+                      text: '',
                       textColor: Colors.white,
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
-                        if (isLoading) {
-                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                          return;
-                        }
-                        showSortAlertSheetController(context);
+                        
                       },
                     ),
                   ),
@@ -929,15 +955,13 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
 }
 
 enum buttonType {
-  wp1,
-  wp2,
-  wp3,
-  statistic,
+  intranet,
+  extranet,
+  pipe,
+  nofix,
 }
 
 enum appBarBtnType {
-  noplace,
-  wp2,
-  cm,
-  stb
+  hp,
+  lowhp,
 }
