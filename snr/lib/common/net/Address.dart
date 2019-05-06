@@ -273,4 +273,36 @@ class Address {
   static getQueryHiPASSAPI(strHiPass, area, sort, hub) {
     return "${kSNRHostName}SNRProcess?FunctionName=QueryHiPass&HiPass=${strHiPass}&City=${area}&Sort=${sort}&Hub=${hub}";
   }
+  ///跳頻-cmts
+  static getQueryJumpFreqCMTSAPI() {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryJumpFreqCMTS";
+  }
+  ///跳頻-時段時間
+  static getQuerySwitchDelayTimeAPI() {
+    return "${kSNRHostName}SNRProcess?FunctionName=QuerySwitchDelayTime";
+  }
+  ///跳頻-四個區段
+  static getQueryAutoFrequenceTimeAPI() {
+    return "${kSNRHostName}SNRProcess?FunctionName=query_auto_freq_time";
+  }
+  ///跳頻-卡板
+  static getQueryJumpFreqCIFAPI(cType) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryJumpFreqCIF&CType=${cType}";
+  }
+  ///跳頻-log
+  static getQueryJumpFreqLOGAPI() {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryJumpFreqLOG";
+  }
+  ///跳頻-移頻
+  static postUploadSwitchFreqAPI(cmts, cif, accName, delay) {
+    String str = "${kSNRHostPingName}/CMTSProcess.php?Action=SwitchFreq&CMTS=$cmts&CIF=$cif&AccName=$accName";
+    if (delay != "") {
+      str += "&Delay=${delay}";
+    }
+    return str;
+  }
+  ///跳頻-自動跳頻時段
+  static setAutoFrequenceTimeAPI(time1, time2, time3, time4,) {
+    return "${kSNRHostName}SNRProcess?FunctionName=set_auto_freq_time&TIME1=$time1&TIME2=$time2&TIME3=$time3&TIME4=$time4";
+  }
 }
