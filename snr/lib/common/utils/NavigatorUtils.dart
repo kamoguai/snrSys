@@ -10,6 +10,7 @@ import 'package:snr/page/assignFix/FinishedDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedManDetailPage.dart';
 import 'package:snr/page/assignFix/FinishedStatisticPage.dart';
 import 'package:snr/page/badPoint/bpDetailPage.dart';
+import 'package:snr/page/bigPing/BigPingPage.dart';
 import 'package:snr/page/bigbad/BigbadDetailPage.dart';
 import 'package:snr/page/bigbad/BigbadListPage.dart';
 import 'package:snr/page/hiPass/HiPassDetailPage.dart';
@@ -22,6 +23,7 @@ import 'package:snr/page/assignFix/AssignFixListPage.dart';
 import 'package:snr/page/publicworks/PublicworksDetailPage.dart';
 import 'package:snr/page/publicworks/PublicworksListPage.dart';
 import 'package:snr/page/setting/InstructionsPage.dart';
+import 'package:snr/page/setting/StandardPage.dart';
 import 'package:snr/page/wrongPlace/WrongPlaceDetailPage.dart';
 
 /**
@@ -141,5 +143,13 @@ class NavigatorUtils {
   ///設定說明頁面
   static goInstructions(BuildContext context) {
     NavigatorRouter(context, new InstructionsPage());
+  }
+  ///設定標準頁面
+  static goStandard(BuildContext context) {
+    NavigatorRouter(context, new StandardPage());
+  }
+  ///大PING頁面
+  static goBigPing(BuildContext context) {
+    NavigatorRouter(context, new BigPingPage());
   }
 }

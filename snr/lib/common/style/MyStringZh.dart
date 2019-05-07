@@ -289,4 +289,6 @@ class MyStringZh extends MyStringBase {
   String text_paramSetting = "參數設定";
   @override
   String text_standar = "標準";
+  @override
+  String text_settingPage = "設定頁面";
 }

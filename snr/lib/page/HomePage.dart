@@ -517,7 +517,7 @@ class _HomePageState extends State<HomePage>
     }
     return GestureDetector(
       child: Container(
-        height: 25.0,
+        height: listHeight(),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
@@ -588,7 +588,7 @@ class _HomePageState extends State<HomePage>
     if(bigbadList.length > 0) {
       list = Container(
         color: Color(MyColors.hexFromStr('#fafff9')),
-        height: tableHeight,
+        height: listHeight() * 3,
         child: ListView.builder(
           itemBuilder: _buildBigbadItem,
           itemCount: bigbadList.length,
@@ -896,7 +896,7 @@ class _HomePageState extends State<HomePage>
                             fontSize: MyScreen.homePageFontSize(context)),
                       ),
                       onPressed: () {
-                        print(123);
+                        NavigatorUtils.goBigPing(context);
                       },
                     )),
                     ButtonTheme(
@@ -931,19 +931,7 @@ class _HomePageState extends State<HomePage>
               ),
             ),
           )
-
-          /*
-      child: new MyTabBarWidget(
-        type: MyTabBarWidget.BOTTOM_TAB,
-        tabItems: tabs,
-        tabViews: <Widget>[
-
-        ],
-        backgroundColor: MyColors.primarySwatch,
-        indicatorColor: Color(MyColors.white),
-      ), 
-      */
-          );
+        );
     });
   }
 }

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/page/setting/InstructionsDetailPage.dart';
 import 'package:snr/page/setting/JumpSettingPage.dart';
 import 'package:snr/page/setting/ParamSettingPage.dart';
@@ -12,8 +13,12 @@ import 'package:snr/widget/SettingTabBarWidget.dart';
  * 操作說明頁面
  * Date: 2019-05-02
  */
-class InstructionsPage extends StatelessWidget {
+class InstructionsPage extends StatefulWidget {
+  @override
+  _InstructionsPageState createState() => _InstructionsPageState();
+}
 
+class _InstructionsPageState extends State<InstructionsPage> {
   ///取得裝置width並切6份
   deviceWidth3(context) {
     var width = MediaQuery.of(context).size.width;
@@ -28,7 +33,7 @@ class InstructionsPage extends StatelessWidget {
           Container(
             alignment: Alignment.center,
             width: deviceWidth3(context),
-            child: Text(CommonUtils.getLocale(context).text_paramSetting, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: MyScreen.appBarFontSize(context)),),
+            child: Text(CommonUtils.getLocale(context).text_settingPage, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: MyScreen.appBarFontSize(context)),),
           ),
           Container(
             alignment: Alignment.center,
@@ -105,7 +110,7 @@ class InstructionsPage extends StatelessWidget {
             color: Colors.transparent,
             fontSize: MyScreen.homePageFontSize(context),
             onPress: () {
-              
+              NavigatorUtils.goStandard(context);
             },
           ),
         ),

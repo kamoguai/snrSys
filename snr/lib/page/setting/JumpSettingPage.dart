@@ -14,6 +14,7 @@ import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 
 class JumpSettingPage extends StatefulWidget {
+  JumpSettingPage({Key key}) : super(key: key);
   @override
   _JumpSettingPageState createState() => _JumpSettingPageState();
 }
@@ -111,7 +112,7 @@ class _JumpSettingPageState extends State<JumpSettingPage> with AutomaticKeepAli
 
   ///自動字大小
   autoTextSize(text, style, BuildContext context) {
-    var fontSize = MyScreen.normalListPageFontSize_s(context);
+    var fontSize = MyScreen.defaultTableCellFontSize(context);
     var fontStyle = TextStyle(fontSize: fontSize);
     return AutoSizeText(
       text,
@@ -126,6 +127,7 @@ class _JumpSettingPageState extends State<JumpSettingPage> with AutomaticKeepAli
       alignment: Alignment.center,
       decoration: BoxDecoration( color: color,border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
       width: width,
+      // height: height,
       child: child,
     );
   }
@@ -275,7 +277,7 @@ class _JumpSettingPageState extends State<JumpSettingPage> with AutomaticKeepAli
   Widget _autoJumpView() {
     return _container(
       color: Color(MyColors.hexFromStr('#f4f9e9')),
-      height: listHeight(context) * 3,
+      // height: listHeight(context) * 3,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[

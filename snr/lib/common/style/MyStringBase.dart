@@ -284,4 +284,6 @@ abstract class MyStringBase {
   String text_paramSetting;
 
   String text_standar;
+
+  String text_settingPage;
 }

@@ -12,6 +12,8 @@ class ParamSettingPage extends StatefulWidget {
 
 class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepAliveClientMixin<ParamSettingPage>{
 
+  //是否能編輯
+  var isEdit = false;
 
   getApiDataList(){
 
@@ -38,6 +40,12 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
       width: 1.0,
       color: Colors.grey,
     );
+  }
+
+ ///取得裝置width並切2份
+  deviceWidth2(context) {
+    var width = MediaQuery.of(context).size.width;
+    return width / 2;
   }
 
   ///取得裝置width並切4份
@@ -114,7 +122,6 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
 
   Widget getBody() {
     Widget body;
-
     body = Column(
       children: <Widget>[
         _container(child: _autoTextSize('SNR監控標準', TextStyle(color: Colors.black, fontWeight: FontWeight.bold),context), height: listHeight(context)),
@@ -125,6 +132,7 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Container(
+                width: deviceWidth2(context) - 1,
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -134,8 +142,10 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.,
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        controller: TextEditingController(text: '34'),
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -152,8 +162,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -169,6 +180,7 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
               ),
               buildLineHeight(context),
               Container(
+                width: deviceWidth2(context),
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -178,8 +190,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -196,8 +209,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -220,6 +234,7 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Container(
+                width: deviceWidth2(context) - 1,
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -229,8 +244,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.,
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -247,8 +263,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -264,6 +281,7 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
               ),
               buildLineHeight(context),
               Container(
+                width: deviceWidth2(context),
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -273,8 +291,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -291,8 +310,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -316,6 +336,7 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Container(
+                width: deviceWidth2(context) - 1,
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -325,8 +346,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.,
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -343,8 +365,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -360,6 +383,7 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
               ),
               buildLineHeight(context),
               Container(
+                width: deviceWidth2(context),
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -369,8 +393,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -387,8 +412,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -411,6 +437,7 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Container(
+                width: deviceWidth2(context) - 1,
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -420,8 +447,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.,
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -438,8 +466,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -455,6 +484,7 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
               ),
               buildLineHeight(context),
               Container(
+                width: deviceWidth2(context),
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -464,8 +494,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -482,8 +513,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -507,6 +539,7 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Container(
+                width: deviceWidth2(context) - 1,
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -516,8 +549,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.,
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -534,8 +568,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -551,6 +586,7 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
               ),
               buildLineHeight(context),
               Container(
+                width: deviceWidth2(context),
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -560,8 +596,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -578,8 +615,9 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                     Container(
                       width: 30.0,
                       child: TextField(
-                        // keyboardType: TextInputType.numberWithOptions(),
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        enabled: isEdit,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(2.0),
@@ -596,18 +634,331 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
             ],
           )
         ),
+        _container(
+          height: listHeight(context),
+          color: Color(MyColors.hexFromStr('#f2f2f2')),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                width: deviceWidth2(context) - 1,
+                padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                child: _autoTextSize('設定日期:', TextStyle(color: Colors.grey), context),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth2(context),
+                padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                child: _autoTextSize('設定人', TextStyle(color: Colors.grey), context),
+              ),
+            ],
+          )
+        ),
+        Container(height: listHeight(context), decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid)))),
+        _container(
+          height: listHeight(context),
+          color: Color(MyColors.hexFromStr('#ffeef1')),
+          child: _autoTextSize('上行Mhz(頻差6.4)', TextStyle(color: Colors.black), context)
+        ),
+        _container(
+          height: listHeight(context),
+          child: Row(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                width: (deviceWidth6(context) * 2) - 1,
+                child: _autoTextSize_s('上行第一段頻率', TextStyle(color: Colors.black), context),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) - 1,
+                child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) - 1,
+                child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) - 1,
+                child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) ,
+                child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+            ],
+          )
+        ),
+        _container(
+          height: listHeight(context),
+          child: Row(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                width: (deviceWidth6(context) * 2) - 1,
+                child: _autoTextSize_s('上行第二段頻率', TextStyle(color: Colors.black), context),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) - 1,
+                child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) - 1,
+               child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) - 1,
+                child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) ,
+                child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+            ],
+          )
+        ),
+        _container(
+          height: listHeight(context),
+          child: Row(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                width: (deviceWidth6(context) * 2) - 1,
+                child: _autoTextSize_s('上行第三段頻率', TextStyle(color: Colors.black), context),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) - 1,
+                child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) - 1,
+                child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) - 1,
+                child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth6(context) ,
+                child: TextField(
+                  enabled: isEdit,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(2.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0),borderSide: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))  
+                  ),
+                  onChanged: (String value) {
+                    
+                  },
+                ),
+              ),
+            ],
+          )
+        ),
+        _container(
+          height: listHeight(context),
+          color: Color(MyColors.hexFromStr('#f2f2f2')),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                width: deviceWidth2(context) - 1,
+                padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                child: _autoTextSize('設定日期:', TextStyle(color: Colors.grey), context),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth2(context),
+                padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                child: _autoTextSize('設定人', TextStyle(color: Colors.grey), context),
+              ),
+            ],
+          )
+        ),
+        Container(height: listHeight(context), decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid)))),
+        _container(
+          height: titleHeight(context),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: deviceWidth2(context) - 1,
+                child: FlatButton(
+                  child: _autoTextSize('修改', TextStyle(color: Colors.green), context),
+                  onPressed: () {
+                    setState(() {
+                      isEdit = true;
+                    });
+                  },
+                ),
+              ),
+              buildLineHeight(context),
+              Container(
+                width: deviceWidth2(context),
+                child: FlatButton(
+                  child: _autoTextSize('確定', TextStyle(color: Colors.blue), context),
+                  onPressed: () {
+                    setState(() {
+                      isEdit = false;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        )
       ],
     );
     return body;
   }
 
-  // @override
-  // bool get isRefreshFirst => false;
-
   @override
   void initState() {
     super.initState();
-    // isLoading = true;
 
     getApiDataList();
   }
@@ -626,6 +977,18 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
   bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
-    return getBody();
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Container(
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: <Widget>[
+            getBody()
+          ],
+        ),
+      ),
+    );
   }
 }
