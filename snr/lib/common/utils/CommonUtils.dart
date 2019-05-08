@@ -373,7 +373,8 @@ class CommonUtils {
         }
       }
     }
-    if(name == "DS0_PING" || name == "DS1_PING" || name == "DS2_PING" || name == "DS3_PING" || name == "DS4_PING" || name == "DS5_PING" || name == "DS6_PING" || name == "DS7_PING" ) {
+    // ping ds
+    if(name == "DSMER_PING" || name == "DS0_PING" || name == "DS1_PING" || name == "DS2_PING" || name == "DS3_PING" || name == "DS4_PING" || name == "DS5_PING" || name == "DS6_PING" || name == "DS7_PING" ) {
       if (double.parse(data) == null) {
         return MyColors.hexFromStr("#FF0000");
       }
@@ -383,6 +384,15 @@ class CommonUtils {
        else {
           return (double.parse(data) >= double.parse(strUPDBMAX_INT) ? MyColors.hexFromStr("#FF0000") : MyColors.hexFromStr("#0000FF"));
        }
+    }
+    // ping dp
+    if(name == "DSDB_PING" || name == "DP0_PING" || name == "DP1_PING" || name == "DP2_PING" || name == "DP3_PING" || name == "DP4_PING" || name == "DP5_PING" || name == "DP6_PING" || name == "DP7_PING" ) {
+      if (double.parse(data) == null) {
+        return MyColors.hexFromStr("#FF0000");
+      }
+      else {
+        return (double.parse(data) >= double.parse(strDOWNDBMIN) && double.parse(data) <= double.parse(strDOWNDBMAX) ? MyColors.hexFromStr("#000000") : MyColors.hexFromStr("#FF0000"));
+      }
     }
     // 上DS
     if (name == "DS0" || name == "DS1" || name == "DS2" || name == "DS3" || name == "DS4" || name == "DS5" || name == "DS6" || name == "DS7" ) {

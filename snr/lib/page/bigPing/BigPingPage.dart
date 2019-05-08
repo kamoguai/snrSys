@@ -8,6 +8,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
+import 'package:snr/common/dao/BigPingDao.dart';
 import 'package:snr/common/dao/DefaultTableDao.dart';
 import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/redux/SysState.dart';
@@ -15,6 +16,8 @@ import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/page/bigPing/BigPingTableItem.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
+import 'package:snr/widget/dialog/CPEDialog.dart';
+import 'package:snr/widget/dialog/FLAPDialog.dart';
 /**
  * 大PING頁面
  * Date: 2019-05-07
@@ -25,10 +28,27 @@ class BigPingPage extends StatefulWidget {
 }
 
 class _BigPingPageState extends State<BigPingPage> {
+  ///取得設定檔
   var config;
+  ///裝ping data
   Map<String,dynamic> dataArray = Map<String,dynamic>();
+  ///裝CPE data
+  Map<String,dynamic> cpeArray = Map<String,dynamic>();
+  ///裝FLAP data
+  Map<String,dynamic> flapArray = Map<String,dynamic>();
+  ///輸入框
   var textFiledStr = "";
+  ///是否讀取中
   var isLoading = false;
+  ///保留客編
+  var custNoStr = "";
+  ///保留客戶名
+  var custNameStr = "";
+  ///保留cmts
+  var cmtsStr = "";
+  ///保留cmmac
+  var cmmacStr = "";
+
   ///分隔線
   buildLine() {
     return new Container(
@@ -140,7 +160,7 @@ class _BigPingPageState extends State<BigPingPage> {
   _fourBtnAction(BuildContext context) {
     return Container(
       constraints: BoxConstraints.expand(height: 50),
-      padding: EdgeInsets.only(top: 2.0, bottom: 2.0,),
+      padding: EdgeInsets.only(top: 8.0, bottom: 8.0,),
       child: Row(
         children: <Widget>[
           Container(
@@ -150,7 +170,7 @@ class _BigPingPageState extends State<BigPingPage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0),side: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid)),
               textColor: Colors.black,
               color: Color(MyColors.hexFromStr('#ffeef1')),
-              fontSize: MyScreen.appBarFontSize(context),
+              fontSize: MyScreen.normalListPageFontSize(context),
               text: 'CW',
               onPress: () {
 
@@ -164,10 +184,26 @@ class _BigPingPageState extends State<BigPingPage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0),side: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid)),
               textColor: Colors.black,
               color: Color(MyColors.hexFromStr('#f1ffff')),
-              fontSize: MyScreen.appBarFontSize(context),
+              fontSize: MyScreen.normalListPageFontSize(context),
               text: 'CPE',
-              onPress: (){
-
+              onPress: () async{
+                if(dataArray.length < 1) {
+                  Fluttertoast.showToast(msg: '請先PING資料！');
+                  return;
+                }
+                if (isLoading) {
+                  Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                  return;
+                }
+                Fluttertoast.showToast(msg: '正在獲取資料中...');
+                var resData = await getCPEData();
+                Future.delayed(const Duration(seconds: 1),() {
+                  isLoading = false;
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => cpeDialog(context, resData)
+                  );
+                });
               },
             )
           ),
@@ -178,10 +214,26 @@ class _BigPingPageState extends State<BigPingPage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0),side: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid)),
               textColor: Colors.black,
               color: Color(MyColors.hexFromStr('#f5ffe9')),
-              fontSize: MyScreen.appBarFontSize(context),
+              fontSize: MyScreen.normalListPageFontSize_s(context),
               text: 'FLAP',
-              onPress: (){
-
+              onPress: () async {
+                if(dataArray.length < 1) {
+                  Fluttertoast.showToast(msg: '請先PING資料！');
+                  return;
+                }
+                if (isLoading) {
+                  Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                  return;
+                }
+                Fluttertoast.showToast(msg: '正在獲取資料中...');
+                var resData = await getFLAPData();
+                Future.delayed(const Duration(seconds: 1),() {
+                  isLoading = false;
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => flapDialog(context, resData)
+                  );
+                });
               },
             )
           ),
@@ -192,7 +244,7 @@ class _BigPingPageState extends State<BigPingPage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0),side: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid)),
               textColor: Colors.black,
               color: Color(MyColors.hexFromStr('#fffae4')),
-              fontSize: MyScreen.appBarFontSize(context),
+              fontSize: MyScreen.normalListPageFontSize(context),
               text: '訊號',
               onPress: (){
 
@@ -205,8 +257,13 @@ class _BigPingPageState extends State<BigPingPage> {
   }
   ///ping 客編相關
   _custNoPing(BuildContext context) {
+    var deviceHeight = MediaQuery.of(context).size.height;
+    double paddingValue = 8.0;
+    if (deviceHeight < 600) {
+      paddingValue = 5.0;
+    }
     return Container(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 5.0, bottom: 5.0),
+      padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 2.0, bottom: 5.0),
       child: Row(
         children: <Widget>[
           Container(
@@ -217,7 +274,7 @@ class _BigPingPageState extends State<BigPingPage> {
             child: Container(
               padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 5.0, bottom: 5.0),
               child: CupertinoTextField(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(paddingValue),
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), border: Border.all(width: 1.0, color: Colors.grey, style: BorderStyle.solid)),
                 onChanged: (String value) {
                   textFiledStr = value;
@@ -253,16 +310,16 @@ class _BigPingPageState extends State<BigPingPage> {
   ///pingview
   _pingView() {
     BigPingViewModel model;
-    if(dataArray.length > 0) {
-      model = BigPingViewModel.forMap(dataArray);
-    }
-    else {
-      model = BigPingViewModel.forDummy(null);
-    }
-     
-    return BigPingTableItem(model);
-    
+    model = BigPingViewModel.forMap(dataArray);
+    return BigPingTableItem(defaultViewModel: model, configData: config,);
   }
+  ///pingDummyview
+  _pingDummyView() {
+    BigPingViewModel model;
+    model = BigPingViewModel.forDummy(null);
+    return BigPingTableItem(defaultViewModel: model, configData: config,);
+  }
+  
   ///app bar actions
   _renderAppBarAction(BuildContext context) {
     return Expanded(
@@ -342,24 +399,17 @@ class _BigPingPageState extends State<BigPingPage> {
             },
           ),
         ),
-        ButtonTheme(
-            child: new FlatButton.icon(
-          icon: Image.asset(
-            MyICons.DEFAULT_USER_ICON,
-            width: 30,
-            height: 30,
+        Container(
+          height: 30,
+          child: FlatButton.icon(
+            icon: Image.asset('static/images/23.png'),
+            color: Colors.transparent,
+            label: Text(''),
+            onPressed: (){
+
+            },
           ),
-          textColor: Colors.white,
-          color: Colors.transparent,
-          label: Text(
-            'PING',
-            style: TextStyle(
-                fontSize: MyScreen.homePageFontSize(context)),
-          ),
-          onPressed: () {
-            print(123);
-          },
-        )),
+        ),
         ButtonTheme(
           minWidth: MyScreen.homePageBarButtonWidth(context),
           child: new MyToolButton(
@@ -383,7 +433,10 @@ class _BigPingPageState extends State<BigPingPage> {
             fontSize: MyScreen.homePageFontSize(context),
             mainAxisAlignment: MainAxisAlignment.start,
             onPress: () {
-              print('it click');
+              if (isLoading) {
+                Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                return;
+              }
               Navigator.pop(context);          
             },
           ),
@@ -393,14 +446,40 @@ class _BigPingPageState extends State<BigPingPage> {
   }
   ///body
   _renderBody(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        _fourBtnAction(context),
-        _custNoPing(context),
-        buildLine(),
-        _pingView(),
-      ],
-    );
+    if(dataArray.length > 0 ){
+      return Column(
+        children: <Widget>[
+          _fourBtnAction(context),
+          _custNoPing(context),
+          buildLine(),
+          Expanded(
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: <Widget>[
+                _pingView(),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+    else {
+      return Column(
+        children: <Widget>[
+          _fourBtnAction(context),
+          _custNoPing(context),
+          buildLine(),
+          Expanded(
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: <Widget>[
+                _pingDummyView(),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
   }
   ///小ping function
   void _callPing(String custCode) async{
@@ -408,13 +487,17 @@ class _BigPingPageState extends State<BigPingPage> {
       Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
       return;
     }
+    FocusScope.of(context).requestFocus(FocusNode());
     isLoading = true;
     Fluttertoast.showToast(msg: '正在ping該筆資料中..');
     var res = await getPingData(custCode);
     if(res != null && res.result) {
       setState(() {
         dataArray = res.data;
-        _pingView();
+        cmtsStr = dataArray["CMTS"];
+        cmmacStr = dataArray["CMMAC"];
+        custNameStr = dataArray["CustName"];
+        custNoStr = dataArray["CustCode"];
         isLoading = false;
       });
     }
@@ -423,6 +506,67 @@ class _BigPingPageState extends State<BigPingPage> {
   getPingData(custCode) async {
     var res = await DefaultTableDao.getPingSNR(_getStore(),context, custCode: custCode);
     return res;
+  }
+  ///呼叫cep api
+  getCPEData() async {
+    isLoading = true;
+    var res = await BigPingDao.getCPEData(cmts: cmtsStr, cmmac: cmmacStr);
+    return res;
+  }
+  ///呼叫flap api
+  getFLAPData() async {
+    isLoading = true;
+    var res = await BigPingDao.getFLAPData(cmts: cmtsStr, cmmac: cmmacStr);
+    return res;
+  }
+  ///清除flap api
+  clearFlapData() async {
+    isLoading = true;
+    var res = await BigPingDao.clearFLAPData(cmts: cmtsStr, cmmac: cmmacStr);
+    return res;
+  }
+  ///清除flap function
+  void _clearFlapFunc() async {
+    if (isLoading) {
+      Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+      return;
+    }
+    var res = await clearFlapData();
+    if(res != null && res.result) {
+      isLoading = false;
+      Fluttertoast.showToast(msg: res.data["MSG"]);
+    }
+
+  }
+  ///cpe dialog
+  Widget cpeDialog(BuildContext context, data) {
+    return Material(
+       type: MaterialType.transparency,
+       child: Column(
+         mainAxisAlignment: MainAxisAlignment.end,
+         children: <Widget>[
+           Card(
+             child: CPEDialog(custNoStr, custNameStr, data.data),
+           )
+         ],
+       ),
+    );
+  }
+  ///cpe dialog
+  Widget flapDialog(BuildContext context, data) {
+    FlapViewModel model;
+    model = FlapViewModel.forMap(data.data);
+    return Material(
+       type: MaterialType.transparency,
+       child: Column(
+         mainAxisAlignment: MainAxisAlignment.end,
+         children: <Widget>[
+           Card(
+             child: FLAPDialog(custNo: custNoStr, custName: custNameStr, data: data.data, defaultViewModel: model, clearFlapFunc: _clearFlapFunc,),
+           )
+         ],
+       ),
+    );
   }
   @override
   void initState() {

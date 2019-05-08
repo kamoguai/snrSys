@@ -1230,24 +1230,16 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
                       },
                     ),
                   ),
-                  ButtonTheme(
-                    child: new FlatButton.icon(
-                      icon: Image.asset(
-                        MyICons.DEFAULT_USER_ICON,
-                        width: 30,
-                        height: 30,
-                      ),
-                      textColor: Colors.white,
+                  Container(
+                    height: 30,
+                    child: FlatButton.icon(
+                      icon: Image.asset('static/images/23.png'),
                       color: Colors.transparent,
-                      label: Text(
-                        'PING',
-                        style: TextStyle(
-                            fontSize: MyScreen.homePageFontSize(context)),
-                      ),
-                      onPressed: () {
-                        print(123);
+                      label: Text(''),
+                      onPressed: (){
+
                       },
-                    )
+                    ),
                   ),
                   ButtonTheme(
                     minWidth: MyScreen.homePageBarButtonWidth(context),

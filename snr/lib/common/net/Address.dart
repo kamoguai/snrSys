@@ -305,4 +305,16 @@ class Address {
   static setAutoFrequenceTimeAPI(time1, time2, time3, time4,) {
     return "${kSNRHostName}SNRProcess?FunctionName=set_auto_freq_time&TIME1=$time1&TIME2=$time2&TIME3=$time3&TIME4=$time4";
   }
+  ///大ping-cpe
+  static getCPEDataAPI(cmts, cmmac) {
+    return "${kSNRHostPingName}SNRping.php?Action=getCPE&CMTS=$cmts&CMMAC=$cmmac";
+  }
+  ///大ping-flap
+  static getFLAPDataAPI(cmts, cmmac) {
+    return "${kSNRHostPingName}SNRping.php?Action=getFLAP&CMTS=$cmts&CMMAC=$cmmac";
+  }
+   ///大ping-清除flap
+  static clearFLAPDataAPI(cmts, cmmac) {
+    return "${kSNRHostPingName}SNRping.php?Action=ClearFLAP&CMTS=$cmts&CMMAC=$cmmac";
+  }
 }

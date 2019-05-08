@@ -8,19 +8,15 @@ import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/model/User.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
-
-class BigPingTableItem extends StatefulWidget {
+/**
+ * 大ping資料
+ * Date: 2019-05-08
+ */
+class BigPingTableItem extends StatelessWidget {
   final BigPingViewModel defaultViewModel;
-  BigPingTableItem(this.defaultViewModel);
-  @override
-  _BigPingTableItemState createState() => _BigPingTableItemState(defaultViewModel);
-}
-
-class _BigPingTableItemState extends State<BigPingTableItem> {
-  final BigPingViewModel defaultViewModel;
-  _BigPingTableItemState(this.defaultViewModel);
-  dynamic configData;
+  final dynamic configData;
   User user;
+  BigPingTableItem({this.defaultViewModel, this.configData, });
 
   ///分隔線
   _buildLine() {
@@ -58,6 +54,11 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
     return (deviceWidth / 3);
   }
 
+  _deviceWidth7(context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    return (deviceWidth / 7);
+  }
+
   _deviceWidth9(context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     return (deviceWidth / 9);
@@ -77,6 +78,17 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
       style: style.merge(fontStyle),
       minFontSize: 5.0,
       textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _autoTextSizeLeft(text, style, context) {
+    var fontSize = MyScreen.defaultTableCellFontSize(context);
+    var fontStyle = TextStyle(fontSize: fontSize);
+    return AutoSizeText(
+      text,
+      style: style.merge(fontStyle),
+      minFontSize: 5.0,
+      textAlign: TextAlign.left,
     );
   }
 
@@ -191,6 +203,7 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
     Map<String, dynamic> pwr2 = {};
     Map<String, dynamic> pwr3 = {};
     Map<String, dynamic> u = {};
+
     if (defaultViewModel.snr != null) {
       u = defaultViewModel.snr["U0"];
       snr0 = u;
@@ -215,6 +228,10 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
       pwr2 = {"PWR":""};
       pwr3 = {"PWR":""};
     }
+    Map<String, dynamic> g0 = {};
+    Map<String, dynamic> g1 = {};
+    Map<String, dynamic> g2 = {};
+    Map<String, dynamic> g3 = {};
     Map<String, dynamic> c0 = {};
     Map<String, dynamic> c1 = {};
     Map<String, dynamic> c2 = {};
@@ -225,28 +242,57 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
     Map<String, dynamic> u3 = {};
     if (defaultViewModel.codeWord != null) {
       u = defaultViewModel.codeWord["U0"];
+      g0 = u;
       c0 = u;
       u0 = u;
       u = defaultViewModel.codeWord["U1"];
+      g1 = u;
       c1 = u;
       u1 = u;
       u = defaultViewModel.codeWord["U2"];
+      g2 = u;
       c2 = u;
       u2 = u;
       u = defaultViewModel.codeWord["U3"];
+      g3 = u;
       c3 = u;
       u3 = u;
     }
     else {
+      g0 = {"G":""};
       c0 = {"C":""};
       u0 = {"U":""};
+      g1 = {"G":""};
       c1 = {"C":""};
       u1 = {"U":""};
+      g2 = {"G":""};
       c2 = {"C":""};
       u2 = {"U":""};
+      g3 = {"G":""};
       c3 = {"C":""};
       u3 = {"U":""};
     }
+
+    var netStatus = "";
+    if(defaultViewModel.status == "") {
+      netStatus = "";
+    }
+    else if (defaultViewModel.status == "online"){
+      netStatus = "上線";
+    }
+    else{
+      netStatus = "離線";
+    }
+
+    var cmtsStr = "";
+    var cifStr = "";
+    var nodeStr = "";
+    if(defaultViewModel.count != null) {
+      cmtsStr = defaultViewModel.count["CMTS"];
+      cifStr = defaultViewModel.count["CIF"];
+      nodeStr = defaultViewModel.count["NODE"];
+    }
+
 
     return Container(
       width: double.maxFinite,
@@ -254,13 +300,20 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          Container(
+            height: 25.0,
+            padding: EdgeInsets.only(left: 5.0),
+            alignment: Alignment.centerLeft,
+            child: _autoTextSizeLeft(defaultViewModel.mac, TextStyle(color: Colors.black), context)
+          ),
+          _buildLine(),
           _autoContainer(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Container(
                   width: (_deviceWidth3(context) * 2 + _deviceWidth9(context) * 0.5) - 1 ,
-                  child: _autoTextSize('', TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(cmtsStr + cifStr + nodeStr, TextStyle(color: Colors.black), context),
                 ),
                 _buildHeightLine(),
                 Container(
@@ -340,6 +393,7 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
                 ),
                 _buildHeightLine51(),
                 Container(
+                  color: Color(MyColors.hexFromStr('#ffeef1')),
                   width: ((_deviceWidth9(context) * 4)) - 1,
                   child: Column(
                     children: <Widget>[
@@ -428,47 +482,47 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
               children: <Widget>[
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize('', TextStyle(color: Colors.blue), context),
+                  child: _autoTextSize(defaultViewModel.dsMer, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp0, 'DSMER_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.ds0, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds0, 'DS0', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.ds0, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds0, 'DS0_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.ds1, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds1, 'DS1', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.ds1, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds1, 'DS1_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.ds2, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds2, 'DS2', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.ds2, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds2, 'DS2_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.ds3, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds3, 'DS3', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.ds3, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds3, 'DS3_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.ds4, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds4, 'DS4', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.ds4, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds4, 'DS4_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.ds5, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds5, 'DS5', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.ds5, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds5, 'DS5_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.ds6, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds6, 'DS6', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.ds6, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds6, 'DS6_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.ds7, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds7, 'DS7', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.ds7, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.ds7, 'DS7_PING', netType, configData))), context),
                 ),
               ],
             ),
@@ -481,47 +535,47 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
               children: <Widget>[
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize('', TextStyle(color: Colors.blue), context),
+                  child: _autoTextSize(defaultViewModel.dsdb, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp0, 'DSDB_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.dp0, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp0, 'DP0', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.dp0, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp0, 'DP0_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.dp1, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp1, 'DP1', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.dp1, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp1, 'DP1_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.dp2, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp2, 'DP2', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.dp2, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp2, 'DP2_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.dp3, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp3, 'DP3', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.dp3, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp3, 'DP3_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.dp4, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp4, 'DP4', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.dp4, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp4, 'DP4_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.dp5, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp5, 'DP5', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.dp5, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp5, 'DP5_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.dp6, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp6, 'DP6', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.dp6, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp6, 'DP6_PING', netType, configData))), context),
                 ),
                 _buildHeightLine(),
                 Container(
                   width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize(defaultViewModel.dp7, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp7, 'DP7', netType, configData))), context),
+                  child: _autoTextSize(defaultViewModel.dp7, TextStyle(color: Color(CommonUtils.checkSnrConfigureValueColor(defaultViewModel.dp7, 'DP7_PING', netType, configData))), context),
                 ),
               ],
             ),
@@ -532,7 +586,7 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
               children: <Widget>[
                 Container(
                   width: (_deviceWidth9(context) * 1.5) - 1,
-                  child: _autoTextSize(defaultViewModel.status == "1" ? "上線" : "離線", TextStyle(color: defaultViewModel.status == "1" ? Colors.blue : Colors.red), context),
+                  child: _autoTextSize(netStatus, TextStyle(color: defaultViewModel.status == "online" ? Colors.blue : Colors.red), context),
                 ),
                 _buildHeightLine(),
                 Container(
@@ -567,72 +621,6 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
               ],
             ),
           ),
-          Container(
-            color: Color(MyColors.hexFromStr('#f1f1f1')),
-            height: 25.0,
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize('校正', TextStyle(color: Colors.black), context),
-                ),
-                _buildHeightLine(),
-                Container(
-                  width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(c0["C"], TextStyle(color: Colors.black), context),
-                ),
-                _buildHeightLine(),
-                   Container(
-                  width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(c1["C"], TextStyle(color: Colors.black), context),
-                ),
-                _buildHeightLine(),
-                   Container(
-                  width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(c2["C"], TextStyle(color: Colors.black), context),
-                ),
-                _buildHeightLine(),
-                   Container(
-                  width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(c3["C"], TextStyle(color: Colors.black), context),
-                ),
-              ],
-            ),
-          ),
-          _buildLine(),
-          Container(
-            color: Color(MyColors.hexFromStr('#f1f1f1')),
-            height: 25.0,
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: _deviceWidth9(context) - 1,
-                  child: _autoTextSize('掉包', TextStyle(color: Colors.black), context),
-                ),
-                _buildHeightLine(),
-                Container(
-                  width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(u0["U"], TextStyle(color: Colors.black), context),
-                ),
-                _buildHeightLine(),
-                   Container(
-                  width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(u1["U"], TextStyle(color: Colors.black), context),
-                ),
-                _buildHeightLine(),
-                   Container(
-                  width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(u2["U"], TextStyle(color: Colors.black), context),
-                ),
-                _buildHeightLine(),
-                   Container(
-                  width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(u3["U"], TextStyle(color: Colors.black), context),
-                ),
-              ],
-            ),
-          ),
-          _buildLine(),
           _autoContainer(
             child: Row(
               children: <Widget>[
@@ -659,7 +647,138 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
             ),
           ),
           SizedBox(height: 25,),
-          _buildRedLine()
+          _buildRedLine(),
+          SizedBox(height: 25,),
+          Container(
+            padding: EdgeInsets.all(5.0),
+            alignment: Alignment.centerLeft,
+            child: Text('CodeWord', style: TextStyle(color: Colors.black, fontSize: MyScreen.appBarFontSize(context))),
+          ),
+          _buildLine(),
+          Container(
+            height: 130.0,
+            color: Color(MyColors.hexFromStr('#ffeef1')),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
+                  child: Row(
+                    children: <Widget>[
+                      Container(width: _deviceWidth7(context) - 1,),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2) - 1,
+                        child: _autoTextSize('正常', TextStyle(color: Colors.blue), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2) - 1,
+                        child: _autoTextSize('校正', TextStyle(color: Colors.black), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2),
+                        child: _autoTextSize('掉包', TextStyle(color: Colors.red), context),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
+                  child: Row(
+                    children: <Widget>[
+                      Container(width: _deviceWidth7(context) - 1, child: _autoTextSize('U0', TextStyle(color: Colors.black), context),),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2) - 1,
+                        child: _autoTextSize(g0["G"], TextStyle(color: Colors.blue), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2) - 1,
+                        child: _autoTextSize(c0["C"], TextStyle(color: Colors.black), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2),
+                        child: _autoTextSize(u0["U"], TextStyle(color: Colors.red), context),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
+                  child: Row(
+                    children: <Widget>[
+                      Container(width: _deviceWidth7(context) - 1, child: _autoTextSize('U1', TextStyle(color: Colors.black), context),),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2) - 1,
+                        child: _autoTextSize(g1["G"], TextStyle(color: Colors.blue), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2) - 1,
+                        child: _autoTextSize(c1["C"], TextStyle(color: Colors.black), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2),
+                        child: _autoTextSize(u1["U"], TextStyle(color: Colors.red), context),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
+                  child: Row(
+                    children: <Widget>[
+                      Container(width: _deviceWidth7(context) - 1, child: _autoTextSize('U2', TextStyle(color: Colors.black), context),),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2) - 1,
+                        child: _autoTextSize(g2["G"], TextStyle(color: Colors.blue), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2) - 1,
+                        child: _autoTextSize(c2["C"], TextStyle(color: Colors.black), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2),
+                        child: _autoTextSize(u2["U"], TextStyle(color: Colors.red), context),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
+                  child: Row(
+                    children: <Widget>[
+                      Container(width: _deviceWidth7(context) - 1, child: _autoTextSize('U3', TextStyle(color: Colors.black), context),),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2) - 1,
+                        child: _autoTextSize(g3["G"], TextStyle(color: Colors.blue), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2) - 1,
+                        child: _autoTextSize(c3["C"], TextStyle(color: Colors.black), context),
+                      ),
+                      _buildHeightLine(),
+                      Container(
+                        width: (_deviceWidth7(context) * 2),
+                        child: _autoTextSize(u3["U"], TextStyle(color: Colors.red), context),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 25,),
         ],
       ),
     );
@@ -667,6 +786,7 @@ class _BigPingTableItemState extends State<BigPingTableItem> {
 }
 
 class BigPingViewModel {
+  String mac;
   String cmts;
   String cif;
   String node;
@@ -693,6 +813,8 @@ class BigPingViewModel {
   String dp5;
   String dp6;
   String dp7;
+  String dsdb;
+  String dsMer;
   String status;
   String pingTime;
   String note1;
@@ -716,6 +838,7 @@ class BigPingViewModel {
   BigPingViewModel();
 
   BigPingViewModel.forMap(data) {
+    mac = data["MAC"] == null ? "" : data["MAC"];
     cmts = data["CMTS"] == null ? "" : data["CMTS"];
     cif = data["CIF"] == null ? "" : data["CIF"];
     node = data["NODE"] == null ? "" : data["NODE"];
@@ -742,6 +865,8 @@ class BigPingViewModel {
     dp5 = data["DP5"] == null ? "" : data["DP5"];
     dp6 = data["DP6"] == null ? "" : data["DP6"];
     dp7 = data["DP7"] == null ? "" : data["DP7"];
+    dsdb = data["DSDB"] == null ? "" : data["DSDB"];
+    dsMer = data["DSMER"] == null ? "" : data["DSMER"];
     status = data["STATUS"] == null ? "" : data["STATUS"];
     bb = data["BB"] == null ? "" : data["BB"];
     buildingName = data["BuildingName"] == null ? "" : data["BuildingName"];
@@ -762,6 +887,7 @@ class BigPingViewModel {
     codeWord = data["CodeWord"] == null ? null : data["CodeWord"];
   }
   BigPingViewModel.forDummy(data) {
+    mac = "";
     cmts = "";
     cif = "";
     node = "";
@@ -788,6 +914,8 @@ class BigPingViewModel {
     dp5 = "";
     dp6 = "";
     dp7 = "";
+    dsdb = "";
+    dsMer = "";
     status = "";
     bb = "";
     buildingName = "";
