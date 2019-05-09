@@ -554,7 +554,7 @@ class _OverPowerListPageState extends State<OverPowerListPage> with AutomaticKee
   ///將body寫在這裡
   Widget getBody() {
     return isLoading
-        ? showProgressLoading()
+        ? showLoadingAnime(context)
         : new Column(
             children: <Widget>[
               ///headtilte

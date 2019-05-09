@@ -18,7 +18,6 @@ import 'package:snr/common/model/User.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
-import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/DefaultTableItem.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';

@@ -107,21 +107,6 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
     );
   }
 
-  ///高分隔線
-  _buildRedLineHeight() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.red,
-    );
-  }
-
-  ///取得裝置width並切6份
-  _deviceWidth6() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 6;
-  }
-
   ///取得裝置width並切8份
   _deviceWidth8() {
     var width = MediaQuery.of(context).size.width;
@@ -158,13 +143,6 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
   _titleHeight() {
     var height = _deviceHeight4();
     return height / 4;
-  }
-
-  ///間隔8
-  _dummyHeight() {
-    return SizedBox(
-      height: 8.0,
-    );
   }
 
   ///自動字大小
@@ -380,7 +358,7 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
   /// widget body
   Widget getBody() {
     if(isLoading) {
-      return showProgressLoading();
+      return showLoadingAnime(context);
     }
     else {
       return Column(

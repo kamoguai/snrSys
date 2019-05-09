@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/style/MyStyle.dart';
@@ -40,6 +41,29 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
       refreshIndicatorKey.currentState.show().then((e) {});
       return true;
     });
+  }
+  ///anime loding
+  showLoadingAnime(BuildContext context) {
+    return Center(
+      child: new Container(
+        width: 150.0,
+        height: 150.0,
+        padding: new EdgeInsets.all(4.0),
+        decoration: new BoxDecoration(
+          color: Colors.transparent,
+          //用一个BoxDecoration装饰器提供背景图片
+          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+        ),
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Container(child: SpinKitCubeGrid(color: Colors.blue[200])),
+            new Container(height: 10.0),
+            new Container(child: new Text(CommonUtils.getLocale(context).loading_text, style: TextStyle(color: Colors.black))),
+          ],
+        ),
+      )
+    );
   }
   ///運用MyPullLoadWidget
   showRefreshLoadingF() {

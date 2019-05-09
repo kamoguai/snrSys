@@ -30,13 +30,6 @@ class SmallPingTableItem extends StatelessWidget {
     );
   }
 
-  _buildRedLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.red,
-    );
-  }
-
   _buildHeightLine() {
     return new Container(
       height: 25.0,

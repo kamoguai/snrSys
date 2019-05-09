@@ -1,15 +1,10 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
-import 'package:snr/common/dao/BigBadDao.dart';
-import 'package:snr/common/model/BigBad.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
-import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/dialog/BigbadHistoryDialog.dart';
@@ -62,13 +57,6 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
       color: Colors.grey,
     );
   }
-  ///分隔線red
-  _buildLineRed() {
-    return new Container(
-      height: 1.0,
-      color: Colors.red,
-    );
-  }
 
   ///高分隔線
   _buildLineHeight() {
@@ -79,22 +67,10 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     );
   }
 
-   ///取得裝置width並切6份
-  _deviceWidth2() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 2;
-  }
-
   ///取得裝置width並切6份
   _deviceWidth6() {
     var width = MediaQuery.of(context).size.width;
     return width / 6;
-  }
-
-  ///取得裝置width並切7份
-  _deviceWidth7() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 7;
   }
 
   ///取得裝置height切4分
@@ -584,7 +560,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
   Widget getBody() {
     Widget body;
     if (isLoading) {
-      body = showProgressLoading();
+      body = showLoadingAnime(context);
     }
     else {
       body = SingleChildScrollView(

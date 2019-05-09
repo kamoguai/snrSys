@@ -488,7 +488,7 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
   ///widget body
   Widget getBody() {
     if (isLoading) {
-      return showProgressLoading();
+      return showLoadingAnime(context);
     } else {
       return Column(
         children: <Widget>[

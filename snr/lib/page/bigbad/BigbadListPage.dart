@@ -474,7 +474,7 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
   ///將body寫在這裡
   Widget getBody() {
     return isLoading
-        ? showProgressLoading()
+        ? showLoadingAnime(context)
         : new Column(
             children: <Widget>[
               ///headtilte

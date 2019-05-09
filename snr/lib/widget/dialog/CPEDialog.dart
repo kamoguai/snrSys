@@ -22,13 +22,6 @@ class CPEDialog extends StatelessWidget {
     );
   }
 
-  _buildRedLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.red,
-    );
-  }
-
   _buildLineHeight(context) {
     return Container(
       height: _listHeight(context),

@@ -23,13 +23,6 @@ class BigBadResultDialog extends StatelessWidget {
     );
   }
 
-  _buildRedLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.red,
-    );
-  }
-
   _deviceWidth3(context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     return (deviceWidth / 3) - 1;

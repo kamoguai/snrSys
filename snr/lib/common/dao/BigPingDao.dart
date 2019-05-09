@@ -21,7 +21,7 @@ class BigPingDao {
       if (res.data['Response']['ReturnCode'] == "0") {
         mainDataArray = res.data["ReturnData"];
       }
-      if (mainDataArray.length > 0) {
+      if (mainDataArray != null && mainDataArray.length > 0) {
         return new DataResult(mainDataArray, true);
       } else {
         Fluttertoast.showToast(msg: res.data['Response']['MSG']);

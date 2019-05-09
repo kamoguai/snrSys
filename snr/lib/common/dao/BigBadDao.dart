@@ -42,7 +42,6 @@ class BigbadDao {
   static getQueryBigBadHistory({city}) async {
     Map<String, dynamic> mainDataArray = {};
     List<dynamic> dataArray = [];
-    List<Bigbad> list = new List();
     var res = await HttpManager.netFetch(Address.getQueryBigBadHistory(city), null, null, new Options(method: "post"));
 
     if (res != null && res.result) {

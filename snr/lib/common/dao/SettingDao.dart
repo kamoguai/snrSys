@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/DaoResult.dart';
 import 'package:snr/common/net/Address.dart';

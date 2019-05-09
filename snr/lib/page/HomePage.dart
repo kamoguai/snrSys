@@ -192,11 +192,7 @@ class _HomePageState extends State<HomePage>
     var height = _deviceHeight4();
     return height / 5;
   }
-  ///title height
-  _titleHeight() {
-    var height = _deviceHeight4();
-    return height / 4;
-  }
+
   ///自動縮放text
   _buildTextFontColor(String text, Color color) {
     return AutoSizeText(
@@ -679,7 +675,7 @@ class _HomePageState extends State<HomePage>
 
               ///body
               body: isLoading
-                  ? showProgressLoading()
+                  ? showLoadingAnime(context)
                   : new SingleChildScrollView(
                       child: new Column(
                         children: <Widget>[
@@ -888,7 +884,7 @@ class _HomePageState extends State<HomePage>
                         color: Colors.transparent,
                         label: Text(''),
                         onPressed: (){
-
+                           NavigatorUtils.goBigPing(context);
                         },
                       ),
                     ),

@@ -291,4 +291,8 @@ class MyStringZh extends MyStringBase {
   String text_standar = "標準";
   @override
   String text_settingPage = "設定頁面";
+  @override
+  String text_input = "輸入";
+  @override
+  String text_delete = "刪除";
 }

@@ -11,31 +11,20 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/BpDao.dart';
-import 'package:snr/common/dao/DefaultTableDao.dart';
 import 'package:snr/common/dao/UserDao.dart';
-import 'package:snr/common/dao/WrongPlaceDao.dart';
 import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/model/BpAnalyzeTableCell.dart';
 import 'package:snr/common/model/BpTableCell.dart';
-import 'package:snr/common/model/DefaultTableCell.dart';
-import 'package:snr/common/model/SmallPingTableCell.dart';
 import 'package:snr/common/model/User.dart';
-import 'package:snr/common/model/WrongPlaceNodeTableCell.dart';
-import 'package:snr/common/model/WrongPlaceTableCell.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/BpAnalyzeTableItem.dart';
 import 'package:snr/widget/BpTableItem.dart';
-import 'package:snr/widget/DefaultTableItem.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
-import 'package:snr/widget/WrongPlaceNodeTableItem.dart';
-import 'package:snr/widget/WrongPlaceTalbeItem.dart';
-import 'package:snr/widget/dialog/SmallPingTableItem.dart';
-import 'package:snr/widget/dialog/WrongPlaceDialog.dart';
 
 /**
  * 點數詳情頁面

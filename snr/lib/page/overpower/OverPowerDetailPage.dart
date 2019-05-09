@@ -17,7 +17,6 @@ import 'package:snr/common/model/User.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
-import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/DefaultTableItem.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
@@ -1003,8 +1002,6 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
     var res = await getApiDataList();
     if (res != null && res.result) {
       List<DefaultTableCell> list = new List();
-      var mainData = res.data["Data"];
-      var countData = res.data["Counts"];
       List<dynamic> inLineArr = [];
       originalArray.addAll(res.data["Data"]);
       for (var dic in originalArray) {

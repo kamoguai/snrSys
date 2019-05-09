@@ -313,8 +313,12 @@ class Address {
   static getFLAPDataAPI(cmts, cmmac) {
     return "${kSNRHostPingName}SNRping.php?Action=getFLAP&CMTS=$cmts&CMMAC=$cmmac";
   }
-   ///大ping-清除flap
+  ///大ping-清除flap
   static clearFLAPDataAPI(cmts, cmmac) {
     return "${kSNRHostPingName}SNRping.php?Action=ClearFLAP&CMTS=$cmts&CMMAC=$cmmac";
+  }
+  ///操作維修紀錄
+  static getHipassLogDataAPI(custNo) {
+    return "${kSNRHostName}SNRProcess?FunctionName=query_hilowpass_log&custNo=$custNo";
   }
 }

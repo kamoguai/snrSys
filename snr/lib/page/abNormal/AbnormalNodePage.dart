@@ -210,7 +210,7 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
     return nodeList;
   }
   Widget getBodyData() {
-    return isLoading ? showProgressLoading() : Column(
+    return isLoading ? showLoadingAnime(context) : Column(
       children: <Widget>[
         _buildNodeHeader(),
         _buildLine(),

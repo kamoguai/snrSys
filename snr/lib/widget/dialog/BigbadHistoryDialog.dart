@@ -1,18 +1,10 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
-import 'package:snr/common/dao/BigBadDao.dart';
-import 'package:snr/common/model/BigBad.dart';
 import 'package:snr/common/style/MyStyle.dart';
-import 'package:snr/common/utils/CommonUtils.dart';
-import 'package:snr/common/utils/NavigatorUtils.dart';
-import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/MyListState.dart';
-import 'package:snr/widget/dialog/BigbadResultDialog.dart';
 
 /**
  * 重大異常歷史dialog
@@ -74,16 +66,6 @@ class _BigBadHistoryDialogState extends State<BigBadHistoryDialog> with Automati
       width: 1.0,
       color: Colors.grey,
     );
-  }
-
-  _deviceWidth3(context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-    return (deviceWidth / 3) - 1;
-  }
-
-  _deviceWidth6(context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-    return (deviceWidth / 6) - 1;
   }
 
   ///取得裝置height切4分

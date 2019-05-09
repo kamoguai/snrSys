@@ -394,7 +394,7 @@ class _PublicworksListPageState extends State<PublicworksListPage>
   ///將body寫在這裡
   Widget getBody() {
     return isLoading
-        ? showProgressLoading()
+        ? showLoadingAnime(context)
         : new Column(
             children: <Widget>[
               ///headtilte

@@ -1,7 +1,6 @@
 
 import 'dart:convert';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -14,10 +13,12 @@ import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
-import 'package:snr/page/bigPing/BigPingTableItem.dart';
+import 'package:snr/widget/BigPingTableItem.dart';
+
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/dialog/CPEDialog.dart';
 import 'package:snr/widget/dialog/FLAPDialog.dart';
+import 'package:snr/widget/BaseWidget.dart';
 /**
  * 大PING頁面
  * Date: 2019-05-07
@@ -27,7 +28,7 @@ class BigPingPage extends StatefulWidget {
   _BigPingPageState createState() => _BigPingPageState();
 }
 
-class _BigPingPageState extends State<BigPingPage> {
+class _BigPingPageState extends State<BigPingPage> with BaseWidget {
   ///取得設定檔
   var config;
   ///裝ping data
@@ -125,37 +126,7 @@ class _BigPingPageState extends State<BigPingPage> {
     var height = deviceHeight4(context);
     return height / 4;
   }
-  ///自動字大小
-  _autoTextSize(text, style, BuildContext context) {
-    var fontSize = MyScreen.defaultTableCellFontSize(context);
-    var fontStyle = TextStyle(fontSize: fontSize);
-    return AutoSizeText(
-      text,
-      style: style.merge(fontStyle),
-      minFontSize: 5.0,
-      textAlign: TextAlign.center,
-    );
-  }
-    ///自動字大小s
-  _autoTextSize_s(text, style, BuildContext context) {
-    var fontSize = MyScreen.defaultTableCellFontSize_s(context);
-    var fontStyle = TextStyle(fontSize: fontSize);
-    return AutoSizeText(
-      text,
-      style: style.merge(fontStyle),
-      minFontSize: 5.0,
-      textAlign: TextAlign.center,
-    );
-  }
-  ///container
-  _container({child, height, width, color}) {
-    return Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration( color: color,border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
-      width: width,
-      child: child,
-    );
-  }
+  
   ///上面4個按鈕
   _fourBtnAction(BuildContext context) {
     return Container(
@@ -173,7 +144,7 @@ class _BigPingPageState extends State<BigPingPage> {
               fontSize: MyScreen.normalListPageFontSize(context),
               text: 'CW',
               onPress: () {
-
+                 showLoadingDialog(context);
               },
             )
           ),
@@ -193,6 +164,10 @@ class _BigPingPageState extends State<BigPingPage> {
                 }
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                  return;
+                }
+                if(cmtsStr == '---') {
+                  Fluttertoast.showToast(msg: '查無資料!');
                   return;
                 }
                 Fluttertoast.showToast(msg: '正在獲取資料中...');
@@ -223,6 +198,10 @@ class _BigPingPageState extends State<BigPingPage> {
                 }
                 if (isLoading) {
                   Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                  return;
+                }
+                if(cmtsStr == '---') {
+                  Fluttertoast.showToast(msg: '查無資料!');
                   return;
                 }
                 Fluttertoast.showToast(msg: '正在獲取資料中...');
@@ -489,9 +468,11 @@ class _BigPingPageState extends State<BigPingPage> {
     }
     FocusScope.of(context).requestFocus(FocusNode());
     isLoading = true;
+    showLoadingDialog(context);
     Fluttertoast.showToast(msg: '正在ping該筆資料中..');
     var res = await getPingData(custCode);
     if(res != null && res.result) {
+      hidenLoadingDialog(context);
       setState(() {
         dataArray = res.data;
         cmtsStr = dataArray["CMTS"];
@@ -568,6 +549,7 @@ class _BigPingPageState extends State<BigPingPage> {
        ),
     );
   }
+  
   @override
   void initState() {
     super.initState();

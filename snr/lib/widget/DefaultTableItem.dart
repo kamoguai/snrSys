@@ -3,6 +3,7 @@ import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:snr/widget/dialog/MaintainDialog.dart';
 
 /**
  * 通用table item
@@ -125,6 +126,20 @@ class DefaultTableItem extends StatelessWidget {
  
   Future _openCallPingDialog(custCode, currentCellTag) async {
     callPing(custCode, currentCellTag);
+  }
+
+  Widget _maintainLogDialog(custCode, custName) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Card(
+            child: MaintainLogDialog(custNo: custCode, custName: custName,),
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -665,7 +680,12 @@ class DefaultTableItem extends StatelessWidget {
                 )
               ],
             ),
-            onTap: (){print("showLog");},
+            onTap: (){
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => _maintainLogDialog(defaultViewModel.custNo, defaultViewModel.name)
+              );
+            },
           ),
           
           _buildRedLine()

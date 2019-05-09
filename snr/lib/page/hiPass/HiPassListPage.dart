@@ -1,9 +1,7 @@
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:snr/common/dao/HiPassDao.dart';
-import 'package:snr/common/dao/PublicworksDao.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
@@ -62,7 +60,6 @@ class _HiPassListPageState extends State<HiPassListPage> with AutomaticKeepAlive
     var pipeDic;
     var extraTotal = 0;
     var intraTotal = 0;
-    var otherTotal = 0;
     var countTotal = 0;
     if (typeArray.length > 0) {
         hpDic = typeArray["HP"];
@@ -585,7 +582,7 @@ class _HiPassListPageState extends State<HiPassListPage> with AutomaticKeepAlive
   Widget getBody() {
     Widget body;
     if(isLoading) {
-      body = showProgressLoading();
+      body = showLoadingAnime(context);
     }
     else {
       body = Column(

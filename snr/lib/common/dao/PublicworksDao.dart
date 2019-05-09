@@ -15,7 +15,6 @@ class PublicworksDao {
   ///工務異常list
   static getQueryOverTimeAnalyse() async {
     Map<String, dynamic> mainDataArray = {};
-    List<dynamic> dataArray = [];
     var res = await HttpManager.netFetch(Address.getPublicworksAnalyseAPI(), null, null, new Options(method: "post"));
     if (res != null && res.result) {
       if (Config.DEBUG) {

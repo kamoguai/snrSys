@@ -1,6 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:snr/common/model/CodeWordModel.dart';
-import 'package:snr/common/model/SNRModel.dart';
 part 'SmallPingTableCell.g.dart';
 
 /**

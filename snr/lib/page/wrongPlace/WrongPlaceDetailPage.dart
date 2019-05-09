@@ -360,17 +360,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
     var width = MediaQuery.of(context).size.width;
     return width / 4;
   }
-  ///自動字大小
-  Widget _autoTextSize(text, color) {
-    var fontSize = MyScreen.normalPageFontSize_s(context);
 
-    return AutoSizeText(
-      text,
-      style: TextStyle(color: color, fontSize: fontSize),
-      minFontSize: 5.0,
-      textAlign: TextAlign.center,
-    );
-  }
    ///高分隔線
   _buildLineHeight(context) {
     return new Container(
@@ -394,11 +384,6 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
 
     return height / 4;
   }
-  ///lsit height
-  _listHeight(context) {
-    var height = _deviceHeight4(context);
-    return height / 5;
-  }
 
   ///title height
   _titleHeight(context) {
@@ -416,19 +401,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
       textAlign: TextAlign.center,
     );
   }
-  Widget _container({child, width, height, color}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: color,
-        border: Border(
-          bottom: BorderSide(width: 1.0,style: BorderStyle.solid,color: Colors.grey)
-        )
-      ),
-      height: height == null ? 25.0 : height,
-      width: width,
-      child: child,
-    );
-  }
+
   Widget _statisticHead() {
     if (isEnableHeadBtns && nowType == buttonType.statistic) {
       return Container(

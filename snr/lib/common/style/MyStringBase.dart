@@ -286,4 +286,8 @@ abstract class MyStringBase {
   String text_standar;
 
   String text_settingPage;
+
+  String text_input;
+
+  String text_delete;
 }

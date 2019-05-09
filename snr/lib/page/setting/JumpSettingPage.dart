@@ -27,7 +27,6 @@ class _JumpSettingPageState extends State<JumpSettingPage> with AutomaticKeepAli
   List<dynamic> cifArray = new List<dynamic>();
   List<dynamic> delayTimeArray = new List<dynamic>();
   Map<String,dynamic> autoTimeMap = Map<String,dynamic>();
-  TimeOfDay _time = new TimeOfDay.now();
   var cType = "";
   var cmtsStr = "";
   var cmtsCode = "";

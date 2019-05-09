@@ -5,11 +5,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:snr/common/dao/PublicworksDao.dart';
 import 'package:snr/common/style/MyStyle.dart';
-import 'package:snr/common/utils/CommonUtils.dart';
-import 'package:snr/common/utils/NavigatorUtils.dart';
-import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/MyListState.dart';
 
 /**
@@ -79,14 +75,6 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
     );
   }
 
-   ///高分隔線
-  _buildListLineHeight() {
-    return new Container(
-      height: _listHeight(),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
 
   ///高分隔線 * 1.5
   _buildListLineHeight15() {
@@ -349,7 +337,7 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
       cardColor = "#f5ffe9";
     }
     if (isLoading) {
-      return showProgressLoading();
+      return showLoadingAnime(context);
     }
     else {
       return Container(
