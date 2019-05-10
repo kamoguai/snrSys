@@ -63,11 +63,31 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
   final List<dynamic> dataArray = [];
   final List<dynamic> extraArray = [];
   final List<dynamic> intraArray = [];
+  ///來自功能
+  var fromFunc = "";
   ///列表顯示的物件
   _renderItem(index) {
+    switch(nowAppBarType) {
+      case appBarBtnType.hp:
+        fromFunc = "HP";
+        break;
+      case appBarBtnType.lowhp:
+        fromFunc = "LOWHP";
+        break;
+    }
+    switch(nowType) {
+      case buttonType.nofix:
+        fromFunc = "NOFIX";
+        break;
+      case buttonType.pipe:
+        fromFunc = "PIPE";
+        break;
+      default:
+        break;
+    }
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,netType: netType ,);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,netType: netType , fromFunc: fromFunc,);
   }
 
   ///appbar按鈕群

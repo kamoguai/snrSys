@@ -290,4 +290,6 @@ abstract class MyStringBase {
   String text_input;
 
   String text_delete;
+
+  String text_saveData;
 }

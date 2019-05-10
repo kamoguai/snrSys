@@ -60,8 +60,24 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
   final List<String> toTransformArray = [];
   ///數據資料arr
   final List<dynamic> dataArray = [];
+  ///來自功能
+  var fromFunc = "";
   ///列表顯示的物件
   _renderItem(index) {
+    switch(nowType) {
+      case buttonType.cut:
+        fromFunc = "CUT";
+        break;
+      case buttonType.fix:
+        fromFunc = "FIX";
+        break;
+      case buttonType.fix2:
+        fromFunc = "FIX2";
+        break;
+      case buttonType.watch:
+        fromFunc = "WATCH";
+        break;
+    }
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
     return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);

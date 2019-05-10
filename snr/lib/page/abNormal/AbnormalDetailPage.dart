@@ -41,7 +41,7 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
   _renderItem(index) {
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index, fromFunc: "AB",);
   }
 
   //讀取snr config

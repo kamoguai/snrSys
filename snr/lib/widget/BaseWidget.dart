@@ -37,7 +37,7 @@ mixin BaseWidget{
         height: 150.0,
         padding: new EdgeInsets.all(4.0),
         decoration: new BoxDecoration(
-          color: Colors.black,
+          color: Colors.black45,
           //用一个BoxDecoration装饰器提供背景图片
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),

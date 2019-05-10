@@ -18,7 +18,8 @@ class DefaultTableItem extends StatelessWidget {
   final List<String> addTransformArray;
   final int currentCellTag;
   final String netType;
-  DefaultTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing, this.currentCellTag, this.netType});
+  final String fromFunc;
+  DefaultTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing, this.currentCellTag, this.netType, this.fromFunc});
   ///分隔線
   _buildLine() {
     return new Container(

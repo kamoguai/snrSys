@@ -295,4 +295,6 @@ class MyStringZh extends MyStringBase {
   String text_input = "輸入";
   @override
   String text_delete = "刪除";
+  @override
+  String text_saveData = "存檔";
 }

@@ -57,11 +57,27 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
   final List<String> toTransformArray = [];
   ///數據資料arr
   final List<dynamic> dataArray = [];
+  ///來自功能
+  var fromFunc = "";
   ///列表顯示的物件
   _renderItem(index) {
+    switch(nowType) {
+      case buttonType.vbad:
+        fromFunc = "VBAD";
+        break;
+      case buttonType.trace:
+        fromFunc = "TRACE";
+        break;
+      case buttonType.problem:
+        fromFunc = "PROBLEM";
+        break;
+      case buttonType.other:
+        fromFunc = "OTHER";
+        break;
+    }
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index, fromFunc: fromFunc,);
   }
 
   ///頁面上方按鈕群

@@ -60,11 +60,30 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
   final List<String> toTransformArray = [];
   ///數據資料arr
   final List<dynamic> dataArray = [];
+  ///來自功能
+  var fromFunc = "";
   ///列表顯示的物件
   _renderItem(index) {
+    switch(nowType) {
+      case buttonType.day:
+        fromFunc = "DAY";
+        break;
+      case buttonType.day1:
+        fromFunc = "DAY1";
+        break;
+      case buttonType.day2:
+        fromFunc = "DAY2";
+        break;
+      case buttonType.day3:
+        fromFunc = "DAY3";
+        break;
+      case buttonType.day4:
+        fromFunc = "DAY4";
+        break;
+    }
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index, fromFunc: fromFunc,);
   }
 
   ///頁面上方按鈕群

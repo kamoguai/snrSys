@@ -1,6 +1,12 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/MaintainLogDao.dart';
+import 'package:snr/common/dao/UserDao.dart';
+import 'package:snr/common/local/LocalStorage.dart';
+import 'package:snr/common/model/SsoLogin.dart';
+import 'package:snr/common/model/User.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/BaseWidget.dart';
@@ -12,8 +18,9 @@ class MaintainLogDialog extends StatefulWidget {
 
   final String custNo;
   final String custName;
+  final String from;
   
-  MaintainLogDialog({this.custNo, this.custName});
+  MaintainLogDialog({this.custNo, this.custName, this.from});
 
   @override
   _MaintainLogDialogState createState() => _MaintainLogDialogState();
@@ -25,10 +32,29 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
   ///data相關
   List<dynamic> dataArray = new List<dynamic>();
   final List<String> toTransformArray = [];
+  List<bool> isSelectArray = [];
+  /// user model
+  User user;
+  /// sso model
+  Sso sso;
   var isCanAdd = false;
   var tapId = "";
   var tapIndex = 0;
   var tapTarget = "";
+  ///取得使用者信息
+  getUserInfoData() async {
+    var res = await UserDao.getUserInfoLocal();
+    user = res;
+  }
+  ///初始化
+  initParam() async {
+    var userRes = await UserDao.getUserInfoLocal();
+    var ssoRes = await UserDao.getUserSSOInfoLocal();
+    user = userRes.data;
+    sso = ssoRes.data;
+    user.accNo = await LocalStorage.get(Config.USER_NAME_KEY);
+    user.accName = sso.accName;
+  }
   ///first item
   Widget _firstItem() {
     Widget item;
@@ -36,7 +62,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
       var dic = MaintainViewModel.forMap(dataArray[0]);
       item = GestureDetector(
         child: Container(
-          decoration: BoxDecoration(color: _changeTransColor(), border: Border(bottom: BorderSide(width: 1.0, color: Colors.red, style: BorderStyle.solid))),
+          decoration: BoxDecoration(color: _changeTransColor(0), border: Border(bottom: BorderSide(width: 1.0, color: Colors.red, style: BorderStyle.solid))),
           child: Column(
             children: <Widget>[
               Container(
@@ -81,11 +107,12 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
 
   ///loglist item
   Widget _logListItem(BuildContext context, int index) {
+    var count = index + 1;
     var dicIndex = dataArray[index + 1];
     var dic = MaintainViewModel.forMap(dicIndex);
     return GestureDetector(
       child: Container(
-        decoration: BoxDecoration(color: _changeTransColor(), border: Border(bottom: BorderSide(width: 1.0, color: Colors.black, style: BorderStyle.solid))),
+        decoration: BoxDecoration(color: _changeTransColor(count), border: Border(bottom: BorderSide(width: 1.0, color: Colors.black, style: BorderStyle.solid))),
         child: Column(
           children: <Widget>[
             Container(
@@ -95,7 +122,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
             ),
             buildLine(),
             Container(
-              color: Color(MyColors.hexFromStr('#f2f2f2')),
+              color: _changeTransColor(count),
               child: Row(
                 children: <Widget>[
                   Container(
@@ -152,39 +179,93 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
     }
     setState(() {
       if (toTransformArray.contains(tapTarget)) {
-        var index = toTransformArray.indexOf(tapTarget);
-        toTransformArray.removeAt(index);
+        var targetIndex = toTransformArray.indexOf(tapTarget);
+        toTransformArray.removeAt(targetIndex);
+        isSelectArray[index] = false;
       }
       else {
         toTransformArray.add(tapTarget);
+        isSelectArray[index] = true;
       }
-      print("select target => $toTransformArray");
     });
   }
   
   ///跳轉選定後改變欄位顏色
-  Color _changeTransColor() {
-    if(toTransformArray.contains(tapTarget)) {
+  Color _changeTransColor(int index) {
+    if(isSelectArray[index] == true) {
       return Colors.orange;
     }
     else {
-      return Colors.transparent;
+      if (index > 0) {
+        return Color(MyColors.hexFromStr('#f2f2f2'));
+      }
+      else {
+        return Colors.transparent;
+      }
+      
     }
+  }
+  ///刪除dialog
+  _deleteDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        var dialog = CupertinoAlertDialog(
+          content: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                  text: '確定將選取的${toTransformArray.length}筆資料刪除？', 
+                  style: TextStyle(color: Colors.black, ),
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              child: Text('取消', style: TextStyle(color: Colors.red),),
+            ),
+            CupertinoButton(
+              onPressed: (){
+                
+                deleteData();
+                Navigator.pop(context);
+              },
+              child: Text('確定', style: TextStyle(color: Colors.blue),),
+            ),
+          ],
+        );
+        return dialog;
+      }
+    );
   }
   
   ///呼叫api data
   getDataList() async {
+    dataArray.clear();
+    isSelectArray.clear();
     var res = await MaintainLogDao.getHipassLogData(custNo: widget.custNo);
     if(res != null && res.result) {
       setState(() {
         isLoading = false;
         dataArray = res.data["Data"];
+        for (var i = 0; i < dataArray.length; i++) {
+          isSelectArray.add(false);
+        }
       });
     }
     else {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+  ///呼叫刪除api
+  deleteData() async {
+    var res = await MaintainLogDao.delReportLog(senderId: user.accNo, senderName: user.accName, logIdList: toTransformArray, custId: widget.custNo, from: widget.from);
+    if(res != null && res.result) {
+      isLoading = true;
+      getDataList();
     }
   }
   @override
@@ -201,6 +282,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
   void initState() {
     super.initState();
     isLoading = true;
+    initParam();
     getDataList();
   }
 
@@ -212,7 +294,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
   @override
   Widget build(BuildContext context) {
     Widget btnAction;
-    if(isCanAdd) {
+    if(user.isDeleteReportLog == 1) {
       btnAction = Container(
         height: titleHeight(context),
         child: Row(
@@ -223,7 +305,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
                 textColor: Colors.red,
                 child: autoTextSize(CommonUtils.getLocale(context).text_delete, TextStyle(color: Colors.red), context),
                 onPressed: () {
-
+                  _deleteDialog();
                 },
               ),
             ),
@@ -264,7 +346,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
                 textColor: Colors.red,
                 child: autoTextSize(CommonUtils.getLocale(context).text_delete, TextStyle(color: Colors.red), context),
                 onPressed: () {
-                  Navigator.pop(context);
+                  _deleteDialog();
                 },
               ),
             ),

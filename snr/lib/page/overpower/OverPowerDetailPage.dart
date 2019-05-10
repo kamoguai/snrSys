@@ -64,11 +64,12 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
   final List<dynamic> firstArray = [];
   final List<dynamic> secondArray = [];
   final List<dynamic> originalArray = [];
+
   ///列表顯示的物件
   _renderItem(index) {
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,netType: netType ,);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,netType: netType ,fromFunc: "OVERPOWER",);
   }
 
   ///頁面上方按鈕群

@@ -67,13 +67,29 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
   final List<String> toTransformArray = [];
   ///數據資料arr
   final List<dynamic> dataArray = [];
+  ///來自功能
+  var fromFunc = "";
   ///列表顯示的物件
   _renderItem(index) {
+    switch(nowType) {
+      case buttonType.wp1:
+        fromFunc = "WP1";
+        break;
+      case buttonType.wp2:
+        fromFunc = "WP2";
+        break;
+      case buttonType.wp3:
+        fromFunc = "WP3";
+        break;
+      default:
+        break;
+
+    }
     if (isEnableHeadBtns) {
       if(nowType != buttonType.statistic) {
         DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
         DefaultViewModel model = DefaultViewModel.forMap(dtc);
-        return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);
+        return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index, fromFunc: fromFunc,);
       }
       else {
         WrongPlaceNodeTableCell dtc = pullLoadWidgetControl.dataList[index];

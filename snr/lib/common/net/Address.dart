@@ -321,4 +321,37 @@ class Address {
   static getHipassLogDataAPI(custNo) {
     return "${kSNRHostName}SNRProcess?FunctionName=query_hilowpass_log&custNo=$custNo";
   }
+  ///清除維修記錄
+  static delReportLog(senderId, senderName, logIdList, custId, from) {
+    var logidStr = "";
+    var i = 0;
+    for (var str in logIdList) {
+      if (str.contains("XXXXX")) {
+        if (logidStr != "") {
+          if (i < 1) {
+            logidStr += ",XXXXX";
+          }
+        }
+        else {
+          if (i < 1) {
+            logidStr += "XXXXX";
+          }
+        }
+        i += 1;
+      }
+      else {
+        if (logidStr == "") {
+          logidStr = str;
+        }
+        else {
+          logidStr = "${logidStr},${str}";
+        }
+      }
+    }
+    return "${kSNRHostName}SNRProcess?FunctionName=DeleteReportLog&SenderID=$senderId&SenderName=$senderName&LogID=$logidStr&CustCD=$custId&From=$from";
+  }
+  ///操作維修紀錄-添加log
+  static addDescriptionAPI(custId, inputText, senderId, senderName, from) {
+    return "${kSNRHostName}SNRProcess?FunctionName=AddReportLog&SenderID=$senderId&SenderName=$senderName&InputText=$inputText&CustCD=$custId&From=$from";
+  }
 }

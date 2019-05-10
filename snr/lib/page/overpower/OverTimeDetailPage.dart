@@ -67,11 +67,21 @@ class _OverTimeDetailPageState extends State<OverTimeDetailPage> with AutomaticK
   final List<dynamic> firstArray = [];
   final List<dynamic> secondArray = [];
   final List<dynamic> originalArray = [];
+  ///來自功能
+  var fromFunc = "";
   ///列表顯示的物件
   _renderItem(index) {
+    switch(nowAppBarBtnType) {
+      case appBarBtnType.notime:
+        fromFunc = "NODS";
+        break;
+      case appBarBtnType.ovettime:
+        fromFunc = "OVERTIME";
+        break;
+    }
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,netType: netType ,);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,netType: netType ,fromFunc:  fromFunc,);
   }
 
   ///頁面上方按鈕群
