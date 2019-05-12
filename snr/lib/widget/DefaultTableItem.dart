@@ -136,7 +136,7 @@ class DefaultTableItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Card(
-            child: MaintainLogDialog(custNo: custCode, custName: custName,),
+            child: MaintainLogDialog(custNo: custCode, custName: custName, from: fromFunc,),
           )
         ],
       ),

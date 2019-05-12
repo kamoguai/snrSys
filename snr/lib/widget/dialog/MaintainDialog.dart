@@ -10,6 +10,7 @@ import 'package:snr/common/model/User.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/BaseWidget.dart';
+import 'package:snr/widget/dialog/AddDescriptionDialog.dart';
 /**
  * 維修紀錄dialog
  * Date: 2019-05-09
@@ -41,11 +42,6 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
   var tapId = "";
   var tapIndex = 0;
   var tapTarget = "";
-  ///取得使用者信息
-  getUserInfoData() async {
-    var res = await UserDao.getUserInfoLocal();
-    user = res;
-  }
   ///初始化
   initParam() async {
     var userRes = await UserDao.getUserInfoLocal();
@@ -239,7 +235,27 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
       }
     );
   }
-  
+  ///輸入dialog
+  _addInputDialog(custNo, custName) {
+    return GestureDetector(
+      child: Material(
+        type: MaterialType.transparency,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Card(
+              child: AddDescriptionDialog(custNo: custNo, custName: custName, from: widget.from, senderId: user.accNo, senderName: user.accName,),
+            )
+          ],
+        ),
+      ),
+      onTap: () {
+        print('click');
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+    );
+     
+  }
   ///呼叫api data
   getDataList() async {
     dataArray.clear();
@@ -294,6 +310,9 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
   @override
   Widget build(BuildContext context) {
     Widget btnAction;
+    if(user == null) {
+      return Container(width: 150, child: showLoadingAnime(context));
+    }
     if(user.isDeleteReportLog == 1) {
       btnAction = Container(
         height: titleHeight(context),
@@ -316,7 +335,10 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
                 textColor: Colors.red,
                 child: autoTextSize(CommonUtils.getLocale(context).text_input, TextStyle(color: Colors.blue), context),
                 onPressed: () {
-                  
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => _addInputDialog(widget.custNo, widget.custName)
+                  );
                 },
               ),
             ),
@@ -327,7 +349,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
                 textColor: Colors.red,
                 child: autoTextSize(CommonUtils.getLocale(context).text_leave, TextStyle(color: Colors.black), context),
                 onPressed: () {
-                  
+                  Navigator.pop(context);
                 },
               ),
             ),
@@ -344,9 +366,9 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
               width: deviceWidth2(context) - 1,
               child: FlatButton(
                 textColor: Colors.red,
-                child: autoTextSize(CommonUtils.getLocale(context).text_delete, TextStyle(color: Colors.red), context),
+                child: autoTextSize(CommonUtils.getLocale(context).text_input, TextStyle(color: Colors.red), context),
                 onPressed: () {
-                  _deleteDialog();
+                  
                 },
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snr/common/dao/MaintainLogDao.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/BaseWidget.dart';
@@ -12,7 +13,9 @@ class AddDescriptionDialog extends StatefulWidget {
   final String custNo;
   final String custName;
   final String from;
-  AddDescriptionDialog(this.custNo, this.custName, this.from);
+  final String senderId;
+  final String senderName;
+  AddDescriptionDialog({this.custNo, this.custName, this.from, this.senderId, this.senderName});
   @override
   _AddDescriptionDialogState createState() => _AddDescriptionDialogState();
 }
@@ -21,7 +24,23 @@ class _AddDescriptionDialogState extends State<AddDescriptionDialog> with BaseWi
 
   final _descriptionFocusNode = FocusNode();
   var inputText = "";  
+  final fromKey = GlobalKey<FormState>();
 
+  ///call add api
+  addDescriptionAPI() async {
+    var res = await MaintainLogDao.addDescription(custId: widget.custNo, inputText: inputText, senderId: widget.senderId, senderName: widget.senderName, from: widget.from);
+    if(res != null && res.result) {
+      Future.delayed(const Duration(seconds: 1),() {
+        Navigator.pop(context);
+      });
+    }
+  }
+  void _submit() {
+    if(fromKey.currentState.validate()) {
+      fromKey.currentState.save();
+      addDescriptionAPI();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,54 +63,63 @@ class _AddDescriptionDialogState extends State<AddDescriptionDialog> with BaseWi
             ),
           ),
           Container(
-            height: deviceHeight4(context),
-            child: EnsureVisibleWhenFocused(
-              focusNode: _descriptionFocusNode,
-              child: TextFormField(
-                maxLines: 4,
-                decoration: InputDecoration(
-                  hintText: '請輸入回報內容',
-                  contentPadding: EdgeInsets.all(5.0)
-                ),
-                validator: (String value) {
-                  if(value.isEmpty) {
-                    return '回報內容為必填';
-                  }
-                },
-                onSaved: (String value) {
-                  inputText = value;
-                },
+            // height: deviceHeight4(context),
+            child: Form(
+              key: fromKey,
+              // focusNode: _descriptionFocusNode,
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      hintText: '請輸入回報內容',
+                      contentPadding: EdgeInsets.all(5.0)
+                    ),
+                    validator: (String value) {
+                      if(value.isEmpty) {
+                        return '回報內容為必填';
+                      }
+                    },
+                    onSaved: (String value) {
+                      setState(() {
+                        inputText = value;
+                      });
+                    },
+                  ),
+                  buildLine(),
+                  Container(
+                    color: Color(MyColors.hexFromStr('#fff7f6')),
+                    height: titleHeight(context),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Container(
+                          child: FlatButton(
+                            textColor: Colors.blue,
+                            child: autoTextSize(CommonUtils.getLocale(context).text_saveData, TextStyle(), context),
+                            onPressed: (){
+                              _submit();
+                              
+                            },
+                          ),
+                        ),
+                        buildLineHeight(context),
+                        Container(
+                          child: FlatButton(
+                            textColor: Colors.red,
+                            child: autoTextSize(CommonUtils.getLocale(context).text_leave, TextStyle(), context),
+                            onPressed: (){
+                              Navigator.pop(context);
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
               ),
             )
           ),
-          buildLine(),
-          Container(
-            color: Color(MyColors.hexFromStr('#fff7f6')),
-            height: titleHeight(context),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  child: FlatButton(
-                    textColor: Colors.blue,
-                    child: autoTextSize(CommonUtils.getLocale(context).text_saveData, TextStyle(), context),
-                    onPressed: (){
-
-                    },
-                  ),
-                ),
-                buildLineHeight(context),
-                Container(
-                  child: FlatButton(
-                    textColor: Colors.red,
-                    child: autoTextSize(CommonUtils.getLocale(context).text_leave, TextStyle(), context),
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                  ),
-                )
-              ],
-            ),
-          )
         ],
       ),
     );

@@ -57,7 +57,7 @@ class MaintainLogDao {
 
     if (res != null && res.result) {
       if (Config.DEBUG) {
-        print("delReportLog resp => " + res.data.toString());
+        print("addDescription resp => " + res.data.toString());
       }
       if (res.data['Response']['ReturnCode'] == "0") {
         Fluttertoast.showToast(msg: res.data['Response']['MSG']);
