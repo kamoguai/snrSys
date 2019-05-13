@@ -61,42 +61,9 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
     }
   }
 
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-   ///取得裝置width並切6份
-  _deviceWidth6() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 6;
-  }
- 
-  ///取得裝置height切4分
-  _deviceHeight4() {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-  ///lsit height
-  _listHeight() {
-    var height = _deviceHeight4();
-    return height / 5;
-  }
-  ///title height
-  _titleHeight() {
-    var height = _deviceHeight4();
-    return height / 4;
-  }
-
   ///自動字大小
-  Widget _autoTextSize(text, color) {
+  @override
+  Widget autoTextSize(text, color) {
     var fontSize = MyScreen.normalPageFontSize_s(context);
 
     return AutoSizeText(
@@ -110,34 +77,34 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
   ///list head
   _buildNodeHeader() {
     return new Container(
-      height: _titleHeight(),
+      height: titleHeight(),
       color: Color(MyColors.hexFromStr('#fef5f6')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(CommonUtils.getLocale(context).abnormal_node_node, Colors.black),
+            width: deviceWidth6(),
+            child: autoTextSize(CommonUtils.getLocale(context).abnormal_node_node, Colors.black),
           ),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_online, Colors.blue),
+            width: deviceWidth6(),
+            child: autoTextSize(CommonUtils.getLocale(context).home_signal_online, Colors.blue),
           ),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_upP, Colors.black),
+            width: deviceWidth6(),
+            child: autoTextSize(CommonUtils.getLocale(context).home_signal_upP, Colors.black),
           ),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_problem, Colors.black),
+            width: deviceWidth6(),
+            child: autoTextSize(CommonUtils.getLocale(context).home_signal_problem, Colors.black),
           ),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
+            width: deviceWidth6(),
+            child: autoTextSize(CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
           ),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_percent, Colors.pink),
+            width: deviceWidth6(),
+            child: autoTextSize(CommonUtils.getLocale(context).home_signal_percent, Colors.pink),
           ),
           
         ],
@@ -149,7 +116,7 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
     var dic = dataArray[index];
     return GestureDetector(
       child: Container(
-        height: _listHeight(),
+        height: listHeight(),
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(
             color: Colors.grey,
@@ -161,28 +128,28 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
-              width: _deviceWidth6(),
-              child: _autoTextSize(dic["NODE"], Colors.black),
+              width: deviceWidth6(),
+              child: autoTextSize(dic["NODE"], Colors.black),
             ),
             Container(
-              width: _deviceWidth6(),
-              child: _autoTextSize(dic["OnLine"], Colors.blue),
+              width: deviceWidth6(),
+              child: autoTextSize(dic["OnLine"], Colors.blue),
             ),
             Container(
-              width: _deviceWidth6(),
-              child: _autoTextSize(dic["OverPower"], Colors.black),
+              width: deviceWidth6(),
+              child: autoTextSize(dic["OverPower"], Colors.black),
             ),
             Container(
-              width: _deviceWidth6(),
-              child: _autoTextSize(dic["Problem"], Colors.black),
+              width: deviceWidth6(),
+              child: autoTextSize(dic["Problem"], Colors.black),
             ),
             Container(
-              width: _deviceWidth6(),
-              child: _autoTextSize(dic["Bad"], Colors.red),
+              width: deviceWidth6(),
+              child: autoTextSize(dic["Bad"], Colors.red),
             ),
             Container(
-              width: _deviceWidth6(),
-              child: _autoTextSize('${((double.parse(dic['BadRate']) * 1000) / 10).toStringAsFixed(1)}%', Colors.blue),
+              width: deviceWidth6(),
+              child: autoTextSize('${((double.parse(dic['BadRate']) * 1000) / 10).toStringAsFixed(1)}%', Colors.blue),
             ),
           ],
         ),
@@ -213,7 +180,7 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
     return isLoading ? showLoadingAnime(context) : Column(
       children: <Widget>[
         _buildNodeHeader(),
-        _buildLine(),
+        buildLine(),
         _buildNodeList()
 
       ],

@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:snr/common/model/PublicworksTableCell.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:snr/widget/dialog/MaintainDialog.dart';
 
 /**
  * 工程異常table item
@@ -15,9 +16,10 @@ class PublicworksTableItem extends StatelessWidget {
   final Function callPing;
   final List<String> addTransformArray;
   final int currentCellTag;
+  final String fromFunc;
   ///1:inst, 2:maintain, 3:instfix, 4:fixfix
   final String typeValue;
-  PublicworksTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing, this.currentCellTag, this.typeValue});
+  PublicworksTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing, this.currentCellTag, this.typeValue, this.fromFunc});
   ///分隔線
   _buildLine() {
     return new Container(
@@ -127,6 +129,20 @@ class PublicworksTableItem extends StatelessWidget {
     callPing(custCode, currentCellTag);
   }
 
+  Widget _maintainLogDialog(custCode, custName) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Card(
+            child: MaintainLogDialog(custNo: custCode, custName: custName, from: fromFunc,),
+          )
+        ],
+      ),
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
     var netType = 'EXT';
@@ -675,7 +691,12 @@ class PublicworksTableItem extends StatelessWidget {
                 ),
               ],
             ),
-            onTap: (){print("showLog");},
+            onTap: (){
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => _maintainLogDialog(defaultViewModel.custNo, defaultViewModel.name)
+              );
+            },
           ),
           
           _buildRedLine()

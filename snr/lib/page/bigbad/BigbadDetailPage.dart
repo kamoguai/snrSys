@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/dialog/BigbadHistoryDialog.dart';
@@ -50,53 +51,24 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     initData();
     isLoading = false;
   }
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///高分隔線
-  _buildLineHeight() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///取得裝置width並切6份
-  _deviceWidth6() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 6;
-  }
-
-  ///取得裝置height切4分
-  _deviceHeight4() {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-
+  
   ///lsit height
-  _listHeight() {
-    var height = _deviceHeight4();
+  @override
+  listHeight() {
+    var height = deviceHeight4();
     return height / 7;
   }
 
   ///title height
-  _titleHeight() {
-    var height = _deviceHeight4();
+  @override
+  titleHeight() {
+    var height = deviceHeight4();
     return height / 4.8;
   }
 
   ///自動字大小
-  Widget _autoTextSize(text, color, {fontWeight}) {
+  @override
+  Widget autoTextSize(text, color, {fontWeight}) {
     var fontSize = MyScreen.normalPageFontSize_s(context);
 
     return AutoSizeText(
@@ -107,7 +79,8 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     );
   }
   ///自動字大小靠左
-  Widget _autoTextSizeLeft(text, color) {
+  @override
+  Widget autoTextSizeLeft(text, color) {
     var fontSize = MyScreen.normalPageFontSize_s(context);
 
     return AutoSizeText(
@@ -121,23 +94,23 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
   Widget _buildCmts() {
     Widget cmts;
     cmts = Container(
-      height: _listHeight() * 2,
+      height: listHeight() * 2,
       child: Column(
         children: <Widget>[
           Container(
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(left: 5.0),
-            height: _listHeight() - 1,
-            child: _autoTextSizeLeft('地址地址', Colors.grey),
+            height: listHeight() - 1,
+            child: autoTextSizeLeft('地址地址', Colors.grey),
           ),
-          _buildLine(),
+          buildLine(),
           Container(
             padding: EdgeInsets.only(left: 5.0),
-            height:  _listHeight() - 1,
+            height:  listHeight() - 1,
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: _autoTextSizeLeft('cmts', Colors.black),
+                  child: autoTextSizeLeft('cmts', Colors.black),
                 ),
                 GestureDetector(
                   child: Container(
@@ -159,38 +132,38 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
   Widget _buildTotalTitle() {
     Widget title;
     title = Container(
-      height: _listHeight(),
+      height: listHeight(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_online, Colors.blue),
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).home_signal_online, Colors.blue),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).home_btn_upP, Colors.black),
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).home_btn_upP, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_problem, Colors.pink),
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_problem, Colors.pink),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).home_btn_assignFix, Colors.red),
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).home_btn_assignFix, Colors.red),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_percent, Colors.blueAccent),
+            width: deviceWidth6(),
+            child: autoTextSize(CommonUtils.getLocale(context).home_signal_percent, Colors.blueAccent),
           ),
         ],
       ),
@@ -205,38 +178,38 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
         border: Border(
           bottom: BorderSide(
             color: Colors.grey, width: 1.0, style: BorderStyle.solid))),
-      height: _listHeight(),
+      height: listHeight(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_online, Colors.blue),
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).home_signal_online, Colors.blue),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).home_btn_upP, Colors.black),
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).home_btn_upP, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_problem, Colors.pink),
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_problem, Colors.pink),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).home_btn_assignFix, Colors.red),
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).home_btn_assignFix, Colors.red),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(CommonUtils.getLocale(context).home_signal_percent, Colors.blueAccent),
+            width: deviceWidth6(),
+            child: autoTextSize(CommonUtils.getLocale(context).home_signal_percent, Colors.blueAccent),
           ),
         ],
       ),
@@ -248,7 +221,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     Widget totalList;
     // if (dataArray.length > 0) {
       totalList = Container(
-        height: (_listHeight() * 2),
+        height: (listHeight() * 2),
         child: ListView.builder(
           itemBuilder: _buildTotalItem,
           itemCount: dataArray.length + 2,
@@ -265,26 +238,26 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     Widget lightTitle;
     lightTitle = Container(
       color: Color(MyColors.hexFromStr('#f0fcff')),
-      height: _listHeight() * 2,
+      height: listHeight() * 2,
       child: Column(
         children: <Widget>[
           Container(
-            height: _listHeight() - 1,
+            height: listHeight() - 1,
             child:  Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _autoTextSize(CommonUtils.getLocale(context).text_affectLight, Colors.black),
+                autoTextSize(CommonUtils.getLocale(context).text_affectLight, Colors.black),
               ],
             ),
           ),
-          _buildLine(),
+          buildLine(),
           Container(
-            height: _listHeight(),
+            height: listHeight(),
             child: ListView(
               padding: EdgeInsets.only(left: 5.0),
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                _autoTextSize('text', Colors.black)
+                autoTextSize('text', Colors.black)
               ],
             ),
           )
@@ -298,19 +271,19 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     Widget mans;
     mans = Container(
       color: Color(MyColors.hexFromStr('#fafff2')),
-      height: _listHeight() * 2,
+      height: listHeight() * 2,
       child: Column(
         children: <Widget>[
           Container(
             alignment: Alignment.centerLeft,
-            height: _listHeight() - 1,
-            child: _autoTextSize('text', Colors.black),
+            height: listHeight() - 1,
+            child: autoTextSize('text', Colors.black),
           ),
-          _buildLine(),
+          buildLine(),
           Container(
             alignment: Alignment.centerLeft,
-            height: _listHeight(),
-            child: _autoTextSize('text', Colors.black),
+            height: listHeight(),
+            child: autoTextSize('text', Colors.black),
           ),
         ],
       ),
@@ -327,27 +300,27 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
             color: Colors.grey, width: 1.0, style: BorderStyle.solid)
           )
         ),
-      height: _listHeight(),
+      height: listHeight(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: (_deviceWidth6() * 1.5) - 1,
+            width: (deviceWidth6() * 1.5) - 1,
             child: ListView(
               padding: EdgeInsets.only(left: 5.0),
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                _autoTextSize('time and man time and man', Colors.blueAccent),
+                autoTextSize('time and man time and man', Colors.blueAccent),
               ],
             )
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Expanded(
             child: ListView(
               padding: EdgeInsets.only(left: 5.0),
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                 _autoTextSizeLeft('memo view,memo view,memo view,memo view,memo view,memo view,memo view,memo view,memo view,', Colors.black)
+                 autoTextSizeLeft('memo view,memo view,memo view,memo view,memo view,memo view,memo view,memo view,memo view,', Colors.black)
               ],
             )
             
@@ -371,7 +344,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     Widget list;
     // if (dataArray.length > 0) {
       list = Container(
-        height: _listHeight() * 3,
+        height: listHeight() * 3,
         child: ListView.builder(
           itemBuilder: _buildReportManItem,
           itemCount: dataArray.length + 2,
@@ -387,7 +360,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
   Widget _buildHQTime() {
     Widget hq;
     hq = Container(
-      height: _listHeight(),
+      height: listHeight(),
       color: Color(MyColors.hexFromStr('#f2f2f2')),
       child: ListView(
         padding: EdgeInsets.only(left: 5.0),
@@ -396,12 +369,12 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              _autoTextSize('發報時間:', Colors.black, fontWeight: FontWeight.bold),
-              _autoTextSize('開始時間', Colors.red,),
-              _autoTextSize('~', Colors.black,),
-              _autoTextSize('結束時間', Colors.blueAccent,),
+              autoTextSize('發報時間:', Colors.black, fontWeight: FontWeight.bold),
+              autoTextSize('開始時間', Colors.red,),
+              autoTextSize('~', Colors.black,),
+              autoTextSize('結束時間', Colors.blueAccent,),
               SizedBox(width: 10.0,),
-              _autoTextSize('(耗時:h:mm)', Colors.black,),
+              autoTextSize('(耗時:h:mm)', Colors.black,),
             ],
           ),
         ],
@@ -420,9 +393,9 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
           )
         )
       ),
-      width: _deviceWidth6(),
-      height: _listHeight(),
-      child: _autoTextSize('查修人', Colors.black),
+      width: deviceWidth6(),
+      height: listHeight(),
+      child: autoTextSize('查修人', Colors.black),
     );
     return item;
   }
@@ -432,7 +405,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     // if(dataArray.length > 0) {
       list = GestureDetector(
         child: Container(
-          height: _listHeight(),
+          height: listHeight(),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: _buildCheckManItem,
@@ -459,13 +432,13 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     Widget result;
     result = GestureDetector(
       child: Container(
-        height: _listHeight() * 2.5,
+        height: listHeight() * 2.5,
         color: Color(MyColors.hexFromStr('#fff7f6')),
         child: ListView(
           padding: EdgeInsets.only(left: 5.0, right: 5.0),
           scrollDirection: Axis.vertical,
           children: <Widget>[
-            _autoTextSizeLeft('查修結果: 此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，', Colors.grey),
+            autoTextSizeLeft('查修結果: 此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，此番修正問題結果如何，', Colors.grey),
           ],
         ),
       ),
@@ -483,11 +456,11 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     Widget title;
     title = Container(
       color: Color(MyColors.hexFromStr('#f0fcff')),
-      height: _listHeight(),
+      height: listHeight(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          _autoTextSize('過去查修歷史', Colors.black, fontWeight: FontWeight.bold),
+          autoTextSize('過去查修歷史', Colors.black, fontWeight: FontWeight.bold),
         ],
       ),
     );
@@ -500,31 +473,31 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
 
     item = Container(
       color: value > 0 ? Color(MyColors.hexFromStr('#f2f2f2')) : Colors.white ,
-      height: _listHeight() * 2,
+      height: listHeight() * 2,
       child: Column(
         children: <Widget>[
           Container(
-            height: _listHeight() - 1,
+            height: listHeight() - 1,
             child: ListView(
               padding: EdgeInsets.only(left: 5.0,),
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                _autoTextSizeLeft('日期/ 開始時間~結束時間 (耗時) 人員a,人員b', Colors.grey),
+                autoTextSizeLeft('日期/ 開始時間~結束時間 (耗時) 人員a,人員b', Colors.grey),
               ],
             )
           ),
-          _buildLine(),
+          buildLine(),
           Container(
-            height: _listHeight() - 1,
+            height: listHeight() - 1,
             child: ListView(
               padding: EdgeInsets.only(left: 5.0,),
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                _autoTextSizeLeft('查修結果', Colors.grey),
+                autoTextSizeLeft('查修結果', Colors.grey),
               ],
             )
           ),
-          _buildLine(),
+          buildLine(),
         ],
       ),
     );
@@ -536,7 +509,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     // if(dataArray.length > 0) {
       list = GestureDetector(
         child: Container(
-          height: _listHeight() * 6,
+          height: listHeight() * 6,
           child: ListView.builder(
             itemBuilder: _buildHistoryItem,
             itemCount: dataArray.length + 4,
@@ -568,25 +541,25 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
         child: Column(
           children: <Widget>[
             _buildCmts(),
-            _buildLine(),
+            buildLine(),
             _buildTotalTitle(),
-            _buildLine(),
+            buildLine(),
             _buildTotalList(),
             // _buildLine(),
             _buildLightTitle(),
-            _buildLine(),
+            buildLine(),
             _buildMans(),
-            _buildLine(),
+            buildLine(),
             _buildReportManList(),
-            _buildLine(),
+            buildLine(),
             _buildHQTime(),
-            _buildLine(),
+            buildLine(),
             _buildCheckManList(),
-            _buildLine(),
+            buildLine(),
             _buildCheckResult(),
-            _buildLine(),
+            buildLine(),
             _buildHistoryTitle(),
-            _buildLine(),
+            buildLine(),
             _buildHistoryList()
           ],
         ),
@@ -618,18 +591,18 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
     Widget dialog;
     dialog = Container(
       width: double.maxFinite,
-      height: _titleHeight() * 2,
+      height: titleHeight() * 2,
       padding: EdgeInsets.only(top: 2.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            height: _titleHeight(),
-            child: _autoTextSize("是否要將本案轉至完工記點", Colors.black),
+            height: titleHeight(),
+            child: autoTextSize("是否要將本案轉至完工記點", Colors.black),
           ),
-          _buildLine(),
+          buildLine(),
           _buildCheckManList(),
-          _buildLine(),
+          buildLine(),
         ],
       ),
     );
@@ -648,7 +621,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
           SizedBox(height: 20.0,),
           Card(
             child: Container(
-              height: _titleHeight() * 1.5,
+              height: titleHeight() * 1.5,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -661,7 +634,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
                       },
                     ),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
                     // width: _deviceWidth2() - 3,
                     child: FlatButton(
@@ -780,7 +753,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
         bottomNavigationBar: new Material(
           color: Theme.of(context).primaryColor,
           child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               ButtonTheme(
                 minWidth: MyScreen.homePageBarButtonWidth(context),
@@ -789,7 +762,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
                   text: CommonUtils.getLocale(context).text_refresh,
                   textColor: Colors.white,
                   color: Colors.transparent,
-                  fontSize: MyScreen.normalPageFontSize(context),
+                  fontSize: MyScreen.homePageFontSize(context),
                   onPress: () {
                     isLoading = true;
                     setState(() {
@@ -805,31 +778,23 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
                   text: CommonUtils.getLocale(context).text_register,
                   textColor: Colors.white,
                   color: Colors.transparent,
-                  fontSize: MyScreen.normalPageFontSize(context),
+                  fontSize: MyScreen.homePageFontSize(context),
                   onPress: () {
                   
                   },
                 ),
               ),
-              ButtonTheme(
-                 minWidth: MyScreen.homePageBarButtonWidth(context),
-                  child: new FlatButton.icon(
-                icon: Image.asset(
-                  MyICons.DEFAULT_USER_ICON,
-                  width: 30,
-                  height: 30,
+              Container(
+                height: 30,
+                child: FlatButton.icon(
+                  icon: Image.asset('static/images/24.png'),
+                  color: Colors.transparent,
+                  label: Text(''),
+                  onPressed: (){
+                     NavigatorUtils.goLogin(context);
+                  },
                 ),
-                textColor: Colors.white,
-                color: Colors.transparent,
-                label: Text(
-                  'DCTV',
-                  style: TextStyle(
-                      fontSize: MyScreen.normalPageFontSize(context)),
-                ),
-                onPressed: () {
-                  print(123);
-                },
-              )),
+              ),
               ButtonTheme(
                 minWidth: MyScreen.homePageBarButtonWidth(context),
                 child: new MyToolButton(
@@ -837,10 +802,10 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
                   text: '',
                   textColor: Colors.white,
                   color: Colors.transparent,
-                  fontSize: MyScreen.normalPageFontSize(context),
+                  fontSize: MyScreen.homePageFontSize(context),
                   mainAxisAlignment: MainAxisAlignment.start,
                   onPress: () {
-                  
+                    
                   },
                 ),
               ),
@@ -851,7 +816,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
                   text: CommonUtils.getLocale(context).text_back,
                   textColor: Colors.white,
                   color: Colors.transparent,
-                  fontSize: MyScreen.normalPageFontSize(context),
+                  fontSize: MyScreen.homePageFontSize(context),
                   mainAxisAlignment: MainAxisAlignment.start,
                   onPress: () {
                     if (isLoading) {

@@ -214,13 +214,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
         refreshKey: refreshIndicatorKey,
     );
   }
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
+ 
   ///取得使用者信息
   getUserInfoData() async {
     var res = await UserDao.getUserInfoLocal();
@@ -578,7 +572,9 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
       builder: (BuildContext context) => _buildPingDialog(context,res, currentCellTag: currentCellTag)
       );
       isLoading = false;
-      
+    }
+    else {
+      isLoading = false;
     }
     
   }
@@ -809,7 +805,7 @@ class _ProblemDetailPageState extends State<ProblemDetailPage> with AutomaticKee
             body: Column(
               children: <Widget>[
                 _renderHeader(),
-                _buildLine(),
+                buildLine(),
                 Expanded(
                   child: _renderBody(),
                 ),

@@ -9,6 +9,7 @@ import 'package:snr/common/model/SmallPingTableCell.dart';
 import 'package:snr/common/model/User.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:snr/common/utils/NavigatorUtils.dart';
 
 
 /**
@@ -654,7 +655,10 @@ class SmallPingTableItem extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(5.0))
                     ),
                     child: _autoTextSize('大PING', TextStyle(color: Colors.red), context),
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.pop(context);
+                      NavigatorUtils.goBigPing(context, custNo: defaultViewModel.custCode);
+                    },
                   ),
                 ),
                 _buildHeightLine(),

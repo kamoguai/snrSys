@@ -77,6 +77,7 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - static/images/23.png
+    - static/images/24.png
     - static/images/64x64.png
     - static/images/blue.png
     - static/images/blueWay.png

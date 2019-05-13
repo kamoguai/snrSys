@@ -68,8 +68,20 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
   final List<dynamic> dataArray = [];
   ///是否顯示統計列表
   var isEnableStatistic = false;
+  ///來自功能
+  var fromFunc = "";
   ///列表顯示的物件
   _renderItem(index) {
+    switch(nowBtnType) {
+      case buttonType.confirm:
+        fromFunc = "CONFIRM";
+        break;
+      case buttonType.bp:
+        fromFunc = "BP";
+        break;
+      default:
+        break;
+    }
     if (!isEnableStatistic) {
       var bpType;
       if(nowBtnType == buttonType.confirm) {
@@ -80,7 +92,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
       }
       BpTableCell dtc = pullLoadWidgetControl.dataList[index];
       BpViewModel model = BpViewModel.forMap(dtc);
-      return new BpTableItem(defaultViewModel: model,bpType: bpType,);
+      return new BpTableItem(defaultViewModel: model,bpType: bpType, fromFunc: fromFunc,);
       
     }
     else {
@@ -313,61 +325,9 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
     }
     return wList;
   }
-   ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-    ///高分隔線
-  _buildLineHeight() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///高分隔線
-  _buildLineHeightRed() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.red,
-    );
-  }
-
-  ///取得裝置width並切10份
-  _deviceWidth8() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 8;
-  }
-
-  ///取得裝置height切4分
-  _deviceHeight4() {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-
-  ///lsit height
-  _listHeight() {
-    var height = _deviceHeight4();
-    return height / 5;
-  }
-
-  ///title height
-  _titleHeight() {
-    var height = _deviceHeight4();
-    return height / 4;
-  }
-
-   Widget _autoTextSize(text, style, context) {
+ 
+   @override
+   Widget autoTextSize(text, style) {
     var fontSize = MyScreen.defaultTableCellFontSize(context);
     var fontStyle = TextStyle(fontSize: fontSize);
     return AutoSizeText(
@@ -385,92 +345,92 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
       body = Column(
         children: <Widget>[
           _renderHeader(),
-          _buildLine(),
+          buildLine(),
           Container(
             decoration: BoxDecoration(color: Color(MyColors.hexFromStr('#fef5f6')),border: Border(bottom: BorderSide(width: 1.0,color: Colors.grey,style: BorderStyle.solid))),
-            height: _listHeight(),
+            height: listHeight(),
             child: Row(
               children: <Widget>[
                 Container(
-                  width: (_deviceWidth8() * 2) - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_people, TextStyle(color: Colors.black), context),
+                  width: (deviceWidth8() * 2) - 1,
+                  child: autoTextSize(CommonUtils.getLocale(context).text_people, TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeight(),
+                buildLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_point, TextStyle(color: Colors.black), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize(CommonUtils.getLocale(context).text_point, TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeight(),
+                buildLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_total_s, TextStyle(color: Colors.black), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize(CommonUtils.getLocale(context).text_total_s, TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeightRed(),
+                buildRedLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_inst, TextStyle(color: Colors.black), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize(CommonUtils.getLocale(context).text_inst, TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeightRed(),
+                buildRedLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_maintain, TextStyle(color: Colors.black), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize(CommonUtils.getLocale(context).text_maintain, TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeight(),
+                buildLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_assign, TextStyle(color: Colors.black), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize(CommonUtils.getLocale(context).text_assign, TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeight(),
+                buildLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_bp, TextStyle(color: Colors.red), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize(CommonUtils.getLocale(context).text_bp, TextStyle(color: Colors.red)),
                 ),
               ],
             ),
           ),
-          _buildLine(),
+          buildLine(),
           Expanded(
             child: _renderBody(),
           ),
-          _buildLine(),
+          buildLine(),
           Container(
             decoration: BoxDecoration(color: Color(MyColors.hexFromStr('#f0fcff')),border: Border(bottom: BorderSide(width: 1.0,color: Colors.grey,style: BorderStyle.solid))),
-            height: _listHeight(),
+            height: listHeight(),
             child: Row(
               children: <Widget>[
                 Container(
-                  width: (_deviceWidth8() * 2) - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_total + "${dataArray.length}人", TextStyle(color: Colors.black), context),
+                  width: (deviceWidth8() * 2) - 1,
+                  child: autoTextSize(CommonUtils.getLocale(context).text_total + "${dataArray.length}人", TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeight(),
+                buildLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_point, TextStyle(color: Colors.black), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize(CommonUtils.getLocale(context).text_point, TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeight(),
+                buildLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize("$totalCount", TextStyle(color: Colors.black), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize("$totalCount", TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeightRed(),
+                buildRedLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize("$instCount", TextStyle(color: Colors.black), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize("$instCount", TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeightRed(),
+                buildRedLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize("$fixCount", TextStyle(color: Colors.black), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize("$fixCount", TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeight(),
+                buildLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_assign, TextStyle(color: Colors.black), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize(CommonUtils.getLocale(context).text_assign, TextStyle(color: Colors.black)),
                 ),
-                _buildLineHeight(),
+                buildLineHeight(),
                 Container(
-                  width: _deviceWidth8() - 1,
-                  child: _autoTextSize("$pointCount", TextStyle(color: Colors.red), context),
+                  width: deviceWidth8() - 1,
+                  child: autoTextSize("$pointCount", TextStyle(color: Colors.red)),
                 ),
               ],
             ),
@@ -482,7 +442,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
       body = Column(
         children: <Widget>[
           _renderHeader(),
-          _buildLine(),
+          buildLine(),
           Expanded(
             child: _renderBody(),
           ),

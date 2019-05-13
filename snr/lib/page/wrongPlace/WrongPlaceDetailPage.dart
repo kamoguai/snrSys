@@ -114,7 +114,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth4(),
+            width: deviceWidth4(),
               child: MyToolButton(
               text: CommonUtils.getLocale(context).text_noPlace,
               fontSize: MyScreen.appBarFontSize(context),
@@ -135,7 +135,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
             ),
           ),
           Container(
-            width: _deviceWidth4(),
+            width: deviceWidth4(),
               child: MyToolButton(
               text: CommonUtils.getLocale(context).text_wp2,
               fontSize: MyScreen.appBarFontSize(context),
@@ -156,7 +156,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
             ),
           ),
           Container(
-            width: _deviceWidth4(),
+            width: deviceWidth4(),
               child: MyToolButton(
               text: 'CM-NG',
               textColor: nowAppBarType == appBarBtnType.cm ? Colors.yellow : Colors.white,
@@ -177,7 +177,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
             ),
           ),
           Container(
-            width: _deviceWidth4(),
+            width: deviceWidth4(),
               child: MyToolButton(
               text: 'STB-NG',
               textColor: nowAppBarType == appBarBtnType.stb ? Colors.yellow : Colors.white,
@@ -364,50 +364,8 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
         refreshKey: refreshIndicatorKey,
     );
   }
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-  ///取得裝置width並切6份
-  _deviceWidth4() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 4;
-  }
 
-   ///高分隔線
-  _buildLineHeight(context) {
-    return new Container(
-      height: _titleHeight(context),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
-  ///取得裝置width並切10份
-  _deviceWidth10(context) {
-    var width = MediaQuery.of(context).size.width;
-    return width / 10;
-  }
-
-  ///取得裝置height切4分
-  _deviceHeight4(context) {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-
-  ///title height
-  _titleHeight(context) {
-    var height = _deviceHeight4(context);
-    return height / 4;
-  }
-
-  Widget _autoTextSizeH(text, style, context) {
+  Widget autoTextSizeH(text, style, context) {
     var fontSize = MyScreen.defaultTableCellFontSize(context);
     var fontStyle = TextStyle(fontSize: fontSize);
     return AutoSizeText(
@@ -421,23 +379,23 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
   Widget _statisticHead() {
     if (isEnableHeadBtns && nowType == buttonType.statistic) {
       return Container(
-        height: _titleHeight(context) * 0.7,
+        height: titleHeight() * 0.7,
         color: Color(MyColors.hexFromStr('#fdf5f6')),
         child: Row(
         children: <Widget>[
           Container(
-            width: (_deviceWidth10(context) * 4) - 1,
-            child: _autoTextSizeH('光點', TextStyle(color: Colors.black, fontWeight: FontWeight.bold), context),
+            width: (deviceWidth10(context) * 4) - 1,
+            child: autoTextSizeH('光點', TextStyle(color: Colors.black, fontWeight: FontWeight.bold), context),
           ),
-          _buildLineHeight(context),
+          buildLineHeight(),
           Container(
-            width: (_deviceWidth10(context) * 3) - 1,
-            child: _autoTextSizeH('BOSS卡板', TextStyle(color: Colors.blue, fontWeight: FontWeight.bold), context),
+            width: (deviceWidth10(context) * 3) - 1,
+            child: autoTextSizeH('BOSS卡板', TextStyle(color: Colors.blue, fontWeight: FontWeight.bold), context),
           ),
-          _buildLineHeight(context),
+          buildLineHeight(),
           Container(
-            width: (_deviceWidth10(context) * 3),
-            child: _autoTextSizeH('上線卡板', TextStyle(color: Colors.brown, fontWeight: FontWeight.bold), context),
+            width: (deviceWidth10(context) * 3),
+            child: autoTextSizeH('上線卡板', TextStyle(color: Colors.brown, fontWeight: FontWeight.bold), context),
           ),
           
         ],
@@ -802,6 +760,9 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
         isLoading = false;
       });
     }
+    else {
+      isLoading = false;
+    }
   }
   ///自移，停訊dialog
   Widget _buildWPDialog(BuildContext context,wpType) {
@@ -827,7 +788,9 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
       builder: (BuildContext context) => _buildPingDialog(context,res, currentCellTag: currentCellTag)
       );
       isLoading = false;
-      
+    }
+    else {
+      isLoading = false;
     }
     
   }
@@ -1083,9 +1046,9 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
             body: Column(
               children: <Widget>[
                 _renderHeader(),
-                _buildLine(),
+                buildLine(),
                 _statisticHead(),
-                _buildLine(),
+                buildLine(),
                 Expanded(
                   child: _renderBody(),
                 ),

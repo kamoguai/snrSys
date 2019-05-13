@@ -24,6 +24,8 @@ import 'package:snr/widget/BaseWidget.dart';
  * Date: 2019-05-07
  */
 class BigPingPage extends StatefulWidget {
+  final String custNo;
+  BigPingPage({this.custNo});
   @override
   _BigPingPageState createState() => _BigPingPageState();
 }
@@ -50,83 +52,6 @@ class _BigPingPageState extends State<BigPingPage> with BaseWidget {
   ///保留cmmac
   var cmmacStr = "";
 
-  ///分隔線
-  buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-  ///分隔線red
-  buildLineRed() {
-    return new Container(
-      height: 1.0,
-      color: Colors.red,
-    );
-  }
-
-  ///高分隔線
-  buildLineHeight(context) {
-    return new Container(
-      height: listHeight(context),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///取得裝置width並切2份
-  deviceWidth2(context) {
-    var width = MediaQuery.of(context).size.width;
-    return width / 2;
-  }
-
-  ///取得裝置width並切3份
-  deviceWidth3(context) {
-    var width = MediaQuery.of(context).size.width;
-    return width / 3;
-  }
-
-
-  ///取得裝置width並切4份
-  deviceWidth4(context) {
-    var width = MediaQuery.of(context).size.width;
-    return width / 4;
-  }
-
-  ///取得裝置width並切5份
-  deviceWidth5(context) {
-    var width = MediaQuery.of(context).size.width;
-    return width / 5;
-  }
-
-  ///取得裝置width並切6份
-  deviceWidth6(context) {
-    var width = MediaQuery.of(context).size.width;
-    return width / 6;
-  }
-
-  ///取得裝置height切4分
-  deviceHeight4(context) {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-
-  ///lsit height
-  listHeight(context) {
-    var height = deviceHeight4(context);
-    return height / 5;
-  }
-
-  ///title height
-  titleHeight(context) {
-    var height = deviceHeight4(context);
-    return height / 4;
-  }
-  
   ///上面4個按鈕
   _fourBtnAction(BuildContext context) {
     return Container(
@@ -144,7 +69,7 @@ class _BigPingPageState extends State<BigPingPage> with BaseWidget {
               fontSize: MyScreen.normalListPageFontSize(context),
               text: 'CW',
               onPress: () {
-                 showLoadingDialog(context);
+                
               },
             )
           ),
@@ -253,6 +178,9 @@ class _BigPingPageState extends State<BigPingPage> with BaseWidget {
             child: Container(
               padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 5.0, bottom: 5.0),
               child: CupertinoTextField(
+                style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.black),
+                keyboardType: TextInputType.number,
+                controller: TextEditingController(text: widget.custNo == null ? textFiledStr : widget.custNo),
                 padding: EdgeInsets.all(paddingValue),
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), border: Border.all(width: 1.0, color: Colors.grey, style: BorderStyle.solid)),
                 onChanged: (String value) {
@@ -269,6 +197,9 @@ class _BigPingPageState extends State<BigPingPage> with BaseWidget {
               child: Image.asset('static/images/23.png')
             ),
             onTap: (){
+              if (widget.custNo != null) {
+                textFiledStr = widget.custNo;
+              }
               if(textFiledStr == "") {
                 Fluttertoast.showToast(msg: '請輸入客編');
                 return;
@@ -466,10 +397,13 @@ class _BigPingPageState extends State<BigPingPage> with BaseWidget {
       Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
       return;
     }
+    // if(custCode.length < 10) {
+    //   Fluttertoast.showToast(msg: '請輸入正確客編格式');
+    //   return;
+    // }
     FocusScope.of(context).requestFocus(FocusNode());
     isLoading = true;
     showLoadingDialog(context);
-    Fluttertoast.showToast(msg: '正在ping該筆資料中..');
     var res = await getPingData(custCode);
     if(res != null && res.result) {
       hidenLoadingDialog(context);
@@ -480,6 +414,12 @@ class _BigPingPageState extends State<BigPingPage> with BaseWidget {
         custNameStr = dataArray["CustName"];
         custNoStr = dataArray["CustCode"];
         isLoading = false;
+      });
+    }
+    else {
+      Future.delayed(const Duration(seconds: 1),(){
+        hidenLoadingDialog(context);
+        isLoading = false;     
       });
     }
   }
@@ -516,6 +456,9 @@ class _BigPingPageState extends State<BigPingPage> with BaseWidget {
     if(res != null && res.result) {
       isLoading = false;
       Fluttertoast.showToast(msg: res.data["MSG"]);
+    }
+    else {
+      isLoading = false;
     }
 
   }

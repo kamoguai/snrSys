@@ -94,9 +94,10 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
       builder: (BuildContext context) => _buildPingDialog(context,res, currentCellTag: currentCellTag)
       );
       isLoading = false;
-      
     }
-    
+    else {
+      isLoading = false;
+    }
   }
  ///小ping dialog
   Widget _buildPingDialog(BuildContext context, res, {currentCellTag}) {

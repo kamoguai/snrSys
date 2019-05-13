@@ -149,7 +149,7 @@ class NavigatorUtils {
     NavigatorRouter(context, new StandardPage());
   }
   ///大PING頁面
-  static goBigPing(BuildContext context) {
-    NavigatorRouter(context, new BigPingPage());
+  static goBigPing(BuildContext context, {String custNo}) {
+    NavigatorRouter(context, new BigPingPage(custNo: custNo,));
   }
 }

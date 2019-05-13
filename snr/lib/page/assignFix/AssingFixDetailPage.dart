@@ -60,6 +60,8 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
   final List<String> toTransformArray = [];
   ///數據資料arr
   final List<dynamic> dataArray = [];
+  ///指派人員arr
+  final List<dynamic> assingManArray = [];
   ///來自功能
   var fromFunc = "";
   ///列表顯示的物件
@@ -80,7 +82,7 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
     }
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, assignManFunc: _assingManFunc, currentCellTag: index,);
   }
 
   ///頁面上方按鈕群
@@ -221,13 +223,7 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
         refreshKey: refreshIndicatorKey,
     );
   }
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
+
   ///取得使用者信息
   getUserInfoData() async {
     var res = await UserDao.getUserInfoLocal();
@@ -244,6 +240,8 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
     final configData = await LocalStorage.get(Config.SNR_CONFIG);
     final dic = json.decode(configData);
     config = dic;
+    var res = await getAssingManData();
+    assingManArray.addAll(res.data);
   }
   ///get api data
   getApiDataList() async {
@@ -255,6 +253,11 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
     typeValue: typevalue,
     accNo: user.accNo,
     );
+    return res;
+  }
+  ///呼叫取得指派人員
+  getAssingManData() async{
+    var res = await AssignFixDao.getQueryAssignManList();
     return res;
   }
   /// call 跳轉api
@@ -592,10 +595,46 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
       builder: (BuildContext context) => _buildPingDialog(context,res, currentCellTag: currentCellTag)
       );
       isLoading = false;
-      
+    }
+    else {
+       isLoading = false;
     }
     
   }
+ ///指派人員function
+  void _assingManFunc() async {
+    showCupertinoModalPopup<String>(
+      context: context,
+        builder: (context) {
+          var dialog = CupertinoActionSheet(
+            title: Text('請選擇欲指派人員'),
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context, 'cancel');
+              },
+              child: Text('取消'),
+            ),
+            actions: _assignManList() 
+          );
+          return dialog;
+        }
+    );
+  }
+ /// assignManList
+ _assignManList() {
+   List<Widget> wList = [];
+   for (var dic in assingManArray) {
+     wList.add(
+      CupertinoActionSheetAction(
+        onPressed: () {
+          Navigator.pop(context);
+        }, 
+        child: Text("${dic["empName"]}"),
+      )
+     );
+   }
+   return wList;
+ }
  ///小ping dialog
   Widget _buildPingDialog(BuildContext context, res, {currentCellTag}) {
     SmallPingTableCell sptc = SmallPingTableCell.fromJson(res.data);
@@ -823,7 +862,7 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
             body: Column(
               children: <Widget>[
                 _renderHeader(),
-                _buildLine(),
+                buildLine(),
                 Expanded(
                   child: _renderBody(),
                 ),

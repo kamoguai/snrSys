@@ -15,11 +15,12 @@ class DefaultTableItem extends StatelessWidget {
   final dynamic configData;
   final Function addTransform;
   final Function callPing;
+  final Function assignManFunc;
   final List<String> addTransformArray;
   final int currentCellTag;
   final String netType;
   final String fromFunc;
-  DefaultTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing, this.currentCellTag, this.netType, this.fromFunc});
+  DefaultTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing, this.assignManFunc, this.currentCellTag, this.netType, this.fromFunc});
   ///分隔線
   _buildLine() {
     return new Container(
@@ -124,11 +125,14 @@ class DefaultTableItem extends StatelessWidget {
       return Colors.white;
     }
   }
- 
+  ///小ping
   Future _openCallPingDialog(custCode, currentCellTag) async {
     callPing(custCode, currentCellTag);
   }
-
+  ///指派人員
+  Future _openAssignManDialog() async {
+    assignManFunc();
+  }
   Widget _maintainLogDialog(custCode, custName) {
     return Material(
       type: MaterialType.transparency,
@@ -241,7 +245,7 @@ class DefaultTableItem extends StatelessWidget {
                 _buildHeightLine(),
                 GestureDetector(
                   onTap: (){
-                    print('assignman');
+                    _openAssignManDialog();
                   },
                   child: Container(
                     width:_deviceWidth92(context),

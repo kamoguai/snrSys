@@ -144,4 +144,25 @@ class AssignFixDao {
       return new DataResult(null, false);
     }
   }
+  ///取的指派人員
+  static getQueryAssignManList() async {
+    List<dynamic> mainDataArray = [];
+    var res = await HttpManager.netFetch(Address.getQueryAssignManListAPI(), null, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("getQueryAssignManList resp => " + res.data.toString());
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        mainDataArray = res.data["ReturnData"];
+        return new DataResult(mainDataArray, true);
+      }
+      else {
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
+        return new DataResult(null, false);
+      }
+      
+    } else {
+      return new DataResult(null, false);
+    }
+  }
 }

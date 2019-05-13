@@ -162,13 +162,7 @@ class _OverTimeDetailPageState extends State<OverTimeDetailPage> with AutomaticK
         refreshKey: refreshIndicatorKey,
     );
   }
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
+
   ///取得使用者信息
   getUserInfoData() async {
     var res = await UserDao.getUserInfoLocal();
@@ -541,7 +535,9 @@ class _OverTimeDetailPageState extends State<OverTimeDetailPage> with AutomaticK
       builder: (BuildContext context) => _buildPingDialog(context,res, currentCellTag: currentCellTag)
       );
       isLoading = false;
-      
+    }
+    else {
+      isLoading = false;
     }
   }
  ///小ping dialog
@@ -813,7 +809,7 @@ class _OverTimeDetailPageState extends State<OverTimeDetailPage> with AutomaticK
             body: Column(
               children: <Widget>[
                 _renderHeader(),
-                _buildLine(),
+                buildLine(),
                 Expanded(
                   child: _renderBody(),
                 ),

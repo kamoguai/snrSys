@@ -70,62 +70,9 @@ class _PublicworksListPageState extends State<PublicworksListPage>
     }
   }
 
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///高分隔線
-  _buildLineHeight() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///高分隔線red
-  _buildLineHeightRed() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.red,
-    );
-  }
-
-  ///取得裝置width並切6份
-  _deviceWidth6() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 6;
-  }
-
-  ///取得裝置height切4分
-  _deviceHeight4() {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-
-  ///lsit height
-  _listHeight() {
-    var height = _deviceHeight4();
-    return height / 5;
-  }
-
-  ///title height
-  _titleHeight() {
-    var height = _deviceHeight4();
-    return height / 4;
-  }
-
   ///自動字大小
-  Widget _autoTextSize(text, color) {
+  @override
+  Widget autoTextSize(text, color) {
     var fontSize = MyScreen.normalPageFontSize_s(context);
 
     return AutoSizeText(
@@ -138,38 +85,38 @@ class _PublicworksListPageState extends State<PublicworksListPage>
 
   Widget _buildWorkTitle1() {
     return new Container(
-      height: _titleHeight(),
+      height: titleHeight(),
       color: Color(MyColors.hexFromStr('#fef5f6')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: (_deviceWidth6() * 2) - 1,
-            child: _autoTextSize(
+            width: (deviceWidth6() * 2) - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_status, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_inst, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_maintain, Colors.black),
           ),
-          _buildLineHeightRed(),
+          buildRedLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_instFix, Colors.red),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(
+            width: deviceWidth6(),
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_fixfix, Colors.pink),
           ),
         ],
@@ -182,7 +129,7 @@ class _PublicworksListPageState extends State<PublicworksListPage>
     var dic = dataArray[index];
     return GestureDetector(
       child: Container(
-        height: _listHeight(),
+        height: listHeight(),
         decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
@@ -191,28 +138,28 @@ class _PublicworksListPageState extends State<PublicworksListPage>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
-              width: (_deviceWidth6() * 2) - 1,
-              child: _autoTextSize(dic["Area"] ?? "", Colors.black),
+              width: (deviceWidth6() * 2) - 1,
+              child: autoTextSize(dic["Area"] ?? "", Colors.black),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth6() - 1,
-              child: _autoTextSize(dic["INST"] ?? "", Colors.black),
+              width: deviceWidth6() - 1,
+              child: autoTextSize(dic["INST"] ?? "", Colors.black),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth6() - 1,
-              child: _autoTextSize(dic["MAINTAIN"] ?? "", Colors.black),
+              width: deviceWidth6() - 1,
+              child: autoTextSize(dic["MAINTAIN"] ?? "", Colors.black),
             ),
-            _buildLineHeightRed(),
+            buildRedLineHeight(),
             Container(
-              width: _deviceWidth6() - 1,
-              child: _autoTextSize(dic["INSTFIX"] ?? "", Colors.red),
+              width: deviceWidth6() - 1,
+              child: autoTextSize(dic["INSTFIX"] ?? "", Colors.red),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth6(),
-              child: _autoTextSize(dic["FIXFIX"] ?? "", Colors.pink),
+              width: deviceWidth6(),
+              child: autoTextSize(dic["FIXFIX"] ?? "", Colors.pink),
             ),
           ],
         ),
@@ -228,7 +175,7 @@ class _PublicworksListPageState extends State<PublicworksListPage>
     Widget publicList;
     if (dataArray.length > 0) {
       publicList = Container(
-        height: _deviceHeight4(),
+        height: deviceHeight4(),
         child: ListView.builder(
           itemBuilder: _buildWorkListItem1,
           itemCount: dataArray.length,
@@ -243,38 +190,38 @@ class _PublicworksListPageState extends State<PublicworksListPage>
   ///work bottom
   Widget _buildWorkBottom1() {
     return new Container(
-      height: _titleHeight(),
+      height: titleHeight(),
       color: Color(MyColors.hexFromStr('#f0fcff')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: (_deviceWidth6() * 2) - 1,
-            child: _autoTextSize(
+            width: (deviceWidth6() * 2) - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_total, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(instCount == 0 ? "" : instCount, Colors.black),
+            width: deviceWidth6() - 1,
+            child: autoTextSize(instCount == 0 ? "" : instCount, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 maintainCount == 0 ? "" : maintainCount, Colors.black),
           ),
-          _buildLineHeightRed(),
+          buildRedLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 instFixCount == 0 ? "" : instFixCount, Colors.red),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child:
-                _autoTextSize(fixfixCount == 0 ? "" : fixfixCount, Colors.pink),
+                autoTextSize(fixfixCount == 0 ? "" : fixfixCount, Colors.pink),
           ),
         ],
       ),
@@ -284,38 +231,38 @@ class _PublicworksListPageState extends State<PublicworksListPage>
   ///work head title2
   Widget _buildWorkTitle2() {
     return new Container(
-      height: _titleHeight(),
+      height: titleHeight(),
       color: Color(MyColors.hexFromStr('#fef5f6')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: (_deviceWidth6() * 2) - 1,
-            child: _autoTextSize(
+            width: (deviceWidth6() * 2) - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_people, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_inst, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_maintain, Colors.black),
           ),
-          _buildLineHeightRed(),
+          buildRedLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_instFix, Colors.red),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(
+            width: deviceWidth6(),
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_fixfix, Colors.pink),
           ),
         ],
@@ -328,7 +275,7 @@ class _PublicworksListPageState extends State<PublicworksListPage>
     var dic = dataArray2[index];
     return GestureDetector(
       child: Container(
-        height: _listHeight(),
+        height: listHeight(),
         decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
@@ -337,32 +284,32 @@ class _PublicworksListPageState extends State<PublicworksListPage>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
-              width: (_deviceWidth6() * 2) - 1,
-              child: _autoTextSize(
+              width: (deviceWidth6() * 2) - 1,
+              child: autoTextSize(
                   CommonUtils.getLocale(context).text_status, Colors.black),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth6() - 1,
-              child: _autoTextSize(
+              width: deviceWidth6() - 1,
+              child: autoTextSize(
                   CommonUtils.getLocale(context).text_inst, Colors.black),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth6() - 1,
-              child: _autoTextSize(
+              width: deviceWidth6() - 1,
+              child: autoTextSize(
                   CommonUtils.getLocale(context).text_maintain, Colors.black),
             ),
-            _buildLineHeightRed(),
+            buildRedLineHeight(),
             Container(
-              width: _deviceWidth6() - 1,
-              child: _autoTextSize(
+              width: deviceWidth6() - 1,
+              child: autoTextSize(
                   CommonUtils.getLocale(context).text_instFix, Colors.red),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth6(),
-              child: _autoTextSize(
+              width: deviceWidth6(),
+              child: autoTextSize(
                   CommonUtils.getLocale(context).text_fixfix, Colors.pink),
             ),
           ],
@@ -377,7 +324,7 @@ class _PublicworksListPageState extends State<PublicworksListPage>
     Widget publicList2;
     if (dataArray2 != null && dataArray2.length > 0) {
       publicList2 = Container(
-        height: _deviceHeight4(),
+        height: deviceHeight4(),
         child: ListView.builder(
           itemBuilder: _buildWorkListItem2,
           itemCount: dataArray2.length,
@@ -399,17 +346,17 @@ class _PublicworksListPageState extends State<PublicworksListPage>
             children: <Widget>[
               ///headtilte
               _buildWorkTitle1(),
-              _buildLine(),
+              buildLine(),
               _buildWorkList1(),
               // _buildLine(),
               _buildWorkBottom1(),
-              _buildLine(),
+              buildLine(),
               SizedBox(
                 height: 10.0,
               ),
-              _buildLine(),
+              buildLine(),
               _buildWorkTitle2(),
-              _buildLine(),
+              buildLine(),
               _buildWorkList2(),
               // _buildLine(),
             ],

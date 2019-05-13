@@ -254,13 +254,7 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
         refreshKey: refreshIndicatorKey,
     );
   }
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
+
   ///取得使用者信息
   getUserInfoData() async {
     var res = await UserDao.getUserInfoLocal();
@@ -888,7 +882,9 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
       builder: (BuildContext context) => _buildPingDialog(context,res, currentCellTag: currentCellTag)
       );
       isLoading = false;
-      
+    }
+    else {
+      isLoading = false;
     }
   }
  ///小ping dialog
@@ -1181,7 +1177,7 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
             body: Column(
               children: <Widget>[
                 _renderHeader(),
-                _buildLine(),
+                buildLine(),
                 Expanded(
                   child: _renderBody(),
                 ),

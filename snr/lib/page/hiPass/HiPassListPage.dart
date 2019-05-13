@@ -52,6 +52,9 @@ class _HiPassListPageState extends State<HiPassListPage> with AutomaticKeepAlive
         isLoading = false;
       });
     }
+    else{
+      isLoading = false;
+    }
   }
   ///hp title
   Widget _buildHpTitle() {

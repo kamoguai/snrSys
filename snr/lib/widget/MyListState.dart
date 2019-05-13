@@ -364,6 +364,15 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
   }
 
   ///高分隔線
+  buildRedLineHeight() {
+    return new Container(
+      height: titleHeight(),
+      width: 1.0,
+      color: Colors.red,
+    );
+  }
+
+  ///高分隔線
   buildLineHeight() {
     return new Container(
       height: titleHeight(),
@@ -393,10 +402,39 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
     return width / 6;
   }
 
+  ///取得裝置width並切7份
+  deviceWidth7() {
+    var width = MediaQuery.of(context).size.width;
+    return width / 7;
+  }
+
+  ///取得裝置width並切8份
+  deviceWidth8() {
+    var width = MediaQuery.of(context).size.width;
+    return width / 8;
+  }
+
   ///取得裝置width並切9份
   deviceWidth9() {
     var width = MediaQuery.of(context).size.width;
     return width / 9;
+  }
+
+  ///取得裝置width並切10份
+  deviceWidth10(context) {
+    var width = MediaQuery.of(context).size.width;
+    return width / 10;
+  }
+
+  ///取得裝置width並切8份*2
+  deviceWidth82() {
+    var width = MediaQuery.of(context).size.width;
+    return (width / 8) * 2;
+  }
+  ///取得裝置width並切8份*3
+  deviceWidth83() {
+    var width = MediaQuery.of(context).size.width;
+    return (width / 8) * 3;
   }
 
   ///取得裝置height切4分
@@ -433,6 +471,18 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
     );
   }
   
+  ///自動字大小靠左
+  Widget autoTextSizeLeft(text, color) {
+    var fontSize = MyScreen.normalPageFontSize_s(context);
+
+    return AutoSizeText(
+      text,
+      style: TextStyle(color: color, fontSize: fontSize),
+      minFontSize: 5.0,
+      textAlign: TextAlign.left,
+    );
+  }
+
   @protected
   resolveRefreshResult(res) {
     if (res != null && res.result) {

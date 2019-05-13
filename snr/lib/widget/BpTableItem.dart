@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:snr/common/model/BpTableCell.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:snr/widget/dialog/MaintainDialog.dart';
 /**
  * 待確認，扣點tableItem
  * Data: 2019-04-29
@@ -13,8 +14,8 @@ class BpTableItem extends StatelessWidget {
  
   final BpViewModel defaultViewModel;
   final bpType;
- 
-  BpTableItem({this.defaultViewModel,this.bpType});
+  final fromFunc;
+  BpTableItem({this.defaultViewModel,this.bpType, this.fromFunc});
   ///分隔線
   _buildLine() {
     return new Container(
@@ -80,6 +81,19 @@ class BpTableItem extends StatelessWidget {
       height: height == null ? 30.0 : height,
       width: width,
       child: child,
+    );
+  }
+  Widget _maintainLogDialog(custCode, wkNo, custName) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Card(
+            child: MaintainLogDialog(custNo: custCode, wkNo: wkNo, custName: custName, from: fromFunc,),
+          )
+        ],
+      ),
     );
   }
   
@@ -231,21 +245,32 @@ class BpTableItem extends StatelessWidget {
               ],
             )
           ),
-          _buildLine(),
-          Container(
-           
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.only(left: 5.0, right: 5.0),
-            child: _autoTextSizeLeft('BOSS: ${defaultViewModel.bossLog}', TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.bossLogColor))), context),
+          GestureDetector(
+            child: Column(
+              children: <Widget>[
+                _buildLine(),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                  child: _autoTextSizeLeft('BOSS: ${defaultViewModel.bossLog}', TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.bossLogColor))), context),
+                ),
+                _buildLine(),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                  child: _autoTextSizeLeft('維修記錄: ${defaultViewModel.reportLog}', TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.reportLogColor))), context),
+                ),
+                _buildLine(),
+                lastWidget,
+              ],
+            ),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => _maintainLogDialog(defaultViewModel.custNo, defaultViewModel.n_COID, defaultViewModel.name)
+              );
+            },
           ),
-          _buildLine(),
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.only(left: 5.0, right: 5.0),
-            child: _autoTextSizeLeft('維修記錄: ${defaultViewModel.reportLog}', TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.reportLogColor))), context),
-          ),
-          _buildLine(),
-          lastWidget,
           _buildRedLine()
         ],
       ),

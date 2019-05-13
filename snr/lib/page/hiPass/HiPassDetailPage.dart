@@ -567,7 +567,9 @@ class _HiPassDetailPageState extends State<HiPassDetailPage> with AutomaticKeepA
       builder: (BuildContext context) => _buildPingDialog(context,res, currentCellTag: currentCellTag)
       );
       isLoading = false;
-      
+    }
+    else {
+      isLoading = false;
     }
     
   }

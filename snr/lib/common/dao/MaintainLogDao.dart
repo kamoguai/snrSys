@@ -71,4 +71,24 @@ class MaintainLogDao {
       return new DataResult(null, false);
     }
   }
+  ///添加維修記錄-扣點
+  static addDescription_deduct({custId, wkNo, inputText, senderId, senderName, from}) async{
+    var res = await HttpManager.netFetch(Address.addDescription_deductAPI(custId, wkNo, inputText, senderId, senderName, from), null, null, new Options(method: "post"));
+
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("addDescription_deduct resp => " + res.data.toString());
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
+        return new DataResult(res, true);
+      }
+      else {
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
+        return new DataResult(null, false);
+      }
+    } else {
+      return new DataResult(null, false);
+    }
+  }
 }

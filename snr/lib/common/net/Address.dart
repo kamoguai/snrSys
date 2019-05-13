@@ -354,4 +354,20 @@ class Address {
   static addDescriptionAPI(custId, inputText, senderId, senderName, from) {
     return "${kSNRHostName}SNRProcess?FunctionName=AddReportLog&SenderID=$senderId&SenderName=$senderName&InputText=$inputText&CustCD=$custId&From=$from";
   }
+  ///操作維修紀錄-添加log-扣點
+  static addDescription_deductAPI(custId, wkNo, inputText, senderId, senderName, from) {
+    return "${kSNRHostName}SNRProcess?FunctionName=AddReportLog&SenderID=$senderId&SenderName=$senderName&InputText=$inputText&CustCD=$custId&From=$from&WorkNo=$wkNo";
+  }
+  ///扣點log
+  static getQueryDeductLogAPI(custCD, wkNo) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryDeductLog&CustCD=$custCD&WorkNo=$wkNo";
+  }
+  ///位置錯誤log
+  static getQueryWrongPlaceHistoryAPI(node) {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryWrongPlaceHistory&Node=$node";
+  }
+  ///取得指派人員
+  static getQueryAssignManListAPI() {
+    return "${kSNRHostName}SNRProcess?FunctionName=QueryAssignManList";
+  }
 }

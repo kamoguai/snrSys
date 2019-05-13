@@ -84,66 +84,16 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
     }
   }
 
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-  ///分隔線red
-  _buildLineRed() {
-    return new Container(
-      height: 1.0,
-      color: Colors.red,
-    );
-  }
-
-  ///高分隔線
-  _buildLineHeight() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///取得裝置width並切6份
-  _deviceWidth6() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 6;
-  }
-
-  ///取得裝置width並切7份
-  _deviceWidth7() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 7;
-  }
-
-  ///取得裝置height切4分
-  _deviceHeight4() {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-
-  ///lsit height
-  _listHeight() {
-    var height = _deviceHeight4();
-    return height / 5;
-  }
-
   ///title height
-  _titleHeight() {
-    var height = _deviceHeight4();
+  @override
+  titleHeight() {
+    var height = deviceHeight4();
     return height / 4.8;
   }
 
   ///自動字大小
-  Widget _autoTextSize(text, color) {
+  @override
+  Widget autoTextSize(text, color) {
     var fontSize = MyScreen.normalPageFontSize_s(context);
 
     return AutoSizeText(
@@ -154,7 +104,8 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
     );
   }
   ///自動字大小靠左
-  Widget _autoTextSizeLeft(text, color) {
+  @override
+  Widget autoTextSizeLeft(text, color) {
     var fontSize = MyScreen.normalPageFontSize_s(context);
 
     return AutoSizeText(
@@ -167,44 +118,44 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
   ///title1
   Widget _buildBigBadTitle1() {
     return new Container(
-      height: _titleHeight(),
+      height: titleHeight(),
       color: Color(MyColors.hexFromStr('#fafff2')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_status, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).home_signal_online, Colors.blueAccent),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).home_btn_upP, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).home_btn_problem, Colors.pink),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(
+            width: deviceWidth6(),
+            child: autoTextSize(
                 CommonUtils.getLocale(context).home_signal_percent, Colors.blueAccent),
           ),
         ],
@@ -217,7 +168,7 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
     var dic = bigbadList[index];
     return GestureDetector(
       child: Container(
-        height: _listHeight() * 4,
+        height: listHeight() * 4,
         decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
@@ -225,83 +176,83 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
         child: Column(
           children: <Widget>[
             Container(
-              height: _listHeight() - 2,
+              height: listHeight() - 2,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Container(
-                    width: _deviceWidth6() - 1,
-                    child: _autoTextSize(CommonUtils.getLocale(context).text_sendReoprt, Colors.black),
+                    width: deviceWidth6() - 1,
+                    child: autoTextSize(CommonUtils.getLocale(context).text_sendReoprt, Colors.black),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth6() - 1,
-                    child: _autoTextSize(dic.Online ?? "", Colors.blue),
+                    width: deviceWidth6() - 1,
+                    child: autoTextSize(dic.Online ?? "", Colors.blue),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth6() - 1,
-                    child: _autoTextSize(dic.Bad ?? "", Colors.red),
+                    width: deviceWidth6() - 1,
+                    child: autoTextSize(dic.Bad ?? "", Colors.red),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth6() - 1,
-                    child: _autoTextSize('上P', Colors.red),
+                    width: deviceWidth6() - 1,
+                    child: autoTextSize('上P', Colors.red),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth6() - 1,
-                    child: _autoTextSize('問題', Colors.red),
+                    width: deviceWidth6() - 1,
+                    child: autoTextSize('問題', Colors.red),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth6(),
-                    child: _autoTextSize('％', Colors.black),
+                    width: deviceWidth6(),
+                    child: autoTextSize('％', Colors.black),
                   ),
                 ],
               ),
             ),
-            _buildLine(),
+            buildLine(),
             Container(
-              height: _listHeight() - 1,
+              height: listHeight() - 1,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Container(
-                    width: _deviceWidth6() - 1,
-                    child: _autoTextSize(CommonUtils.getLocale(context).text_situation, Colors.black),
+                    width: deviceWidth6() - 1,
+                    child: autoTextSize(CommonUtils.getLocale(context).text_situation, Colors.black),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth6() - 1,
-                    child: _autoTextSize(dic.Online ?? "", Colors.blue),
+                    width: deviceWidth6() - 1,
+                    child: autoTextSize(dic.Online ?? "", Colors.blue),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth6() - 1,
-                    child: _autoTextSize(dic.Bad ?? "", Colors.black),
+                    width: deviceWidth6() - 1,
+                    child: autoTextSize(dic.Bad ?? "", Colors.black),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth6() - 1,
-                    child: _autoTextSize('上P', Colors.black),
+                    width: deviceWidth6() - 1,
+                    child: autoTextSize('上P', Colors.black),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth6() - 1,
-                    child: _autoTextSize('問題', Colors.black),
+                    width: deviceWidth6() - 1,
+                    child: autoTextSize('問題', Colors.black),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth6(),
-                    child: _autoTextSize('％', Colors.blueAccent),
+                    width: deviceWidth6(),
+                    child: autoTextSize('％', Colors.blueAccent),
                   ),
                 ],
               ),
             ),
-            _buildLine(),
+            buildLine(),
             Container(
-              height: _listHeight() - 1,
+              height: listHeight() - 1,
               padding: EdgeInsets.only(left: 2.0, right: 2.0),
               child: ListView(
                 scrollDirection: Axis.horizontal,
@@ -309,32 +260,32 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      _autoTextSize(dic.DisplayName, Colors.black),
+                      autoTextSize(dic.DisplayName, Colors.black),
                       SizedBox(width: 5.0,),
-                      _autoTextSize(dic.DATE, Colors.green),
+                      autoTextSize(dic.DATE, Colors.green),
                       SizedBox(width: 2.0,),
-                      _autoTextSize(dic.Time, Colors.red),
-                      _autoTextSize('~', Colors.black),
-                      _autoTextSize(dic.RTIME, Colors.blue),
+                      autoTextSize(dic.Time, Colors.red),
+                      autoTextSize('~', Colors.black),
+                      autoTextSize(dic.RTIME, Colors.blue),
                     ],
                   ),
                 ],
               ),
             ),
-            _buildLine(),
+            buildLine(),
             Container(
-              height: _listHeight() - 1,
+              height: listHeight() - 1,
               alignment: Alignment.centerLeft,
               color: Color(MyColors.hexFromStr('#f2f2f2')),
               child: ListView(
                 padding: EdgeInsets.only(left: 2.0, right: 2.0),
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                  _autoTextSizeLeft('查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報', Colors.grey),
+                  autoTextSizeLeft('查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報', Colors.grey),
                 ],
               )
             ),
-            _buildLineRed()
+            buildLineRed()
           ],
         )
         
@@ -350,7 +301,7 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
     Widget publicList;
     if (bigbadList.length > 0) {
       publicList = Container(
-        height: _deviceHeight4() * 1.6,
+        height: deviceHeight4() * 1.6,
         child: ListView.builder(
           itemBuilder: _buildBigBadListItem1,
           itemCount: bigbadList.length,
@@ -365,38 +316,38 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
   ///title2
   Widget _buildBigBadTitle2() {
     return new Container(
-      height: _titleHeight(),
+      height: titleHeight(),
       color: Color(MyColors.hexFromStr('#f0fcff')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: (_deviceWidth7() * 2) - 1,
-            child: _autoTextSize(
+            width: (deviceWidth7() * 2) - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_position, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth7() - 1,
-            child: _autoTextSize(
+            width: deviceWidth7() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_thisDay, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth7() - 1,
-            child: _autoTextSize(
+            width: deviceWidth7() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_thisWeek, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth7() - 1,
-            child: _autoTextSize(
+            width: deviceWidth7() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_thisMonth, Colors.black),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: (_deviceWidth7() * 2),
-            child: _autoTextSize(
+            width: (deviceWidth7() * 2),
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_time, Colors.black),
           ),
         ],
@@ -411,7 +362,7 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
     var fDate = formatDate(dateToStr, [yy,'-',mm,'-',dd]);
     return GestureDetector(
       child: Container(
-        height: _listHeight(),
+        height: listHeight(),
         decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
@@ -420,28 +371,28 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
-              width: (_deviceWidth7() * 2) - 1,
-              child: _autoTextSize(dic["Name"] ?? "", Colors.black),
+              width: (deviceWidth7() * 2) - 1,
+              child: autoTextSize(dic["Name"] ?? "", Colors.black),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth7() - 1,
-              child: _autoTextSize(dic["DCOUNT"], Colors.black),
+              width: deviceWidth7() - 1,
+              child: autoTextSize(dic["DCOUNT"], Colors.black),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth7() - 1,
-              child: _autoTextSize(dic["WCOUNT"], Colors.black),
+              width: deviceWidth7() - 1,
+              child: autoTextSize(dic["WCOUNT"], Colors.black),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth7() - 1,
-              child: _autoTextSize(dic["MCOUNT"], Colors.black),
+              width: deviceWidth7() - 1,
+              child: autoTextSize(dic["MCOUNT"], Colors.black),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: (_deviceWidth7() * 2),
-              child: _autoTextSize(fDate + "\n" + dic["STIME"] + "~" + dic["RTIME"], Colors.black),
+              width: (deviceWidth7() * 2),
+              child: autoTextSize(fDate + "\n" + dic["STIME"] + "~" + dic["RTIME"], Colors.black),
             ),
           ],
         ),
@@ -479,13 +430,13 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
             children: <Widget>[
               ///headtilte
               _buildBigBadTitle1(),
-              _buildLine(),
+              buildLine(),
               ///bodylist
               _buildBigBadList1(),
               SizedBox(height: 10.0,),
-              _buildLine(),
+              buildLine(),
               _buildBigBadTitle2(),
-              _buildLine(),
+              buildLine(),
               _buildBigBadList2()
             ],
           );
@@ -665,24 +616,17 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
                     },
                   ),
                 ),
-                ButtonTheme(
-                    child: new FlatButton.icon(
-                  icon: Image.asset(
-                    MyICons.DEFAULT_USER_ICON,
-                    width: 30,
-                    height: 30,
+                Container(
+                  height: 30,
+                  child: FlatButton.icon(
+                    icon: Image.asset('static/images/24.png'),
+                    color: Colors.transparent,
+                    label: Text(''),
+                    onPressed: (){
+                      NavigatorUtils.goLogin(context);
+                    },
                   ),
-                  textColor: Colors.white,
-                  color: Colors.transparent,
-                  label: Text(
-                    'DCTV',
-                    style: TextStyle(
-                        fontSize: MyScreen.normalPageFontSize(context)),
-                  ),
-                  onPressed: () {
-                    print(123);
-                  },
-                )),
+                ),
                 ButtonTheme(
                   child: new MyToolButton(
                     padding: EdgeInsets.all(1.0),

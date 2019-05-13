@@ -85,66 +85,6 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
     }
   }
 
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///高分隔線
-  _buildLineHeight() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///高分隔線
-  _buildRedLineHeight() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.red,
-    );
-  }
-
-  ///取得裝置width並切6份
-  _deviceWidth6() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 6;
-  }
-
-  ///取得裝置width並切6份
-  _deviceWidth8() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 8;
-  }
-
-  ///取得裝置height切4分
-  _deviceHeight4() {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-
-  ///lsit height
-  _listHeight() {
-    var height = _deviceHeight4();
-    return height / 5;
-  }
-
-  ///title height
-  _titleHeight() {
-    var height = _deviceHeight4();
-    return height / 4;
-  }
-
   ///間隔8
   _dummyHeight() {
     return SizedBox(
@@ -153,7 +93,8 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
   }
 
   ///自動字大小
-  Widget _autoTextSize(text, style) {
+  @override
+  Widget autoTextSize(text, style) {
     var fontSize = MyScreen.defaultTableCellFontSize(context);
     var fontStyle = TextStyle(fontSize: fontSize);
     return AutoSizeText(
@@ -167,45 +108,45 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
   ///list title
   Widget _buildAssignFixListHeader1() {
     return new Container(
-      height: _titleHeight(),
+      height: titleHeight(),
       color: Color(MyColors.hexFromStr('#fef5f6')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize('CMTS',
+            width: deviceWidth6() - 1,
+            child: autoTextSize('CMTS',
                 TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(
+            width: deviceWidth6() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).home_btn_assignFix,
                 TextStyle(color: Colors.brown, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_fix2,
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_fix2,
                 TextStyle(color: Colors.brown, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_cut,
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_cut,
                 TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_watch,
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_watch,
                 TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize(CommonUtils.getLocale(context).text_total_s,
+            width: deviceWidth6(),
+            child: autoTextSize(CommonUtils.getLocale(context).text_total_s,
                 TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           ),
         ],
@@ -217,7 +158,7 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
     var dic = dataArray[index];
     return GestureDetector(
       child: Container(
-        height: _listHeight(),
+        height: listHeight(),
         decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
@@ -226,34 +167,34 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
-              width: _deviceWidth6() - 1,
-              child: _autoTextSize(dic["Name"], TextStyle(color: Colors.black)),
+              width: deviceWidth6() - 1,
+              child: autoTextSize(dic["Name"], TextStyle(color: Colors.black)),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth6() - 1,
-              child: _autoTextSize(dic["FIX"], TextStyle(color: Colors.brown)),
+              width: deviceWidth6() - 1,
+              child: autoTextSize(dic["FIX"], TextStyle(color: Colors.brown)),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth6() - 1,
-              child: _autoTextSize(dic["FIX2"], TextStyle(color: Colors.brown)),
+              width: deviceWidth6() - 1,
+              child: autoTextSize(dic["FIX2"], TextStyle(color: Colors.brown)),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth6() - 1,
-              child: _autoTextSize(dic["CUT"], TextStyle(color: Colors.blue)),
+              width: deviceWidth6() - 1,
+              child: autoTextSize(dic["CUT"], TextStyle(color: Colors.blue)),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth6() - 1,
-              child: _autoTextSize(dic["WATCH"], TextStyle(color: Colors.blue)),
+              width: deviceWidth6() - 1,
+              child: autoTextSize(dic["WATCH"], TextStyle(color: Colors.blue)),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth6(),
+              width: deviceWidth6(),
               child:
-                  _autoTextSize(dic["TOTAL"], TextStyle(color: Colors.black)),
+                  autoTextSize(dic["TOTAL"], TextStyle(color: Colors.black)),
             ),
           ],
         ),
@@ -268,7 +209,7 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
     Widget assignFixList;
     if (dataArray.length > 0) {
       assignFixList = Container(
-        height: _deviceHeight4(),
+        height: deviceHeight4(),
         child: ListView.builder(
           itemBuilder: _buildAssignFixListItem,
           itemCount: dataArray.length,
@@ -285,44 +226,44 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
   ///list bottom
   Widget _buildAssignFixListBottom1() {
     return new Container(
-      height: _titleHeight(),
+      height: titleHeight(),
       color: Color(MyColors.hexFromStr('#fce7f8')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_total,
+            width: deviceWidth6() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_total,
                 TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize("$fixTotal",
+            width: deviceWidth6() - 1,
+            child: autoTextSize("$fixTotal",
                 TextStyle(color: Colors.brown, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize("$fix2Total",
+            width: deviceWidth6() - 1,
+            child: autoTextSize("$fix2Total",
                 TextStyle(color: Colors.brown, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize("$cutTotal",
+            width: deviceWidth6() - 1,
+            child: autoTextSize("$cutTotal",
                 TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6() - 1,
-            child: _autoTextSize("$watchTotal",
+            width: deviceWidth6() - 1,
+            child: autoTextSize("$watchTotal",
                 TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth6(),
-            child: _autoTextSize("$countTotal",
+            width: deviceWidth6(),
+            child: autoTextSize("$countTotal",
                 TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           ),
         ],
@@ -334,58 +275,58 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
   Widget _buildBuildingListHeader() {
     return new Container(
       color: Color(MyColors.hexFromStr("#f2f2f2f2")),
-      height: _titleHeight(),
+      height: titleHeight(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: (_deviceWidth8() * 3) - 1,
-            child: _autoTextSize(
+            width: (deviceWidth8() * 3) - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_buildingName,
                 TextStyle(
                   color: Colors.black,
                 )),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize(
+            width: deviceWidth8() - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_total_s,
                 TextStyle(
                   color: Colors.black,
                 )),
           ),
-          _buildRedLineHeight(),
+          buildRedLineHeight(),
           Container(
-            width: (_deviceWidth8()) - 1,
-            child: _autoTextSize(
+            width: (deviceWidth8()) - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).home_cmtsTitle_fix,
                 TextStyle(
                   color: Colors.black,
                 )),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: (_deviceWidth8()) - 1,
-            child: _autoTextSize(
+            width: (deviceWidth8()) - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_fix2,
                 TextStyle(
                   color: Colors.black,
                 )),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: (_deviceWidth8()) - 1,
-            child: _autoTextSize(
+            width: (deviceWidth8()) - 1,
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_cut,
                 TextStyle(
                   color: Colors.black,
                 )),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: (_deviceWidth8()),
-            child: _autoTextSize(
+            width: (deviceWidth8()),
+            child: autoTextSize(
                 CommonUtils.getLocale(context).text_watch,
                 TextStyle(
                   color: Colors.black,
@@ -401,7 +342,7 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
     var dic = dataArray2[index];
     return GestureDetector(
       child: Container(
-        height: _listHeight(),
+        height: listHeight(),
         decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
@@ -410,53 +351,53 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
-              width: (_deviceWidth8() * 3) - 1,
-              child: _autoTextSize(
+              width: (deviceWidth8() * 3) - 1,
+              child: autoTextSize(
                   dic["BuildingName"],
                   TextStyle(
                     color: Colors.black,
                   )),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth8() - 1,
-              child: _autoTextSize(
+              width: deviceWidth8() - 1,
+              child: autoTextSize(
                   dic["TOTAL"],
                   TextStyle(
                     color: Colors.black,
                   )),
             ),
-            _buildRedLineHeight(),
+            buildRedLineHeight(),
             Container(
-              width: (_deviceWidth8()) - 1,
-              child: _autoTextSize(
+              width: (deviceWidth8()) - 1,
+              child: autoTextSize(
                   dic["FIX"],
                   TextStyle(
                     color: Colors.black,
                   )),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: (_deviceWidth8()) - 1,
-              child: _autoTextSize(
+              width: (deviceWidth8()) - 1,
+              child: autoTextSize(
                   dic["FIX2"] ?? "0",
                   TextStyle(
                     color: Colors.black,
                   )),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: (_deviceWidth8()) - 1,
-              child: _autoTextSize(
+              width: (deviceWidth8()) - 1,
+              child: autoTextSize(
                   dic["CUT"] ?? "0",
                   TextStyle(
                     color: Colors.black,
                   )),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: (_deviceWidth8()),
-              child: _autoTextSize(
+              width: (deviceWidth8()),
+              child: autoTextSize(
                   dic["WATCH"] ?? "0",
                   TextStyle(
                     color: Colors.black,
@@ -493,15 +434,15 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
       return Column(
         children: <Widget>[
           _buildAssignFixListHeader1(),
-          _buildLine(),
+          buildLine(),
           _buildAssignFixListBody(),
-          _buildLine(),
+          buildLine(),
           _buildAssignFixListBottom1(),
-          _buildLine(),
+          buildLine(),
           _dummyHeight(),
-          _buildLine(),
+          buildLine(),
           _buildBuildingListHeader(),
-          _buildLine(),
+          buildLine(),
           _buildBuildingListBody()
         ],
       );
@@ -556,28 +497,21 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
                     ),
                   ),
                   SizedBox(),
-                  ButtonTheme(
-                      child: new FlatButton.icon(
-                    icon: Image.asset(
-                      MyICons.DEFAULT_USER_ICON,
-                      width: 30,
-                      height: 30,
+                  Container(
+                    height: 30,
+                    child: FlatButton.icon(
+                      icon: Image.asset('static/images/24.png'),
+                      color: Colors.transparent,
+                      label: Text(''),
+                      onPressed: (){
+                        NavigatorUtils.goLogin(context);
+                      },
                     ),
-                    textColor: Colors.white,
-                    color: Colors.transparent,
-                    label: Text(
-                      'DCTV',
-                      style: TextStyle(
-                          fontSize: MyScreen.homePageFontSize(context)),
-                    ),
-                    onPressed: () {
-                      print(123);
-                    },
-                  )),
+                  ),
                   SizedBox(),
                   Text('資料: ${dataTime}',
                       style: TextStyle(
-                          fontSize: MyScreen.normalPageFontSize(context),
+                          fontSize: MyScreen.homePageFontSize(context),
                           color: Colors.white)),
                 ],
               ),
@@ -611,7 +545,9 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
                   textColor: Colors.yellow,
                   color: Colors.transparent,
                   fontSize: MyScreen.homePageFontSize(context),
-                  onPress: () {},
+                  onPress: () {
+                    NavigatorUtils.goBpDetail(context);
+                  },
                 ),
               ),
               ButtonTheme(
@@ -644,7 +580,9 @@ class _AssignFixListPageState extends State<AssignFixListPage> with AutomaticKee
                   textColor: Colors.yellow,
                   color: Colors.transparent,
                   fontSize: MyScreen.homePageFontSize(context),
-                  onPress: () {},
+                  onPress: () {
+                    NavigatorUtils.goPublicworksDetail(context);
+                  },
                 ),
               ),
               ButtonTheme(

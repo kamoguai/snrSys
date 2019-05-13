@@ -204,13 +204,7 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
         refreshKey: refreshIndicatorKey,
     );
   }
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
+
   ///取得使用者信息
   getUserInfoData() async {
     var res = await UserDao.getUserInfoLocal();
@@ -372,7 +366,7 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
             body: Column(
               children: <Widget>[
                 _renderHeader(),
-                _buildLine(),
+                buildLine(),
                 Expanded(
                   child: _renderBody(),
                 ),

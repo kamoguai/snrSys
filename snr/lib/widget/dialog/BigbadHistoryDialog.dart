@@ -44,54 +44,18 @@ class _BigBadHistoryDialogState extends State<BigBadHistoryDialog> with Automati
     initData();
     isLoading = false;
   }
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  _buildRedLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.red,
-    );
-  }
-
-  ///高分隔線
-  _buildLineHeight(context) {
-    return new Container(
-      height: _titleHeight(context),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///取得裝置height切4分
-  _deviceHeight4(BuildContext context) {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-
-  ///lsit height
-  _listHeight(BuildContext context) {
-    var height = _deviceHeight4(context);
-    return height / 5;
-  }
+  
 
   ///title height
-  _titleHeight(BuildContext context) {
-    var height = _deviceHeight4(context);
+  @override
+  titleHeight() {
+    var height = deviceHeight4();
     return height / 4.8;
   }
   
   ///字體自動縮放
-  _autoTextSize(text, style, context) {
+  @override
+  autoTextSize(text, style) {
     var fontSize = MyScreen.defaultTableCellFontSize(context);
     var fontStyle = TextStyle(fontSize: fontSize);
     return AutoSizeText(
@@ -105,11 +69,11 @@ class _BigBadHistoryDialogState extends State<BigBadHistoryDialog> with Automati
   ///title
   Widget _buildTitle(context) {
     return Container(
-      height: _titleHeight(context),
+      height: titleHeight(),
       color: Color(MyColors.hexFromStr('#fafff2')),
       child: Row(
         children: <Widget>[
-          _autoTextSize('cmts+node', TextStyle(color: Colors.black), context)
+          autoTextSize('cmts+node', TextStyle(color: Colors.black) )
         ],
       ),
     );
@@ -127,57 +91,57 @@ class _BigBadHistoryDialogState extends State<BigBadHistoryDialog> with Automati
         child: Column(
           children: <Widget>[
             Container(
-              height: _listHeight(context),
+              height: listHeight(),
               child: ListView(
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                  _autoTextSize("查修時間:", TextStyle(color: Colors.black), context),
-                  _autoTextSize("起日", TextStyle(color: Colors.red), context),
+                  autoTextSize("查修時間:", TextStyle(color: Colors.black) ),
+                  autoTextSize("起日", TextStyle(color: Colors.red) ),
                   SizedBox(width: 5.0,),
-                  _autoTextSize("起時", TextStyle(color: Colors.red), context),
-                  _autoTextSize("~", TextStyle(color: Colors.black), context),
-                  _autoTextSize("迄日", TextStyle(color: Colors.blue), context),
+                  autoTextSize("起時", TextStyle(color: Colors.red) ),
+                  autoTextSize("~", TextStyle(color: Colors.black) ),
+                  autoTextSize("迄日", TextStyle(color: Colors.blue) ),
                   SizedBox(width: 5.0,),
-                  _autoTextSize("迄時", TextStyle(color: Colors.blue), context),
+                  autoTextSize("迄時", TextStyle(color: Colors.blue) ),
                   SizedBox(width: 5.0,),
-                  _autoTextSize("耗時: ", TextStyle(color: Colors.black), context),
+                  autoTextSize("耗時: ", TextStyle(color: Colors.black) ),
                 ],
               ),
             ),
-            _buildLine(),
+            buildLine(),
             Container(
-              height: _listHeight(context) * 1.5,
+              height: listHeight() * 1.5,
               child: ListView(
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 scrollDirection: Axis.vertical,
                 children: <Widget>[
-                  _autoTextSize('查修原因: ', TextStyle(color: Colors.black), context)
+                  autoTextSize('查修原因: ', TextStyle(color: Colors.black) )
                 ],
               ),
             ),
-            _buildLine(),
+            buildLine(),
             Container(
-              height: _listHeight(context) * 2,
+              height: listHeight() * 2,
               child: ListView(
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 scrollDirection: Axis.vertical,
                 children: <Widget>[
-                  _autoTextSize('查修說明: ', TextStyle(color: Colors.black), context)
+                  autoTextSize('查修說明: ', TextStyle(color: Colors.black) )
                 ],
               ),
             ),
-            _buildLine(),
+            buildLine(),
             Container(
-              height: _listHeight(context),
+              height: listHeight(),
               child: ListView(
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                  _autoTextSize('立案人: ', TextStyle(color: Colors.black), context),
-                  _autoTextSize('x先生: ', TextStyle(color: Colors.black), context),
+                  autoTextSize('立案人: ', TextStyle(color: Colors.black) ),
+                  autoTextSize('x先生: ', TextStyle(color: Colors.black) ),
                   SizedBox(width: 10.0,),
-                  _autoTextSize('查修人: ', TextStyle(color: Colors.black), context),
+                  autoTextSize('查修人: ', TextStyle(color: Colors.black) ),
                 ],
               ),
             ),
@@ -217,20 +181,20 @@ class _BigBadHistoryDialogState extends State<BigBadHistoryDialog> with Automati
   _buildButton() {
     return Container(
       color: Color(MyColors.hexFromStr('#fafff2')),
-      height: _titleHeight(context),
+      height: titleHeight(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
             child: FlatButton(
-              child: _autoTextSize('刪除', TextStyle(color: Colors.red), context),
+              child: autoTextSize('刪除', TextStyle(color: Colors.red) ),
               onPressed: (){},
             ),
           ),
-          _buildLineHeight(context),
+          buildLineHeight(),
            Container(
             child: FlatButton(
-              child: _autoTextSize('離開', TextStyle(color: Colors.black), context),
+              child: autoTextSize('離開', TextStyle(color: Colors.black) ),
               onPressed: (){
                 Navigator.pop(context);
               },
@@ -248,11 +212,11 @@ class _BigBadHistoryDialogState extends State<BigBadHistoryDialog> with Automati
       child: Column(
         children: <Widget>[
           _buildTitle(context),
-          _buildLine(),
+          buildLine(),
           _buildHistoryBody(context),
-          _buildRedLine(),
+          buildLineRed(),
           _buildList(),
-          _buildLine(),
+          buildLine(),
           _buildButton()
         ],
       ),

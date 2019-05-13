@@ -82,71 +82,9 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
     }
   }
 
-    ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///高分隔線
-  _buildLineHeight() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
-  ///高分隔線-red
-  _buildLineHeightRed() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.red,
-    );
-  }
-
-  ///取得裝置width並切8份
-  _deviceWidth8() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 8;
-  }
-
-  ///取得裝置width並切8份*2
-  _deviceWidth82() {
-    var width = MediaQuery.of(context).size.width;
-    return (width / 8) * 2;
-  }
-  ///取得裝置width並切8份*3
-  _deviceWidth83() {
-    var width = MediaQuery.of(context).size.width;
-    return (width / 8) * 3;
-  }
-  ///取得裝置height切4分
-  _deviceHeight4() {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-
-  ///lsit height
-  _listHeight() {
-    var height = _deviceHeight4();
-    return height / 5;
-  }
-
-  ///title height
-  _titleHeight() {
-    var height = _deviceHeight4();
-    return height / 4;
-  }
-
   ///自動字大小
-  Widget _autoTextSize(text, style) {
+  @override
+  Widget autoTextSize(text, style) {
     var fontSize = MyScreen.analyzeListFontSize(context);
     var fontStyle = TextStyle(fontSize: fontSize);
     return AutoSizeText(
@@ -159,29 +97,29 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
   /// title
   Widget _buildTitle() {
     return Container(
-      height: _titleHeight() / 1.5,
+      height: titleHeight() / 1.5,
       color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth82() - 1,
+            width: deviceWidth82() - 1,
 
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_addTotal, TextStyle(color: Colors.black,)),
+            width: deviceWidth8() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_addTotal, TextStyle(color: Colors.black,)),
           ),
-          _buildLineHeightRed(),
+          buildRedLineHeight(),
           Container(
-            width: _deviceWidth83() - 1,
-            child: _autoTextSize('SNR', TextStyle(color: Colors.black)),
+            width: deviceWidth83() - 1,
+            child: autoTextSize('SNR', TextStyle(color: Colors.black)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth82(),
-            child: _autoTextSize(CommonUtils.getLocale(context).text_other, TextStyle(color: Colors.black,)),
+            width: deviceWidth82(),
+            child: autoTextSize(CommonUtils.getLocale(context).text_other, TextStyle(color: Colors.black,)),
           ),
         ],
       ),
@@ -190,44 +128,44 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
    /// title2
   Widget _buildTitle2() {
     return Container(
-      height: _titleHeight() / 1.5,
+      height: titleHeight() / 1.5,
       color: isToday ? Color(MyColors.hexFromStr('#fafff2')) : Color(MyColors.hexFromStr('#f2f2f2')),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth82() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_people, TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
+            width: deviceWidth82() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_people, TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_total, TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
+            width: deviceWidth8() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_total, TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeightRed(),
+          buildRedLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_thisMonth, TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            width: deviceWidth8() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_thisMonth, TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_thisDay, TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            width: deviceWidth8() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_thisDay, TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).text_minus, TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            width: deviceWidth8() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).text_minus, TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize(CommonUtils.getLocale(context).home_btn_bigbad, TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+            width: deviceWidth8() - 1,
+            child: autoTextSize(CommonUtils.getLocale(context).home_btn_bigbad, TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8(),
-            child: _autoTextSize(CommonUtils.getLocale(context).text_pipe, TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
+            width: deviceWidth8(),
+            child: autoTextSize(CommonUtils.getLocale(context).text_pipe, TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -238,7 +176,7 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
     var dic = dataArray[index];
     return GestureDetector(
       child: Container(
-        height: _listHeight(),
+        height: listHeight(),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
@@ -252,38 +190,38 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
-              width: _deviceWidth82() - 1,
-              child: _autoTextSize(dic['EmpName'], TextStyle(color: Colors.black)),
+              width: deviceWidth82() - 1,
+              child: autoTextSize(dic['EmpName'], TextStyle(color: Colors.black)),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth8() - 1,
-              child: _autoTextSize(dic['SubTotal'], TextStyle(color: Colors.black)),
+              width: deviceWidth8() - 1,
+              child: autoTextSize(dic['SubTotal'], TextStyle(color: Colors.black)),
             ),
-            _buildLineHeightRed(),
+            buildRedLineHeight(),
             Container(
-              width: _deviceWidth8() - 1,
-              child: _autoTextSize(dic['Month'], TextStyle(color: Colors.black)),
+              width: deviceWidth8() - 1,
+              child: autoTextSize(dic['Month'], TextStyle(color: Colors.black)),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth8() - 1,
-              child: _autoTextSize(dic['Today'], TextStyle(color: Colors.black)),
+              width: deviceWidth8() - 1,
+              child: autoTextSize(dic['Today'], TextStyle(color: Colors.black)),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth8() - 1,
-              child: _autoTextSize(dic['Minus'], TextStyle(color: Colors.red)),
+              width: deviceWidth8() - 1,
+              child: autoTextSize(dic['Minus'], TextStyle(color: Colors.red)),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth8() - 1,
-              child: _autoTextSize('重大', TextStyle(color: Colors.green)),
+              width: deviceWidth8() - 1,
+              child: autoTextSize('', TextStyle(color: Colors.green)),
             ),
-            _buildLineHeight(),
+            buildLineHeight(),
             Container(
-              width: _deviceWidth8(),
-              child: _autoTextSize('區障', TextStyle(color: Colors.blueAccent)),
+              width: deviceWidth8(),
+              child: autoTextSize('', TextStyle(color: Colors.blueAccent)),
             ),
           ],
         ),
@@ -312,44 +250,44 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
   /// bottom #f6e4d5
   Widget _bottomTitle() {
     return Container(
-      height: _titleHeight() / 1.5,
+      height: titleHeight() / 1.5,
       color: isToday ? Color(MyColors.hexFromStr('#f6e4d5')) : Color(MyColors.hexFromStr('#f2f2f2')),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth82() - 1,
-            child: _autoTextSize('合計 ${dataArray.length} 人', TextStyle(color: Colors.black,)),
+            width: deviceWidth82() - 1,
+            child: autoTextSize('合計 ${dataArray.length} 人', TextStyle(color: Colors.black,)),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize('$totalCount', TextStyle(color: Colors.black,)),
+            width: deviceWidth8() - 1,
+            child: autoTextSize('$totalCount', TextStyle(color: Colors.black,)),
           ),
-          _buildLineHeightRed(),
+          buildRedLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize('$mCount', TextStyle(color: Colors.black, )),
+            width: deviceWidth8() - 1,
+            child: autoTextSize('$mCount', TextStyle(color: Colors.black, )),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize('$dCount', TextStyle(color: Colors.black, )),
+            width: deviceWidth8() - 1,
+            child: autoTextSize('$dCount', TextStyle(color: Colors.black, )),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize('$minusCount', TextStyle(color: Colors.red, )),
+            width: deviceWidth8() - 1,
+            child: autoTextSize('$minusCount', TextStyle(color: Colors.red, )),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8() - 1,
-            child: _autoTextSize('$bigBadCount', TextStyle(color: Colors.green, )),
+            width: deviceWidth8() - 1,
+            child: autoTextSize('$bigBadCount', TextStyle(color: Colors.green, )),
           ),
-          _buildLineHeight(),
+          buildLineHeight(),
           Container(
-            width: _deviceWidth8(),
-            child: _autoTextSize('$pipeCount', TextStyle(color: Colors.blueAccent, )),
+            width: deviceWidth8(),
+            child: autoTextSize('$pipeCount', TextStyle(color: Colors.blueAccent, )),
           ),
         ],
       ),
@@ -364,13 +302,13 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
       return Column(
         children: <Widget>[
           _buildTitle(),
-          _buildLine(),
+          buildLine(),
           _buildTitle2(),
-          _buildLine(),
+          buildLine(),
           _buildListBody(),
-          _buildLine(),
+          buildLine(),
           _bottomTitle(),
-          _buildLine(),
+          buildLine(),
           SizedBox(height: 10,)
         ],
       );
@@ -418,7 +356,10 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
              }
              selectDate = formatD;
              isLoading = true;
-             getApiDataList();
+             Future.delayed(const Duration(seconds: 1),(){
+               getApiDataList();
+             });
+             
             });
             Navigator.pop(context);
           },

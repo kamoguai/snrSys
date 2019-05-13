@@ -49,27 +49,10 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
     isLoading = false;
   }
 
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-
-  ///高分隔線
-  _buildLineHeight() {
-    return new Container(
-      height: _titleHeight(),
-      width: 1.0,
-      color: Colors.grey,
-    );
-  }
-
   ///高分隔線 * 1.5
   _buildLineHeight15() {
     return new Container(
-      height: _titleHeight() * 1.5,
+      height: titleHeight() * 1.5,
       width: 1.0,
       color: Colors.grey,
     );
@@ -79,42 +62,15 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
   ///高分隔線 * 1.5
   _buildListLineHeight15() {
     return new Container(
-      height: _listHeight() * 1.5,
+      height: listHeight() * 1.5,
       width: 1.0,
       color: Colors.grey,
     );
   }
 
-  ///取得裝置width並切8份
-  _deviceWidth4() {
-    var width = MediaQuery.of(context).size.width;
-    return (width / 4) - 2;
-  }
-
-  ///取得裝置height切4分
-  _deviceHeight4() {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-
-  ///lsit height
-  _listHeight() {
-    var height = _deviceHeight4();
-    return height / 5;
-  }
-
-  ///title height
-  _titleHeight() {
-    var height = _deviceHeight4();
-    return height / 4;
-  }
-
   ///自動字大小
-  Widget _autoTextSize(text, color) {
+  @override
+  Widget autoTextSize(text, color) {
     var fontSize = MyScreen.normalPageFontSize_s(context);
 
     return AutoSizeText(
@@ -136,22 +92,22 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
             bottom: BorderSide(width: 1.0,style: BorderStyle.solid,color: Colors.grey)
           )
         ),
-        height: _listHeight() * 1.5,
+        height: listHeight() * 1.5,
         child: Row(
           children: <Widget>[
             Container(
-              width: (_deviceWidth4() * 2) - 1,
-              child: _autoTextSize('2200000001', Colors.black),
+              width: (deviceWidth4() * 2) - 1,
+              child: autoTextSize('2200000001', Colors.black),
             ),
             _buildListLineHeight15(),
             Container(
-              width: _deviceWidth4() - 1,
-              child: _autoTextSize('雙向', Colors.black),
+              width: deviceWidth4() - 1,
+              child: autoTextSize('雙向', Colors.black),
             ),
             _buildListLineHeight15(),
             Container(
-              width: _deviceWidth4(),
-              child: _autoTextSize('關MAC', Colors.grey),
+              width: deviceWidth4(),
+              child: autoTextSize('關MAC', Colors.grey),
             )
           ],
         ),
@@ -210,13 +166,13 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
   ///buttons 
   Widget _buildButtonAction() {
     return Container(
-      height: _titleHeight() * 1.5,
+      height: titleHeight() * 1.5,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
             child: FlatButton(
-              child: _autoTextSize('確定', Colors.blue),
+              child: autoTextSize('確定', Colors.blue),
               onPressed: (){
                 _showlog(context);
                 // Navigator.pop(context);
@@ -229,7 +185,7 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
           _buildLineHeight15(),
           Container(
             child: FlatButton(
-              child: _autoTextSize('離開', Colors.red),
+              child: autoTextSize('離開', Colors.red),
               onPressed: (){
                 Navigator.pop(context);
               },
@@ -264,26 +220,26 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
                 child: Column(
                   children: <Widget>[
                     Container(
-                      height: _titleHeight(),
+                      height: titleHeight(),
                       padding: EdgeInsets.only(left: 8.0, right: 8.0),
                       child: Row(
                         children: <Widget>[
                           Container(
-                            child: _autoTextSize('姓名', Colors.black),
+                            child: autoTextSize('姓名', Colors.black),
                           ),
                           SizedBox(width: 10.0,),
                           Container(
-                            child: _autoTextSize('客編', Colors.black),
+                            child: autoTextSize('客編', Colors.black),
                           )
                         ],
                       )
                     ),
-                    _buildLine(),
+                    buildLine(),
                     Center(
                       child: Container(
                         alignment: Alignment.center,
-                        height: _titleHeight() * 1.5,
-                        child: _autoTextSize(textMSG, Colors.black),
+                        height: titleHeight() * 1.5,
+                        child: autoTextSize(textMSG, Colors.black),
                       ),
                     )
                   ],
@@ -293,13 +249,13 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
               Card(
                 child: Container(
                   alignment: Alignment.center,
-                  height: _titleHeight() * 1.5,
+                  height: titleHeight() * 1.5,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
                         child: FlatButton(
-                          child: _autoTextSize('確定', Colors.blue),
+                          child: autoTextSize('確定', Colors.blue),
                           onPressed: (){
                             Fluttertoast.showToast(msg: 'ok click');
                             return;
@@ -309,7 +265,7 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
                       _buildLineHeight15(),
                       Container(
                         child: FlatButton(
-                          child: _autoTextSize('離開', Colors.red),
+                          child: autoTextSize('離開', Colors.red),
                           onPressed: (){
                             Navigator.pop(context);
                           },
@@ -344,47 +300,47 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
         child: Column(
           children: <Widget>[
             Container(
-              height: _listHeight(),
+              height: listHeight(),
               color: Color(MyColors.hexFromStr(cardColor)),
               child: Row(
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.only(left: 5.0),
-                    child: _autoTextSize('姓名', Colors.black),
+                    child: autoTextSize('姓名', Colors.black),
                   ),
                   SizedBox(width: 10.0,),
                   Container(
-                    child: _autoTextSize('客編', Colors.black),
+                    child: autoTextSize('客編', Colors.black),
                   )
                 ],
               ),
             ),
-            _buildLine(),
+            buildLine(),
             Container(
-              height: _titleHeight(),
+              height: titleHeight(),
               color: Color(MyColors.hexFromStr('#f0fcff')),
               child: Row(
                 children: <Widget>[
                   Container(
-                    width: (_deviceWidth4() * 2) - 1,
-                    child: _autoTextSize('機號', Colors.black),
+                    width: (deviceWidth4() * 2) - 1,
+                    child: autoTextSize('機號', Colors.black),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth4() - 1,
-                    child: _autoTextSize('機型', Colors.black),
+                    width: deviceWidth4() - 1,
+                    child: autoTextSize('機型', Colors.black),
                   ),
-                  _buildLineHeight(),
+                  buildLineHeight(),
                   Container(
-                    width: _deviceWidth4(),
-                    child: _autoTextSize('授權', Colors.black),
+                    width: deviceWidth4(),
+                    child: autoTextSize('授權', Colors.black),
                   )
                 ],
               ),
             ),
-            _buildLine(),
+            buildLine(),
             _buildListView(),
-            _buildLine(),
+            buildLine(),
             _buildButtonAction()
           ],
         ),

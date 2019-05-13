@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:snr/common/config/Config.dart';
+import 'package:snr/common/dao/BpDao.dart';
 import 'package:snr/common/dao/MaintainLogDao.dart';
 import 'package:snr/common/dao/UserDao.dart';
 import 'package:snr/common/local/LocalStorage.dart';
@@ -18,10 +19,11 @@ import 'package:snr/widget/dialog/AddDescriptionDialog.dart';
 class MaintainLogDialog extends StatefulWidget {
 
   final String custNo;
+  final String wkNo;
   final String custName;
   final String from;
   
-  MaintainLogDialog({this.custNo, this.custName, this.from});
+  MaintainLogDialog({this.custNo, this.wkNo, this.custName, this.from});
 
   @override
   _MaintainLogDialogState createState() => _MaintainLogDialogState();
@@ -50,6 +52,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
     sso = ssoRes.data;
     user.accNo = await LocalStorage.get(Config.USER_NAME_KEY);
     user.accName = sso.accName;
+    
   }
   ///first item
   Widget _firstItem() {
@@ -165,7 +168,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
     return logList;
   }
 
-    ///跳轉function 
+  ///所選目標function 
   void _addTransform(String id, int index) {
     if (id == "XXXXX") {
       tapTarget = id + "-$index";
@@ -237,20 +240,33 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
   }
   ///輸入dialog
   _addInputDialog(custNo, custName) {
+    var fromFunc = "";
+    if (widget.from == "CONFIRM" || widget.from == "BP") {
+      switch(widget.from) {
+        case "CONFIRM":
+          fromFunc = "DEDUCT1";
+          break;
+        case "BP":
+          fromFunc = "DEDUCT2";
+          break;
+        default:
+          fromFunc = widget.from;
+      }
+    }
     return GestureDetector(
       child: Material(
         type: MaterialType.transparency,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            SizedBox(height: 100,),
             Card(
-              child: AddDescriptionDialog(custNo: custNo, custName: custName, from: widget.from, senderId: user.accNo, senderName: user.accName,),
+              child: AddDescriptionDialog(custNo: custNo, wkNo: widget.wkNo, custName: custName, from: fromFunc, senderId: user.accNo, senderName: user.accName,),
             )
           ],
         ),
       ),
       onTap: () {
-        print('click');
         FocusScope.of(context).requestFocus(new FocusNode());
       },
     );
@@ -260,29 +276,69 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
   getDataList() async {
     dataArray.clear();
     isSelectArray.clear();
-    var res = await MaintainLogDao.getHipassLogData(custNo: widget.custNo);
-    if(res != null && res.result) {
-      setState(() {
-        isLoading = false;
-        dataArray = res.data["Data"];
-        for (var i = 0; i < dataArray.length; i++) {
-          isSelectArray.add(false);
-        }
-      });
+    if (widget.from == "CONFIRM" || widget.from == "BP") {
+      var res = await BpDao.getQueryDeductLog(custCD: widget.custNo, wkNo: widget.wkNo);
+      if(res != null && res.result) {
+        setState(() {
+          isLoading = false;
+          dataArray = res.data["Data"];
+          for (var i = 0; i < dataArray.length; i++) {
+            isSelectArray.add(false);
+          }
+        });
+      }
+      else {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
     else {
-      setState(() {
-        isLoading = false;
-      });
+      var res = await MaintainLogDao.getHipassLogData(custNo: widget.custNo);
+      if(res != null && res.result) {
+        setState(() {
+          isLoading = false;
+          dataArray = res.data["Data"];
+          for (var i = 0; i < dataArray.length; i++) {
+            isSelectArray.add(false);
+          }
+        });
+      }
+      else {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
   ///呼叫刪除api
   deleteData() async {
-    var res = await MaintainLogDao.delReportLog(senderId: user.accNo, senderName: user.accName, logIdList: toTransformArray, custId: widget.custNo, from: widget.from);
-    if(res != null && res.result) {
-      isLoading = true;
-      getDataList();
+    var fromFunc = "";
+    if(widget.from == "CONFIRM" || widget.from == "BP") {
+      switch(widget.from) {
+        case "CONFIRM":
+          fromFunc = "DEDUCT1";
+          break;
+        case "BP":
+          fromFunc = "DEDUCT2";
+          break;
+      }
+      var res = await MaintainLogDao.delReportLog(senderId: user.accNo, senderName: user.accName, logIdList: toTransformArray, custId: widget.custNo, from: fromFunc);
+      if(res != null && res.result) {
+        toTransformArray.clear();
+        isLoading = true;
+        getDataList();
+      }
     }
+    else {
+      var res = await MaintainLogDao.delReportLog(senderId: user.accNo, senderName: user.accName, logIdList: toTransformArray, custId: widget.custNo, from: widget.from);
+      if(res != null && res.result) {
+        toTransformArray.clear();
+        isLoading = true;
+        getDataList();
+      }
+    }
+    
   }
   @override
   deviceWidth2(BuildContext context) {
@@ -368,7 +424,10 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
                 textColor: Colors.red,
                 child: autoTextSize(CommonUtils.getLocale(context).text_input, TextStyle(color: Colors.red), context),
                 onPressed: () {
-                  
+                   showDialog(
+                    context: context,
+                    builder: (BuildContext context) => _addInputDialog(widget.custNo, widget.custName)
+                  );
                 },
               ),
             ),

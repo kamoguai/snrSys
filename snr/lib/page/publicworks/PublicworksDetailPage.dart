@@ -53,7 +53,7 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
   User user;
   /// sso model
   Sso sso;
-  ///跳轉客編arr
+  ///跳轉客編arr 
   final List<String> toTransformArray = [];
   ///跳轉工程名
   final List<String> toTargetManArray = [];
@@ -63,11 +63,28 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
   final List<String> toTransYearMonthArray = [];
   ///數據資料arr
   final List<dynamic> dataArray = [];
+  ///來自功能
+  var fromFunc = "";
   ///列表顯示的物件
   _renderItem(index) {
+    switch(nowType) {
+      case buttonType.inst:
+        fromFunc = "INST";
+        break;
+      case buttonType.maintain:
+        fromFunc = "MAINTAIN";
+        break;
+      case buttonType.instFix:
+        fromFunc = "INSTFIX";
+        break;
+      case buttonType.fixfix:
+        fromFunc = "FIXFIX";
+        break;
+
+    }
     PublicworksTableCell dtc = pullLoadWidgetControl.dataList[index];
     PublicworksViewModel model = PublicworksViewModel.forMap(dtc);
-    return new PublicworksTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index,);
+    return new PublicworksTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, currentCellTag: index, fromFunc: fromFunc,);
   }
 
   ///頁面上方按鈕群
@@ -208,13 +225,7 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
         refreshKey: refreshIndicatorKey,
     );
   }
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
+
   ///取得使用者信息
   getUserInfoData() async {
     var res = await UserDao.getUserInfoLocal();
@@ -635,7 +646,9 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
       builder: (BuildContext context) => _buildPingDialog(context,res, currentCellTag: currentCellTag)
       );
       isLoading = false;
-      
+    }
+    else {
+      isLoading = false;
     }
     
   }
@@ -869,7 +882,7 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
             body: Column(
               children: <Widget>[
                 _renderHeader(),
-                _buildLine(),
+                buildLine(),
                 Expanded(
                   child: _renderBody(),
                 ),
