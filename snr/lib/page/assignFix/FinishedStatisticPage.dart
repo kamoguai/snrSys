@@ -97,7 +97,7 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
   /// title
   Widget _buildTitle() {
     return Container(
-      height: titleHeight() / 1.5,
+      height: titleHeight() / 1.2,
       color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -128,7 +128,7 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
    /// title2
   Widget _buildTitle2() {
     return Container(
-      height: titleHeight() / 1.5,
+      height: titleHeight() / 1.2,
       color: isToday ? Color(MyColors.hexFromStr('#fafff2')) : Color(MyColors.hexFromStr('#f2f2f2')),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -176,7 +176,7 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
     var dic = dataArray[index];
     return GestureDetector(
       child: Container(
-        height: listHeight(),
+        height: titleHeight(),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
@@ -250,7 +250,7 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
   /// bottom #f6e4d5
   Widget _bottomTitle() {
     return Container(
-      height: titleHeight() / 1.5,
+      height: titleHeight() / 1.2,
       color: isToday ? Color(MyColors.hexFromStr('#f6e4d5')) : Color(MyColors.hexFromStr('#f2f2f2')),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -443,7 +443,12 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
                   color: Colors.transparent,
                   fontSize: MyScreen.homePageFontSize(context),
                   onPress: () {
-                    getApiDataList();
+                    setState(() {
+                      isLoading = true;
+                      Future.delayed(const Duration(seconds: 1),(){
+                        getApiDataList();
+                      });
+                    });
                   },
                 ),
               ),

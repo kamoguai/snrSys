@@ -57,8 +57,6 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
       color: Colors.grey,
     );
   }
-
-
   ///高分隔線 * 1.5
   _buildListLineHeight15() {
     return new Container(
@@ -66,6 +64,11 @@ class _WrongPlaceDialogState extends State<WrongPlaceDialog> with AutomaticKeepA
       width: 1.0,
       color: Colors.grey,
     );
+  }
+  ///覆寫
+  @override
+  deviceWidth4() {
+    return super.deviceWidth4() - 2;
   }
 
   ///自動字大小

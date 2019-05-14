@@ -321,6 +321,7 @@ class SmallPingTableItem extends StatelessWidget {
                 ),
                 _buildHeightLine51(),
                 Container(
+                  color: Color(MyColors.hexFromStr('#fef5f6')),
                   width: ((_deviceWidth9(context) * 4)) - 1,
                   child: Column(
                     children: <Widget>[
@@ -403,7 +404,7 @@ class SmallPingTableItem extends StatelessWidget {
             ),
           ),
           Container(
-            color: Color(MyColors.hexFromStr('#f1f1f1')),
+            color: Color(MyColors.hexFromStr('#f9ffee')),
             height: 25.0,
             child: Row(
               children: <Widget>[
@@ -456,7 +457,7 @@ class SmallPingTableItem extends StatelessWidget {
           ),
           _buildLine(),
           Container(
-            color: Color(MyColors.hexFromStr('#f1f1f1')),
+            color: Color(MyColors.hexFromStr('#f9ffee')),
             height: 25.0,
             child: Row(
               children: <Widget>[
@@ -560,22 +561,22 @@ class SmallPingTableItem extends StatelessWidget {
                 _buildHeightLine(),
                 Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(c0["C"], TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(c0["C"], TextStyle(color: Colors.blue), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(c1["C"], TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(c1["C"], TextStyle(color: Colors.blue), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(c2["C"], TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(c2["C"], TextStyle(color: Colors.blue), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(c3["C"], TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(c3["C"], TextStyle(color: Colors.blue), context),
                 ),
               ],
             ),
@@ -593,22 +594,22 @@ class SmallPingTableItem extends StatelessWidget {
                 _buildHeightLine(),
                 Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(u0["U"], TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(u0["U"], TextStyle(color: Colors.pink), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(u1["U"], TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(u1["U"], TextStyle(color: Colors.pink), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(u2["U"], TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(u2["U"], TextStyle(color: Colors.pink), context),
                 ),
                 _buildHeightLine(),
                    Container(
                   width: (_deviceWidth9(context) * 2) - 1,
-                  child: _autoTextSize(u3["U"], TextStyle(color: Colors.black), context),
+                  child: _autoTextSize(u3["U"], TextStyle(color: Colors.pink), context),
                 ),
               ],
             ),

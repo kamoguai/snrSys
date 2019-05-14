@@ -130,8 +130,8 @@ class DefaultTableItem extends StatelessWidget {
     callPing(custCode, currentCellTag);
   }
   ///指派人員
-  Future _openAssignManDialog() async {
-    assignManFunc();
+  Future _openAssignManDialog(custNo, currentCellTag) async {
+    assignManFunc(custNo, currentCellTag);
   }
   Widget _maintainLogDialog(custCode, custName) {
     return Material(
@@ -245,7 +245,7 @@ class DefaultTableItem extends StatelessWidget {
                 _buildHeightLine(),
                 GestureDetector(
                   onTap: (){
-                    _openAssignManDialog();
+                    _openAssignManDialog(defaultViewModel.custNo, currentCellTag);
                   },
                   child: Container(
                     width:_deviceWidth92(context),
@@ -358,7 +358,7 @@ class DefaultTableItem extends StatelessWidget {
                 _buildHeightLine51(),
                 GestureDetector(
                   child:  Container(
-                    decoration: BoxDecoration(border: Border()),
+                    decoration: BoxDecoration(color: Color(MyColors.hexFromStr('#f0fcff')), border: Border()),
                     width: ((_deviceWidth9(context) * 4)) - 1,
                     child: Column(
                       children: <Widget>[

@@ -61,9 +61,24 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
   final List<dynamic> dataArray = [];
   ///列表顯示的物件
   _renderItem(index) {
+    var nowTypeStr = "";
+    switch(nowType) {
+      case buttonType.finished: 
+        nowTypeStr = "finished";
+        break;
+      case buttonType.bp:
+        nowTypeStr = "bp";
+        break;
+      case buttonType.bigbad:
+        nowTypeStr = "bigbad";
+        break;
+      case buttonType.pipe:
+        nowTypeStr = "pipe";
+        break;
+    }
     FinishedTableCell dtc = pullLoadWidgetControl.dataList[index];
     FinishedViewModel model = FinishedViewModel.forMap(dtc);
-    return new FinishedTableItem(defaultViewModel: model,);
+    return new FinishedTableItem(defaultViewModel: model, nowType: nowTypeStr,);
   }
 
   ///頁面上方按鈕群
@@ -184,7 +199,7 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
                   nowType = buttonType.pipe;
                   typevalue = "1";
                   typeof = "WATCH";
-                  showRefreshLoading();
+                  // showRefreshLoading();
                 });
               },
             ),
@@ -354,6 +369,9 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
                       ),
                       SizedBox(),
                       Text(CommonUtils.getLocale(context).text_finish, style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.yellow)),
+                      SizedBox(),
+                      SizedBox(),
+                      SizedBox(),
                       SizedBox(),
                       SizedBox(),
                       Text('筆數: ${pullLoadWidgetControl.dataList.length}', style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: Colors.white)),

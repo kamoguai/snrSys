@@ -72,13 +72,14 @@ class BpAnalyzeTableItem extends StatelessWidget {
   Widget _container({child, width, height, color}) {
 
     return Container(
+      padding: EdgeInsets.only(top: 2.0, bottom: 2.0),
       decoration: BoxDecoration(
         color: color,
         border: Border(
           bottom: BorderSide(width: 1.0,style: BorderStyle.solid,color: Colors.grey)
         )
       ),
-      height: height == null ? 25.0 : height,
+      // height: height == null ? 25.0 : height,
       width: width,
       child: child,
     );
@@ -87,7 +88,7 @@ class BpAnalyzeTableItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _container(
-      height: _listHeight(context),
+      // height: _listHeight(context),
       child: Row(
         children: <Widget>[
           Container(
@@ -97,7 +98,7 @@ class BpAnalyzeTableItem extends StatelessWidget {
           _buildLineHeight(context),
           Container(
             width: _deviceWidth8(context) - 1,
-            child: _autoTextSize('點數', TextStyle(color: Colors.black), context),
+            child: _autoTextSize('', TextStyle(color: Colors.black), context),
           ),
           _buildLineHeight(context),
           Container(
@@ -117,7 +118,7 @@ class BpAnalyzeTableItem extends StatelessWidget {
           _buildLineHeight(context),
           Container(
             width: _deviceWidth8(context) - 1,
-            child: _autoTextSize('指派', TextStyle(color: Colors.black), context),
+            child: _autoTextSize('', TextStyle(color: Colors.black), context),
           ),
           _buildLineHeight(context),
           Container(

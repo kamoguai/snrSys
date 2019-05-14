@@ -545,11 +545,12 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
     List<DefaultTableCell> list = new List();
     for (var dic in originalArray) {
       if (dic["BB"] != null && dic["BB"] != "") {
-        if (dic["BB"] == "內網") {
+        if (dic["BB"] != "內網") {
           secondArray.add(dic);
         }
       }
     }
+    secondArray.sort((a,b) => b["BB"].length.compareTo(a["BB"].length));
     for (var dic in secondArray) {
       var u0P = dic["U0_PWR"];
       var u1P = dic["U1_PWR"];
@@ -576,6 +577,7 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
       }
       check = 0;
     }
+    netType = "EXT";
     firstArray.addAll(secondArray);
     if (dataArray.length > 0 ) {
       for (var dic in dataArray) {
@@ -655,7 +657,7 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
         }
       } 
     }
-    // var sortArr = firstArray.sort((a,b) {return a["BB"].toLowerCase().comoareTo(b["BB"].toLowerCase());});
+    firstArray.sort((a,b) => b["BB"].length.compareTo(a["BB"].length));
     for (var dic in firstArray) {
       var u0P = dic["U0_PWR"];
       var u1P = dic["U1_PWR"];
@@ -709,7 +711,7 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
         }
       } 
     }
-    // var sortArr = firstArray.sort((a,b) {return a["BB"].toLowerCase().comoareTo(b["BB"].toLowerCase());});
+    firstArray.sort((a,b) => b["BB"].length.compareTo(a["BB"].length));
     for (var dic in firstArray) {
       var u0P = dic["U0_PWR"];
       var u1P = dic["U1_PWR"];
@@ -763,7 +765,7 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
         }
       } 
     }
-    // var sortArr = firstArray.sort((a,b) {return a["BB"].toLowerCase().comoareTo(b["BB"].toLowerCase());});
+    firstArray.sort((a,b) => b["BB"].length.compareTo(a["BB"].length));
     for (var dic in firstArray) {
       var u0P = dic["U0_PWR"];
       var u1P = dic["U1_PWR"];
@@ -817,7 +819,7 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
         }
       } 
     }
-    // var sortArr = firstArray.sort((a,b) {return a["BB"].toLowerCase().comoareTo(b["BB"].toLowerCase());});
+    firstArray.sort((a,b) => b["BB"].length.compareTo(a["BB"].length));
     for (var dic in firstArray) {
       var u0P = dic["U0_PWR"];
       var u1P = dic["U1_PWR"];
@@ -1013,58 +1015,225 @@ class _OverPowerDetailPageState extends State<OverPowerDetailPage> with Automati
       }
       var check = 0;
       firstArray.sort((a,b) => b["BB"].length.compareTo(a["BB"].length));
-      for (var dic in firstArray) {
-        var u0P = dic["U0_PWR"];
-        var u1P = dic["U1_PWR"];
-        var u2P = dic["U2_PWR"];
-        var u3P = dic["U3_PWR"];
-        var intu0P = double.parse(u0P) ?? 0;
-        var intu1P = double.parse(u1P) ?? 0;
-        var intu2P = double.parse(u2P) ?? 0;
-        var intu3P = double.parse(u3P) ?? 0;
-        if (intu0P >= fEXT || u0P == "---") {
-          check += 1;
-        }
-        if (intu1P >= fEXT || u1P == "---") {
-          check += 1;
-        }
-        if (intu2P >= fEXT || u2P == "---") {
-          check += 1;
-        }
-        if (intu3P >= fEXT || u3P == "---") {
-          check += 1;
-        }
-        if (check == 4) {
-          dataArray.add(dic);
-        }
-        check = 0;
+      switch(nowBtnType2) {
+        case buttonType2.four:
+          for (var dic in firstArray) {
+            var u0P = dic["U0_PWR"];
+            var u1P = dic["U1_PWR"];
+            var u2P = dic["U2_PWR"];
+            var u3P = dic["U3_PWR"];
+            var intu0P = double.parse(u0P) ?? 0;
+            var intu1P = double.parse(u1P) ?? 0;
+            var intu2P = double.parse(u2P) ?? 0;
+            var intu3P = double.parse(u3P) ?? 0;
+            if (intu0P >= fEXT || u0P == "---") {
+              check += 1;
+            }
+            if (intu1P >= fEXT || u1P == "---") {
+              check += 1;
+            }
+            if (intu2P >= fEXT || u2P == "---") {
+              check += 1;
+            }
+            if (intu3P >= fEXT || u3P == "---") {
+              check += 1;
+            }
+            if (check == 4) {
+              dataArray.add(dic);
+            }
+            check = 0;
+          }
+          for (var dic in secondArray) {
+            var u0P = dic["U0_PWR"];
+            var u1P = dic["U1_PWR"];
+            var u2P = dic["U2_PWR"];
+            var u3P = dic["U3_PWR"];
+            var intu0P = double.parse(u0P) ?? 0;
+            var intu1P = double.parse(u1P) ?? 0;
+            var intu2P = double.parse(u2P) ?? 0;
+            var intu3P = double.parse(u3P) ?? 0;
+            if (intu0P >= fINT || u0P == "---") {
+              check += 1;
+            }
+            if (intu1P >= fINT || u1P == "---") {
+              check += 1;
+            }
+            if (intu2P >= fINT || u2P == "---") {
+              check += 1;
+            }
+            if (intu3P >= fINT || u3P == "---") {
+              check += 1;
+            }
+            if (check == 4) {
+              inLineArr.add(dic);
+            }
+            check = 0;
+          }
+          break;
+        case buttonType2.three:
+          for (var dic in firstArray) {
+            var u0P = dic["U0_PWR"];
+            var u1P = dic["U1_PWR"];
+            var u2P = dic["U2_PWR"];
+            var u3P = dic["U3_PWR"];
+            var intu0P = double.parse(u0P) ?? 0;
+            var intu1P = double.parse(u1P) ?? 0;
+            var intu2P = double.parse(u2P) ?? 0;
+            var intu3P = double.parse(u3P) ?? 0;
+            if (intu0P >= fEXT || u0P == "---") {
+              check += 1;
+            }
+            if (intu1P >= fEXT || u1P == "---") {
+              check += 1;
+            }
+            if (intu2P >= fEXT || u2P == "---") {
+              check += 1;
+            }
+            if (intu3P >= fEXT || u3P == "---") {
+              check += 1;
+            }
+            if (check == 3) {
+              dataArray.add(dic);
+            }
+            check = 0;
+          }
+          for (var dic in secondArray) {
+            var u0P = dic["U0_PWR"];
+            var u1P = dic["U1_PWR"];
+            var u2P = dic["U2_PWR"];
+            var u3P = dic["U3_PWR"];
+            var intu0P = double.parse(u0P) ?? 0;
+            var intu1P = double.parse(u1P) ?? 0;
+            var intu2P = double.parse(u2P) ?? 0;
+            var intu3P = double.parse(u3P) ?? 0;
+            if (intu0P >= fINT || u0P == "---") {
+              check += 1;
+            }
+            if (intu1P >= fINT || u1P == "---") {
+              check += 1;
+            }
+            if (intu2P >= fINT || u2P == "---") {
+              check += 1;
+            }
+            if (intu3P >= fINT || u3P == "---") {
+              check += 1;
+            }
+            if (check == 3) {
+              inLineArr.add(dic);
+            }
+            check = 0;
+          }
+          break;
+        case buttonType2.two:
+          for (var dic in firstArray) {
+            var u0P = dic["U0_PWR"];
+            var u1P = dic["U1_PWR"];
+            var u2P = dic["U2_PWR"];
+            var u3P = dic["U3_PWR"];
+            var intu0P = double.parse(u0P) ?? 0;
+            var intu1P = double.parse(u1P) ?? 0;
+            var intu2P = double.parse(u2P) ?? 0;
+            var intu3P = double.parse(u3P) ?? 0;
+            if (intu0P >= fEXT || u0P == "---") {
+              check += 1;
+            }
+            if (intu1P >= fEXT || u1P == "---") {
+              check += 1;
+            }
+            if (intu2P >= fEXT || u2P == "---") {
+              check += 1;
+            }
+            if (intu3P >= fEXT || u3P == "---") {
+              check += 1;
+            }
+            if (check == 2) {
+              dataArray.add(dic);
+            }
+            check = 0;
+          }
+          for (var dic in secondArray) {
+            var u0P = dic["U0_PWR"];
+            var u1P = dic["U1_PWR"];
+            var u2P = dic["U2_PWR"];
+            var u3P = dic["U3_PWR"];
+            var intu0P = double.parse(u0P) ?? 0;
+            var intu1P = double.parse(u1P) ?? 0;
+            var intu2P = double.parse(u2P) ?? 0;
+            var intu3P = double.parse(u3P) ?? 0;
+            if (intu0P >= fINT || u0P == "---") {
+              check += 1;
+            }
+            if (intu1P >= fINT || u1P == "---") {
+              check += 1;
+            }
+            if (intu2P >= fINT || u2P == "---") {
+              check += 1;
+            }
+            if (intu3P >= fINT || u3P == "---") {
+              check += 1;
+            }
+            if (check == 2) {
+              inLineArr.add(dic);
+            }
+            check = 0;
+          }
+          break;
+        case buttonType2.one:
+          for (var dic in firstArray) {
+            var u0P = dic["U0_PWR"];
+            var u1P = dic["U1_PWR"];
+            var u2P = dic["U2_PWR"];
+            var u3P = dic["U3_PWR"];
+            var intu0P = double.parse(u0P) ?? 0;
+            var intu1P = double.parse(u1P) ?? 0;
+            var intu2P = double.parse(u2P) ?? 0;
+            var intu3P = double.parse(u3P) ?? 0;
+            if (intu0P >= fEXT || u0P == "---") {
+              check += 1;
+            }
+            if (intu1P >= fEXT || u1P == "---") {
+              check += 1;
+            }
+            if (intu2P >= fEXT || u2P == "---") {
+              check += 1;
+            }
+            if (intu3P >= fEXT || u3P == "---") {
+              check += 1;
+            }
+            if (check == 1) {
+              dataArray.add(dic);
+            }
+            check = 0;
+          }
+          for (var dic in secondArray) {
+            var u0P = dic["U0_PWR"];
+            var u1P = dic["U1_PWR"];
+            var u2P = dic["U2_PWR"];
+            var u3P = dic["U3_PWR"];
+            var intu0P = double.parse(u0P) ?? 0;
+            var intu1P = double.parse(u1P) ?? 0;
+            var intu2P = double.parse(u2P) ?? 0;
+            var intu3P = double.parse(u3P) ?? 0;
+            if (intu0P >= fINT || u0P == "---") {
+              check += 1;
+            }
+            if (intu1P >= fINT || u1P == "---") {
+              check += 1;
+            }
+            if (intu2P >= fINT || u2P == "---") {
+              check += 1;
+            }
+            if (intu3P >= fINT || u3P == "---") {
+              check += 1;
+            }
+            if (check == 1) {
+              inLineArr.add(dic);
+            }
+            check = 0;
+          }
+          break;  
       }
-      for (var dic in secondArray) {
-        var u0P = dic["U0_PWR"];
-        var u1P = dic["U1_PWR"];
-        var u2P = dic["U2_PWR"];
-        var u3P = dic["U3_PWR"];
-        var intu0P = double.parse(u0P) ?? 0;
-        var intu1P = double.parse(u1P) ?? 0;
-        var intu2P = double.parse(u2P) ?? 0;
-        var intu3P = double.parse(u3P) ?? 0;
-        if (intu0P >= fINT || u0P == "---") {
-          check += 1;
-        }
-        if (intu1P >= fINT || u1P == "---") {
-          check += 1;
-        }
-        if (intu2P >= fINT || u2P == "---") {
-          check += 1;
-        }
-        if (intu3P >= fINT || u3P == "---") {
-          check += 1;
-        }
-        if (check == 4) {
-          inLineArr.add(dic);
-        }
-        check = 0;
-      }
+      
       ///如果是內網就進入
       if (!isExt) {
         dataArray.clear();

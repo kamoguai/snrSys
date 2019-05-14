@@ -297,4 +297,8 @@ class MyStringZh extends MyStringBase {
   String text_delete = "刪除";
   @override
   String text_saveData = "存檔";
+  @override
+  String text_finalFinished = "最後完工";
+  @override
+  String text_spendTime = "耗時";
 }

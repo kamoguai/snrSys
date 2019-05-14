@@ -360,7 +360,7 @@ class PublicworksTableItem extends StatelessWidget {
                 _buildHeightLine51(),
                 GestureDetector(
                   child:  Container(
-                    decoration: BoxDecoration(border: Border()),
+                    decoration: BoxDecoration(color: Color(MyColors.hexFromStr('#fef5f6')), border: Border()),
                     width: ((_deviceWidth9(context) * 4)) - 1,
                     child: Column(
                       children: <Widget>[

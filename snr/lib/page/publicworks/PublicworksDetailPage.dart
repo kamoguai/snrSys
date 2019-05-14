@@ -18,6 +18,7 @@ import 'package:snr/common/model/User.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
@@ -260,7 +261,8 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
     from: typeof,
     accNo: user.accNo,
     accName: user.accName,
-    custCDList: custCDList
+    custCDList: custCDList,
+    fromFunc: fromFunc
     );
     
     Future.delayed(const Duration(seconds: 1), () {
@@ -292,7 +294,8 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
     memo: memo,
     accNo: user.accNo,
     accName: user.accName,
-    jsonCustCD: jsonCustCD
+    jsonCustCD: jsonCustCD,
+    fromFunc: fromFunc
     );
     Future.delayed(const Duration(seconds: 1), () {
       showRefreshLoading();
@@ -748,6 +751,132 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
   Store<SysState> _getStore() {
     return StoreProvider.of(context);
   }
+  
+  ///覆寫查詢dialog
+  @override
+  showSearchAlertSheetController(BuildContext context, dataArray) {
+    showCupertinoModalPopup<String>(
+        context: context,
+        builder: (context) {
+          var dialog = CupertinoActionSheet(
+            title: Text(CommonUtils.getLocale(context).text_sort),
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context, 'cancel');
+              },
+              child: Text('取消'),
+            ),
+            actions: <Widget>[
+              // CupertinoActionSheetAction(
+              //   onPressed: () {
+              //     Navigator.pop(context);
+              //     _showQeuryCustNo(context);
+              //   },
+              //   child: Text(CommonUtils.getLocale(context).text_custcode),
+              // ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                 setState(() {
+                    List<PublicworksTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BAD_TYPE"] == "C") {
+                        list.add(PublicworksTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text('CH'),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    List<PublicworksTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BAD_TYPE"] == "S") {
+                        list.add(PublicworksTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text('SNR'),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                    List<PublicworksTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BB"] != "內網") {
+                        list.add(PublicworksTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_extranet),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                   List<PublicworksTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["BB"] == "內網") {
+                        list.add(PublicworksTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_intranet),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                   List<PublicworksTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["Status"] == "1") {
+                        list.add(PublicworksTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_online),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  setState(() {
+                   List<PublicworksTableCell> list = new List();
+                    pullLoadWidgetControl.dataList.clear();
+                    for (var dic in dataArray) {
+                      if (dic["Status"] == "0") {
+                        list.add(PublicworksTableCell.fromJson(dic));
+                      }
+                    }
+                    pullLoadWidgetControl.dataList.addAll(list);
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(CommonUtils.getLocale(context).text_offline),
+              ),
+            ],
+          );
+          
+          return dialog;
+        }
+    );
+  }
 
   //透過override pullcontroller裡面的handleRefresh覆寫數據
   @override
@@ -921,11 +1050,7 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
-                        if (isLoading) {
-                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
-                          return;
-                        }
-                        showSortAlertSheetController(context);
+                        NavigatorUtils.goBpDetail(context);
                       },
                     ),
                   ),

@@ -197,17 +197,17 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
                   buildLineHeight(),
                   Container(
                     width: deviceWidth6() - 1,
-                    child: autoTextSize('上P', Colors.red),
+                    child: autoTextSize('', Colors.red),
                   ),
                   buildLineHeight(),
                   Container(
                     width: deviceWidth6() - 1,
-                    child: autoTextSize('問題', Colors.red),
+                    child: autoTextSize('', Colors.red),
                   ),
                   buildLineHeight(),
                   Container(
                     width: deviceWidth6(),
-                    child: autoTextSize('％', Colors.black),
+                    child: autoTextSize('', Colors.black),
                   ),
                 ],
               ),
@@ -235,17 +235,17 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
                   buildLineHeight(),
                   Container(
                     width: deviceWidth6() - 1,
-                    child: autoTextSize('上P', Colors.black),
+                    child: autoTextSize('', Colors.black),
                   ),
                   buildLineHeight(),
                   Container(
                     width: deviceWidth6() - 1,
-                    child: autoTextSize('問題', Colors.black),
+                    child: autoTextSize('', Colors.black),
                   ),
                   buildLineHeight(),
                   Container(
                     width: deviceWidth6(),
-                    child: autoTextSize('％', Colors.blueAccent),
+                    child: autoTextSize('', Colors.blueAccent),
                   ),
                 ],
               ),
@@ -281,7 +281,7 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
                 padding: EdgeInsets.only(left: 2.0, right: 2.0),
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                  autoTextSizeLeft('查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報查修回報', Colors.grey),
+                  autoTextSizeLeft('', Colors.grey),
                 ],
               )
             ),
@@ -362,7 +362,8 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
     var fDate = formatDate(dateToStr, [yy,'-',mm,'-',dd]);
     return GestureDetector(
       child: Container(
-        height: listHeight(),
+        height: titleHeight(),
+        padding: EdgeInsets.only(top: 2.0, bottom: 2.0),
         decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
@@ -371,6 +372,7 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
+              alignment: Alignment.center,
               width: (deviceWidth7() * 2) - 1,
               child: autoTextSize(dic["Name"] ?? "", Colors.black),
             ),
