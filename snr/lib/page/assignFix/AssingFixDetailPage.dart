@@ -602,7 +602,10 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
     
   }
  ///指派人員function
-  void _assingManFunc() async {
+  void _assingManFunc(String custNo, int currentCellTag) async {
+    if(user.isAssign != 1) {
+      return ;
+    }
     showCupertinoModalPopup<String>(
       context: context,
         builder: (context) {
@@ -614,20 +617,33 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
               },
               child: Text('取消'),
             ),
-            actions: _assignManList() 
+            actions: _assignManList(custNo, currentCellTag) 
           );
           return dialog;
         }
     );
   }
  /// assignManList
- _assignManList() {
+ _assignManList(custNo, currentCellTag) {
    List<Widget> wList = [];
    for (var dic in assingManArray) {
      wList.add(
       CupertinoActionSheetAction(
-        onPressed: () {
-          Navigator.pop(context);
+        onPressed: () async {
+          var res = await AssignFixDao.setAssignMan(custCD: custNo, accNo: dic["accNo"], empName: dic["empName"], assignMan: dic["empName"], senderID: user.accNo, senderName: user.accName, from: fromFunc );
+          if(res != null && res.result) {
+            var data = pullLoadWidgetControl.dataList[currentCellTag];
+            setState(() {
+              data.AssignMan = "派:${dic["empName"]}";
+            });
+            Navigator.pop(context);
+            Future.delayed(const Duration(seconds: 1), () {
+              CommonUtils.showMessageDialog(context, '成功指派人員', '${dic["empName"]}');
+            }); 
+          }
+          else {
+             Navigator.pop(context);
+          }
         }, 
         child: Text("${dic["empName"]}"),
       )

@@ -292,4 +292,8 @@ abstract class MyStringBase {
   String text_delete;
 
   String text_saveData;
+
+  String text_finalFinished;
+
+  String text_spendTime;
 }

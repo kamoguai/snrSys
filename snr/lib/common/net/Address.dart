@@ -200,15 +200,20 @@ class Address {
     return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRAllBigBad&City=${city}&Sort=${sort}&Hub=${hub}&${typeOf}=${typeValue}&accNo=${accNo}";
   }
   ///普通跳轉
-  static didTransferAPI(to, from, accNo, accName, custCDList) {
+  static didTransferAPI(to, from, accNo, accName, custCDList, {fromFunc}) {
     var custCDStr = "";
-    for (var str in custCDList) {
-      if (custCDStr == "") {
-        custCDStr = str;
+    if(fromFunc == null || fromFunc == "INST" || fromFunc == "MAINTAIN") {
+      for (var str in custCDList) {
+        if (custCDStr == "") {
+          custCDStr = str;
+        }
+        else {
+          custCDStr = "${custCDStr},${str}";
+        }
       }
-      else {
-        custCDStr = "${custCDStr},${str}";
-      }
+    }
+    else {
+      custCDStr = custCDList;
     }
     return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
   }
@@ -226,8 +231,22 @@ class Address {
     return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&Memo=${memo}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
   }
   ///工異跳轉
-  static didTransferPublicworksAPI(to, from, memo, accNo, accName, jsonCustCD) {
-    return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&Memo=${memo}&CustCD=${jsonCustCD}&SenderID=${accNo}&SenderName=${accName}";
+  static didTransferPublicworksAPI(to, from, memo, accNo, accName, custCDList, {fromFunc}) {
+    var custCDStr = "";
+    if(fromFunc == null || fromFunc == "INST" || fromFunc == "MAINTAIN") {
+      for (var str in custCDList) {
+        if (custCDStr == "") {
+          custCDStr = str;
+        }
+        else {
+          custCDStr = "${custCDStr},${str}";
+        }
+      }
+    }
+    else {
+      custCDStr = custCDList;
+    }
+    return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&Memo=${memo}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
   }
   ///完工統計
   static getQueryFinishAnalyseAPI(date) {
@@ -369,5 +388,9 @@ class Address {
   ///取得指派人員
   static getQueryAssignManListAPI() {
     return "${kSNRHostName}SNRProcess?FunctionName=QueryAssignManList";
+  }
+  ///post指派人員
+  static setAssignManAPI(custCD, accNo, empName, assignMan, senderID, senderName, from) {
+    return "${kSNRHostName}SNRProcess?FunctionName=SetAssignMan&CustCD=$custCD&accNo=$accNo&empName=$empName&AssignMan=$assignMan&SenderID=$senderID&SenderName=$senderName";
   }
 }

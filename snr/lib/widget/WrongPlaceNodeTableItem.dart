@@ -69,7 +69,7 @@ class WrongPlaceNodeTableItem extends StatelessWidget {
           bottom: BorderSide(width: 1.0,style: BorderStyle.solid,color: Colors.grey)
         )
       ),
-      height: height == null ? 25.0 : height,
+      // height: height == null ? 25.0 : height,
       width: width,
       child: child,
     );
@@ -78,14 +78,15 @@ class WrongPlaceNodeTableItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _container(
-      height: _listHeight(context),
+      // height: _listHeight(context),
       child: Row(
         children: <Widget>[
           Container(
-            width: (_deviceWidth10(context) * 4) - 1,
+            decoration: BoxDecoration(border: Border(right: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
+            width: (_deviceWidth10(context) * 4) ,
             child: _autoTextSize(defaultViewModel.nodePath, TextStyle(color: Colors.black), context),
           ),
-          _buildLineHeight(context),
+          // _buildLineHeight(context),
           Container(
             width: (_deviceWidth10(context) * 3) - 1,
             child: Row(

@@ -16,8 +16,8 @@ import 'package:snr/common/utils/CommonUtils.dart';
  */
 class DefaultTableDao {
   ///普通跳轉
-  static didTransfer(context, {to, from, accNo, accName, custCDList}) async {
-    var res = await HttpManager.netFetch(Address.didTransferAPI(to, from, accNo, accName, custCDList), null, null, new Options(method: "post"));
+  static didTransfer(context, {to, from, accNo, accName, custCDList, fromFunc}) async {
+    var res = await HttpManager.netFetch(Address.didTransferAPI(to, from, accNo, accName, custCDList, fromFunc: fromFunc), null, null, new Options(method: "post"));
     if (res != null && res.result) {
       if (Config.DEBUG) {
         print("didTransfer resp => " + res.data.toString());
@@ -56,7 +56,7 @@ class DefaultTableDao {
     }
   }
   ///工異專用
-  static didTransferPublicwork(context, {to, from, memo, accNo, accName, jsonCustCD}) async{
+  static didTransferPublicwork(context, {to, from, memo, accNo, accName, jsonCustCD, fromFunc}) async{
     var res = await HttpManager.netFetch(Address.didTransferPublicworksAPI(to, from, memo, accNo, accName, jsonCustCD), null, null, new Options(method: "post"));
     if (res != null && res.result) {
       if (Config.DEBUG) {

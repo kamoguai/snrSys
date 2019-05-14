@@ -13,8 +13,9 @@ import 'package:snr/common/utils/CommonUtils.dart';
 class FinishedTableItem extends StatelessWidget {
 
   final FinishedViewModel defaultViewModel;
+  final String nowType;
 
-  FinishedTableItem({this.defaultViewModel});
+  FinishedTableItem({this.defaultViewModel, this.nowType});
   ///分隔線
   _buildLine() {
     return new Container(
@@ -48,6 +49,10 @@ class FinishedTableItem extends StatelessWidget {
     return deviceWidth / 9;
   }
 
+  _deviceWidth15(context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    return deviceWidth / 15;
+  }
   _deviceWidth92(context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     var width9 =  deviceWidth / 9;
@@ -62,6 +67,17 @@ class FinishedTableItem extends StatelessWidget {
       style: style.merge(fontStyle),
       minFontSize: 5.0,
       textAlign: TextAlign.center,
+    );
+  }
+
+    Widget _autoTextSizeLeft(text, style, context) {
+    var fontSize = MyScreen.defaultTableCellFontSize(context);
+    var fontStyle = TextStyle(fontSize: fontSize);
+    return AutoSizeText(
+      text,
+      style: style.merge(fontStyle),
+      minFontSize: 5.0,
+      textAlign: TextAlign.left,
     );
   }
 
@@ -86,6 +102,167 @@ class FinishedTableItem extends StatelessWidget {
     );
   }
 
+  Widget centerLayout(BuildContext context) {
+    Widget layout;
+    switch(nowType) {
+      case "bigbad":
+        layout = Container();
+        break;
+      default:
+        layout = Container(
+          decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: _deviceWidth3(context) - 1,
+                child: _autoTextSize(
+                    defaultViewModel.custNo, TextStyle(color: Colors.grey), context),
+              ),
+              _buildHeightLine(),
+              Container(
+                width: (_deviceWidth3(context) + _deviceWidth9(context) * 0.5) - 1,
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      color: Color(MyColors.hexFromStr('#f0fcff')),
+                      width: (_deviceWidth9(context) / 2) - 1,
+                      child: _autoTextSize(
+                          defaultViewModel.note1, TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.note1_color))), context),
+                    ),
+                    _buildHeightLine(),
+                    Container(
+                      width: _deviceWidth3(context) - 1,
+                      child: _autoTextSize(
+                          defaultViewModel.custClass, TextStyle(color: Colors.red), context),
+                    ),
+                  ],
+                ),
+              ),
+              _buildHeightLine(),
+              Container(
+                  width: _deviceWidth92(context),
+                  child: Container(
+                    child: _autoTextSize(
+                        defaultViewModel.name, TextStyle(color: Colors.black), context),
+                  )),
+            ],
+          ),
+        );
+    }
+    return layout;
+  }
+
+  Widget bottomLayout(BuildContext context) {
+    Widget layout;
+    switch(nowType) {
+      case "finished": 
+        layout = _autoContainer(
+          child: Row(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: _deviceWidth3(context) - 1,
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_finish + defaultViewModel.finishedTime, TextStyle(color: Colors.black), context),
+              ),
+              _buildHeightLine(),
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: _deviceWidth3(context) - 1,
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_fix2 + defaultViewModel.finishedTime, TextStyle(color: Colors.pink), context),
+              ),
+              _buildHeightLine(),
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: _deviceWidth3(context),
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_finish + defaultViewModel.finishedTime, TextStyle(color: Colors.pink), context),
+              ),
+            ],
+          )
+        );
+        break;
+      case "bp":
+        layout = _autoContainer(
+          child: Row(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: _deviceWidth3(context) - 1,
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_finish + defaultViewModel.finishedTime, TextStyle(color: Colors.black), context),
+              ),
+              _buildHeightLine(),
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: _deviceWidth3(context) - 1,
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_fix2 + defaultViewModel.finishedTime, TextStyle(color: Colors.pink), context),
+              ),
+              _buildHeightLine(),
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: _deviceWidth3(context),
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_finalFinished + defaultViewModel.finishedTime, TextStyle(color: Colors.purple), context),
+              ),
+            ],
+          )
+        );
+        break;
+      case "bigbad":
+        layout = _autoContainer(
+          child: Row(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: (_deviceWidth15(context) * 5) - 1,
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_sendReoprt + defaultViewModel.finishedTime, TextStyle(color: Colors.pink), context),
+              ),
+              _buildHeightLine(),
+              SizedBox(width: _deviceWidth15(context) - 1),
+              _buildHeightLine(),
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: (_deviceWidth15(context) * 5) - 1,
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_finish + defaultViewModel.finishedTime, TextStyle(color: Colors.blue), context),
+              ),
+              _buildHeightLine(),
+              SizedBox(width: _deviceWidth15(context) - 1),
+              _buildHeightLine(),
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: _deviceWidth15(context) * 3,
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_spendTime + ":" + defaultViewModel.finishedTime, TextStyle(color: Colors.black), context),
+              ),
+            ],
+          )
+        );
+        break;
+      case "pipe":
+        layout = _autoContainer(
+          child: Row(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: _deviceWidth3(context) - 1,
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_finish + defaultViewModel.finishedTime, TextStyle(color: Colors.black), context),
+              ),
+              _buildHeightLine(),
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: _deviceWidth3(context) - 1,
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_fix2 + defaultViewModel.finishedTime, TextStyle(color: Colors.pink), context),
+              ),
+              _buildHeightLine(),
+              Container(
+                padding: EdgeInsets.only(left: 5.0),
+                width: _deviceWidth3(context),
+                child: _autoTextSizeLeft(CommonUtils.getLocale(context).text_finish + defaultViewModel.finishedTime, TextStyle(color: Colors.pink), context),
+              ),
+            ],
+          )
+        );
+        break;
+    }
+    return layout;
+  }
+
   @override
   Widget build(BuildContext context) {
     var netType = 'EXT';
@@ -94,75 +271,15 @@ class FinishedTableItem extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          GestureDetector(
-            onTap: (){print(123);},
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                _autoContainer_full(child: _autoTextSize(defaultViewModel.address,TextStyle(color: Colors.grey), context), ),
-              ],
-            ),
+          Container(
+            padding: EdgeInsets.only(left: 5.0, top: 2.0, bottom: 2.0),
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(border: Border()),
+            child: _autoTextSizeLeft(defaultViewModel.address,TextStyle(color: Colors.grey[700]), context)
           ),
           _buildLine(),
-          _autoContainer(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: _deviceWidth3(context) - 1,
-                  child: _autoTextSize(
-                      defaultViewModel.custNo, TextStyle(color: Colors.grey), context),
-                ),
-                _buildHeightLine(),
-                Container(
-                  width: (_deviceWidth3(context) + _deviceWidth9(context) * 0.5) - 1,
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        color: Color(MyColors.hexFromStr('#f0fcff')),
-                        width: (_deviceWidth9(context) / 2) - 1,
-                        child: _autoTextSize(
-                            defaultViewModel.note1, TextStyle(color: Color(MyColors.hexFromStr(defaultViewModel.note1_color))), context),
-                      ),
-                      _buildHeightLine(),
-                      Container(
-                        width: _deviceWidth3(context) - 1,
-                        child: _autoTextSize(
-                            defaultViewModel.custClass, TextStyle(color: Colors.red), context),
-                      ),
-                    ],
-                  ),
-                ),
-                _buildHeightLine(),
-                Container(
-                    width: _deviceWidth92(context),
-                    child: Container(
-                      child: _autoTextSize(
-                          defaultViewModel.name, TextStyle(color: Colors.black), context),
-                    )),
-              ],
-            ),
-          ),
-          _buildLine(),
-          _autoContainer(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: _deviceWidth3(context) - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_finish + defaultViewModel.finishedTime, TextStyle(color: Colors.black), context),
-                ),
-                _buildHeightLine(),
-                Container(
-                  width: _deviceWidth3(context) - 1,
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_fix2 + defaultViewModel.finishedTime, TextStyle(color: Colors.pink), context),
-                ),
-                _buildHeightLine(),
-                Container(
-                  width: _deviceWidth3(context),
-                  child: _autoTextSize(CommonUtils.getLocale(context).text_finish + defaultViewModel.finishedTime, TextStyle(color: Colors.pink), context),
-                ),
-              ],
-            )
-          ),
+          centerLayout(context),
+          bottomLayout(context),
           _buildLine(),
           GestureDetector(
             child: Container(

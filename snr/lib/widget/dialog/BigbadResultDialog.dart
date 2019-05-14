@@ -120,6 +120,7 @@ class BigBadResultDialog extends StatelessWidget {
             child: EnsureVisibleWhenFocused(
               focusNode: _focusNode,
               child: TextField(
+                style: TextStyle(fontSize: MyScreen.normalPageFontSize(context)),
                 maxLines: 4,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(5.0),
@@ -141,14 +142,14 @@ class BigBadResultDialog extends StatelessWidget {
           _checkManList(context),
           _buildLine(),
           Container(
-            height: _titleHeight(context),
+            color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(border: Border(right: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
                   width: _deviceWidth3(context) - 2,
-                  height: _listHeight(context),
+                  height: _titleHeight(context),
                   child: FlatButton(
                     textColor: Colors.green,
                     child: _autoTextSize('修改', TextStyle(color: Colors.green, fontWeight: FontWeight.bold), context),
@@ -160,7 +161,7 @@ class BigBadResultDialog extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(border: Border(right: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
                   width: _deviceWidth3(context) - 2,
-                  height: _listHeight(context),
+                  height: _titleHeight(context),
                   child: FlatButton(
                     textColor: Colors.green,
                     child: _autoTextSize('確定', TextStyle(color: Colors.blue, fontWeight: FontWeight.bold), context),
@@ -171,7 +172,7 @@ class BigBadResultDialog extends StatelessWidget {
                 ),
                 Container(
                   width: _deviceWidth3(context) - 2,
-                  height: _listHeight(context),
+                  height: _titleHeight(context),
                   child: FlatButton(
                     textColor: Colors.green,
                     child: _autoTextSize('離開', TextStyle(color: Colors.red, fontWeight: FontWeight.bold), context),

@@ -66,6 +66,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
   Sso sso;
   ///數據資料arr
   final List<dynamic> dataArray = [];
+  final Map<String, dynamic> mainArray = {};
   ///是否顯示統計列表
   var isEnableStatistic = false;
   ///來自功能
@@ -151,7 +152,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_confirm + "-${confirmCount}",
+                  .text_confirm + "-${mainArray["DEDUCT1"]}",
               color: Color(MyColors.hexFromStr("#eeffef")),
               fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowBtnType == buttonType.confirm ? Colors.red : Colors.grey[700],
@@ -185,7 +186,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                       new BorderRadius.circular(10.0),
                   side: BorderSide(color: Colors.grey)),
               text: CommonUtils.getLocale(context)
-                  .text_bp + "-${bpCount}",
+                  .text_bp + "-${mainArray["DEDUCT2"]}",
               color: Color(MyColors.hexFromStr("#f0fcff")),
               fontSize: MyScreen.normalListPageFontSize(context),
               textColor: nowBtnType == buttonType.bp ? Colors.red : Colors.grey[700],
@@ -405,7 +406,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                 buildLineHeight(),
                 Container(
                   width: deviceWidth8() - 1,
-                  child: autoTextSize(CommonUtils.getLocale(context).text_point, TextStyle(color: Colors.black)),
+                  child: autoTextSize('', TextStyle(color: Colors.black)),
                 ),
                 buildLineHeight(),
                 Container(
@@ -425,7 +426,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
                 buildLineHeight(),
                 Container(
                   width: deviceWidth8() - 1,
-                  child: autoTextSize(CommonUtils.getLocale(context).text_assign, TextStyle(color: Colors.black)),
+                  child: autoTextSize('', TextStyle(color: Colors.black)),
                 ),
                 buildLineHeight(),
                 Container(
@@ -557,6 +558,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
       //統計按鈕之外都call這
       var res = await getApiDataList();
       if (res != null && res.result) {
+        mainArray.addAll(res.data);
         List<BpTableCell> list = new List();
         if (res.data["Data"] != null && res.data["Data"] != []) {
           dataArray.addAll(res.data["Data"]);

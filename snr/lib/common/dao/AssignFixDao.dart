@@ -165,4 +165,25 @@ class AssignFixDao {
       return new DataResult(null, false);
     }
   }
+  ///post指派人員
+  static setAssignMan({custCD, accNo, empName, assignMan, senderID, senderName, from}) async {
+    Map<String, dynamic> mainDataArray = {};
+    var res = await HttpManager.netFetch(Address.setAssignManAPI(custCD, accNo, empName, assignMan, senderID, senderName, from), null, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("setAssignMan resp => " + res.data.toString());
+      }
+      if (res.data['Response']['ReturnCode'] == "0") {
+        mainDataArray = res.data["ReturnData"];
+        return new DataResult(mainDataArray, true);
+      }
+      else {
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
+        return new DataResult(null, false);
+      }
+      
+    } else {
+      return new DataResult(null, false);
+    }
+  }
 }
