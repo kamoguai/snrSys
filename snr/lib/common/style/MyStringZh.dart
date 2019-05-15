@@ -66,7 +66,7 @@ class MyStringZh extends MyStringBase {
   @override
   String copyRight_text = "Copyright © 2015 DigiDom Cable TV CO., Ltd. All Rights Reserved. 全國數位有線電視股份有限公司 版權所有";
   @override
-  String appVerNo_text = "版號: 3.0.0311";
+  String appVerNo_text = "版號: ";
   @override
   String welcome_text = "歡迎使用SNR預警系統";
   @override

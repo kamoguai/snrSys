@@ -43,7 +43,7 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    /*
+    
     signingConfigs {
         debug {
             keyAlias keystoreProperties['keyAlias']
@@ -69,7 +69,9 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-    */
+    
+    ///debub mode
+    /*
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
@@ -78,6 +80,7 @@ android {
         }
        
     }
+    */
 }
 
 flutter {

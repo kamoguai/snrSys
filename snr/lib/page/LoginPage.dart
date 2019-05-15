@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:snr/common/net/Address.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/widget/MyInputWidget.dart';
@@ -57,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
       verFontSize = 16.0;
     }
     return new AutoSizeText(
-      CommonUtils.getLocale(context).appVerNo_text,
+      CommonUtils.getLocale(context).appVerNo_text + Address.verNo,
       style: TextStyle(fontSize: verFontSize),
       minFontSize: 1.0,
       maxLines: 1,

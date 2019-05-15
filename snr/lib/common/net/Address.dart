@@ -13,9 +13,8 @@ class Address {
   static const String getSsoKey = "SSO/json/login.do?";
   static const String getVersion = "ValidataVersion/json/index!checkVersion.action?";
   static const String loginAPI = "WorkOrder/json/wok!login.action?";
-  static final String bundleID = "com.dc.SNR";
-  // static final String verNo = "3.0.0311";
-  static final String verNo = "2.19.0226";
+  static final String bundleID = "com.dctv.snrSys";
+  static final String verNo = "3.0.0513";
 
   ///檢查是否有更新app
   static getValidateVersionAPI() {

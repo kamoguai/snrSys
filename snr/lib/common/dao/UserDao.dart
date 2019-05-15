@@ -118,6 +118,7 @@ class UserDao {
       }
     }
   }
+
     ///
   static isUpdateApp(context) async {
     var res = await HttpManager.netFetch(Address.getValidateVersionAPI(), null, null, null);

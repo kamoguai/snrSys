@@ -506,64 +506,66 @@ class _HomePageState extends State<HomePage>
   Widget _buildBigbadItem(BuildContext context, int index) {
     var dic = bigbadList[index];
     var miniFontSize = MyScreen.homePageFontSize(context);
-    var tableHeight = 70.0;
-    final deviceHeight = MediaQuery.of(context).size.height;
-    if (deviceHeight > 800) {
-      tableHeight = 110;
-    }
+
     return GestureDetector(
       child: Container(
-        height: listHeight(),
+        height: titleHeight(),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
               color: Colors.grey, width: 1.0, style: BorderStyle.solid))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
           children: <Widget>[
-            new Container(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-                "${dic.Name}-${dic.CIF}",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: miniFontSize),
-              )),
-            new Container(
-              padding: EdgeInsets.all(5.0),
-              child: new Text(
-                dic.DATE,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: miniFontSize),
-              )),
-            new Container(
-              padding: EdgeInsets.all(5.0),
-              child: new Text(
-                dic.Time,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.red, fontSize: miniFontSize),
-              )),
-            new Container(
-              child: new Text(
-              "~",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.black, fontSize: miniFontSize),
-            )),
-            new Container(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-                dic.RTIME == null
-                    ? "--:--"
-                    : dic.RTIME,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.blue, fontSize: miniFontSize),
-              ))
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                new Container(
+                  padding: EdgeInsets.all(5.0),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "${dic.Name}-${dic.CIF}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: miniFontSize),
+                  )),
+                new Container(
+                  padding: EdgeInsets.all(5.0),
+                  child: new Text(
+                    dic.DATE,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: miniFontSize),
+                  )),
+                new Container(
+                  padding: EdgeInsets.all(5.0),
+                  child: new Text(
+                    dic.Time,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.red, fontSize: miniFontSize),
+                  )),
+                new Container(
+                  child: new Text(
+                  "~",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.black, fontSize: miniFontSize),
+                )),
+                new Container(
+                  padding: EdgeInsets.all(5.0),
+                  child: Text(
+                    dic.RTIME == null
+                        ? "--:--"
+                        : dic.RTIME,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.blue, fontSize: miniFontSize),
+                ))
+              ],
+            ),
           ],
         ),
       ),

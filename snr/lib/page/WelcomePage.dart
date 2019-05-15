@@ -17,7 +17,19 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  var isUpdate = false;
 
+  updateFunc() async {
+    var res = await UserDao.isUpdateApp(context);
+    setState(() {
+      isUpdate = res;
+    });
+  }
+
+  void initState() {
+    super.initState();
+    updateFunc();
+  }
   bool hadInit = false;
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -33,14 +45,19 @@ class _WelcomePageState extends State<WelcomePage> {
     new Future.delayed(const Duration(seconds: 2), () {
       //延遲2秒跳轉
       UserDao.initUserInfo(store).then((res) {
-         // 將使用者信息去store查詢
-         if (res != null && res.result) {
-           NavigatorUtils.goHome(context);
-         }
-         else {
-           NavigatorUtils.goLogin(context);
-         }
-         return true;
+        if (isUpdate) {
+          NavigatorUtils.goLogin(context);
+        }
+        else {
+          // 將使用者信息去store查詢
+          if (res != null && res.result) {
+            NavigatorUtils.goHome(context);
+          }
+          else {
+            NavigatorUtils.goLogin(context);
+          }
+        }
+        return true;
       });
     });
   }

@@ -144,7 +144,6 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
                       child: TextField(
                         enabled: isEdit,
                         keyboardType: TextInputType.number,
-                        controller: TextEditingController(text: '34'),
                         style: TextStyle(fontSize: MyScreen.appBarFontSize(context), color: Colors.blue),
                         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],                    
                         decoration: InputDecoration(

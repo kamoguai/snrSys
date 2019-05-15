@@ -1,4 +1,4 @@
-package com.example.snr;
+package com.dctv.snrSys;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
