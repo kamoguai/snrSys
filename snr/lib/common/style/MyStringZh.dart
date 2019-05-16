@@ -301,4 +301,6 @@ class MyStringZh extends MyStringBase {
   String text_finalFinished = "最後完工";
   @override
   String text_spendTime = "耗時";
+  @override
+  String text_addMan = "加入人員";
 }

@@ -586,7 +586,7 @@ class _HomePageState extends State<HomePage>
     if(bigbadList.length > 0) {
       list = Container(
         color: Color(MyColors.hexFromStr('#fafff9')),
-        height: listHeight() * 3,
+        height: (listHeight() * 3) + 30,
         child: ListView.builder(
           itemBuilder: _buildBigbadItem,
           itemCount: bigbadList.length,
@@ -810,7 +810,7 @@ class _HomePageState extends State<HomePage>
                             alignment: Alignment(0, 0),
                             padding: EdgeInsets.only(left: 5.0),
                             // padding: EdgeInsets.all(10.0),
-                            height: _listHeight(),
+                            height: _listHeight() * 1.2,
                             child: _buildWrongPlace(),
                           ),
 
@@ -823,6 +823,8 @@ class _HomePageState extends State<HomePage>
                           /// 高度1的分隔線
                           _buildLine(),
                           new Container(
+                            height: titleHeight() * 0.8,
+                            alignment: Alignment.center,
                             color: Color(MyColors.hexFromStr('#fafff9')),
                             padding: EdgeInsets.only(bottom: 1.0),
                             child: Text(

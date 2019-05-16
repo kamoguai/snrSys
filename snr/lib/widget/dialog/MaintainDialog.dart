@@ -1,7 +1,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:snr/common/config/Config.dart';
+import 'package:snr/common/dao/AssignFixDao.dart';
 import 'package:snr/common/dao/BpDao.dart';
 import 'package:snr/common/dao/MaintainLogDao.dart';
 import 'package:snr/common/dao/UserDao.dart';
@@ -22,19 +24,25 @@ class MaintainLogDialog extends StatefulWidget {
   final String wkNo;
   final String custName;
   final String from;
+  final int currentCellTag;
+  final Function maintainAssignFunc;
   
-  MaintainLogDialog({this.custNo, this.wkNo, this.custName, this.from});
+  MaintainLogDialog({this.custNo, this.wkNo, this.custName, this.from, this.currentCellTag, this.maintainAssignFunc});
 
   @override
-  _MaintainLogDialogState createState() => _MaintainLogDialogState();
+  _MaintainLogDialogState createState() => _MaintainLogDialogState(this.maintainAssignFunc);
 }
 
 class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
- 
+  
+  final Function maintainAssignFunc;
+  _MaintainLogDialogState(this.maintainAssignFunc);
 
   ///data相關
   List<dynamic> dataArray = new List<dynamic>();
+  ///所選row array
   final List<String> toTransformArray = [];
+  ///所選row 狀態，選定時為true，未選為flase
   List<bool> isSelectArray = [];
   /// user model
   User user;
@@ -44,6 +52,8 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
   var tapId = "";
   var tapIndex = 0;
   var tapTarget = "";
+  var selectAccNo = "";
+  var selectEmpName = "";
   ///初始化
   initParam() async {
     var userRes = await UserDao.getUserInfoLocal();
@@ -53,6 +63,10 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
     user.accNo = await LocalStorage.get(Config.USER_NAME_KEY);
     user.accName = sso.accName;
     
+  }
+  ///維修記錄指派人員
+  Future _openMaintainAssign(empName, currentCellTag) {
+    maintainAssignFunc(empName, currentCellTag);
   }
   ///first item
   Widget _firstItem() {
@@ -94,7 +108,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
           ),
         ),
         onTap: () {
-          _addTransform(dic.id, 0);
+          _addTransform(dic.id, 0, accNo: dic.senderID, empName: dic.senderName);
         },
       );
     }
@@ -115,6 +129,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
         child: Column(
           children: <Widget>[
             Container(
+              color: _changeTransColor(count, t: 0),
               padding: EdgeInsets.only(left: 5.0),
               alignment: Alignment.centerLeft,
               child: autoTextSizeLeft(dic.description, TextStyle(color: Color(MyColors.hexFromStr(dic.descriptionColor))), context),
@@ -145,7 +160,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
         ),
       ),
       onTap: () {
-        _addTransform(dic.id, index + 1);
+        _addTransform(dic.id, index + 1, accNo: dic.senderID, empName: dic.senderName);
       },
     );
   }
@@ -169,7 +184,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
   }
 
   ///所選目標function 
-  void _addTransform(String id, int index) {
+  void _addTransform(String id, int index, {accNo, empName}) {
     if (id == "XXXXX") {
       tapTarget = id + "-$index";
     }
@@ -185,18 +200,28 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
       else {
         toTransformArray.add(tapTarget);
         isSelectArray[index] = true;
+        selectAccNo = accNo;
+        selectEmpName = empName;
       }
     });
   }
   
   ///跳轉選定後改變欄位顏色
-  Color _changeTransColor(int index) {
+  Color _changeTransColor(int index, {int t}) {
     if(isSelectArray[index] == true) {
       return Colors.orange;
     }
     else {
-      if (index > 0) {
-        return Color(MyColors.hexFromStr('#f2f2f2'));
+      if (index == 0) {
+        return Color(MyColors.hexFromStr('#f0fcff'));
+      }
+      else if (index > 0) {
+        if (t == 0) {
+          return Colors.white;
+        }
+        else {
+          return Color(MyColors.hexFromStr('#f2f2f2'));
+        }
       }
       else {
         return Colors.transparent;
@@ -272,6 +297,42 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
     );
      
   }
+  ///show 加入人員dialog
+  _addManDialog(accNo, empName, assignMan) {
+    showDialog(
+      context: context,
+      builder: (context) {
+         var dialog = CupertinoAlertDialog(
+            content: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                text: '是否確定要將該筆人員填入派工？\n', 
+                style: TextStyle(color: Colors.black, ),
+                children: <TextSpan>[TextSpan(text: '${empName}', style: TextStyle(color: Colors.blue, )),]
+              ),
+            ),
+            actions: <Widget>[
+              CupertinoButton(
+                onPressed: (){
+                  print('accNo: $accNo, empName: $empName, assignMan: $assignMan');
+                  _setAssignMan(accNo: accNo, empName: empName, assignMan: assignMan);
+                  Navigator.pop(context);
+                },
+                child: Text('確定', style: TextStyle(color: Colors.blue),),
+              ),
+              CupertinoButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+                child: Text('取消', style: TextStyle(color: Colors.red),),
+              ),
+              
+            ],
+          );
+         return dialog;
+      }
+    );
+  }
   ///呼叫api data
   getDataList() async {
     dataArray.clear();
@@ -338,7 +399,14 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
         getDataList();
       }
     }
-    
+  }
+  ///post指派人員
+  _setAssignMan({accNo, empName, assignMan}) async {
+    var res = await AssignFixDao.setAssignMan(custCD: widget.custNo, accNo: accNo, empName: empName, assignMan: assignMan, senderID: user.accNo, senderName: user.accName, from: widget.from );
+    if(res != null && res.result) {
+      Fluttertoast.showToast(msg: '指派人員 [ $empName ] 成功');
+      _openMaintainAssign(empName, widget.currentCellTag);
+    }
   }
   @override
   deviceWidth2(BuildContext context) {
@@ -366,10 +434,39 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
   @override
   Widget build(BuildContext context) {
     Widget btnAction;
+    Widget btnType;
     if(user == null) {
       return Container(width: 150, child: showLoadingAnime(context));
     }
     if(user.isDeleteReportLog == 1) {
+
+      if (toTransformArray.length == 1 && (widget.from == "FIX" || widget.from == "FIX2") || widget.from == "CUT" || widget.from == "WATCH") {
+        btnType = Container(
+          width: deviceWidth3(context) - 1,
+          child: FlatButton(
+            textColor: Colors.red,
+            child: autoTextSize(CommonUtils.getLocale(context).text_addMan, TextStyle(color: Colors.blue), context),
+            onPressed: () {
+             _addManDialog(selectAccNo, selectEmpName, selectEmpName);
+            },
+          ),
+        );
+      }
+      else {
+        btnType = Container(
+          width: deviceWidth3(context) - 1,
+          child: FlatButton(
+            textColor: Colors.red,
+            child: autoTextSize(CommonUtils.getLocale(context).text_input, TextStyle(color: Colors.blue), context),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => _addInputDialog(widget.custNo, widget.custName)
+              );
+            },
+          ),
+        );
+      }
       btnAction = Container(
         height: titleHeight(context),
         child: Row(
@@ -385,19 +482,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
               ),
             ),
             buildLineHeight(context),
-            Container(
-              width: deviceWidth3(context) - 1,
-              child: FlatButton(
-                textColor: Colors.red,
-                child: autoTextSize(CommonUtils.getLocale(context).text_input, TextStyle(color: Colors.blue), context),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => _addInputDialog(widget.custNo, widget.custName)
-                  );
-                },
-              ),
-            ),
+            btnType,
             buildLineHeight(context),
             Container(
               width: deviceWidth3(context),
@@ -422,7 +507,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
               width: deviceWidth2(context) - 1,
               child: FlatButton(
                 textColor: Colors.red,
-                child: autoTextSize(CommonUtils.getLocale(context).text_input, TextStyle(color: Colors.red), context),
+                child: autoTextSize(CommonUtils.getLocale(context).text_input, TextStyle(color: Colors.blue), context),
                 onPressed: () {
                    showDialog(
                     context: context,

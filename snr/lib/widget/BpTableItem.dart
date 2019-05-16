@@ -203,7 +203,7 @@ class BpTableItem extends StatelessWidget {
                 ),
                 _buildHeightLine(),
                 Container(
-                  width: _deviceWidth10(context) * 2,
+                  width: _deviceWidth10(context) * 3,
                   child: _autoTextSize(defaultViewModel.workMan, TextStyle(color: Colors.purple), context),
                 )
               ],

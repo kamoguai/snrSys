@@ -82,7 +82,7 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
     }
     DefaultTableCell dtc = pullLoadWidgetControl.dataList[index];
     DefaultViewModel model = DefaultViewModel.forMap(dtc);
-    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, assignManFunc: _assingManFunc, currentCellTag: index,);
+    return new DefaultTableItem(defaultViewModel: model, configData: config, addTransform: _addTransform, addTransformArray: toTransformArray, callPing: _callPing, assignManFunc: _assingManFunc, maintainAssignFunc: _maintainAssignFunc, currentCellTag: index, fromFunc: fromFunc,);
   }
 
   ///頁面上方按鈕群
@@ -651,6 +651,12 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
    }
    return wList;
  }
+ void _maintainAssignFunc(empName, currentCellTag) {
+   var data = pullLoadWidgetControl.dataList[currentCellTag];
+   setState(() {
+     data.AssignMan = "派:${empName}";
+   });
+ }
  ///小ping dialog
   Widget _buildPingDialog(BuildContext context, res, {currentCellTag}) {
     SmallPingTableCell sptc = SmallPingTableCell.fromJson(res.data);
@@ -934,6 +940,10 @@ class _AssignFixDetailPageState extends State<AssignFixDetailPage> with Automati
                       color: Colors.transparent,
                       fontSize: MyScreen.homePageFontSize(context),
                       onPress: () {
+                        if (isLoading) {
+                          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                          return;
+                        }
                         clearData();
                         NavigatorUtils.goFinishedDetail(context);
                       },

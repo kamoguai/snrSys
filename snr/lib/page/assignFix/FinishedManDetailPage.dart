@@ -239,15 +239,15 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
   }
   ///get api data
   getApiDataList() async {
-    var res = await AssignFixDao.getAssignFix(_getStore(),
-    city: strCity,
-    sort: strSort,
-    hub: strHub,
-    typeOf: typeof,
-    typeValue: typevalue,
-    accNo: user.accNo,
-    );
-    return res;
+    // var res = await AssignFixDao.getAssignFix(_getStore(),
+    // city: strCity,
+    // sort: strSort,
+    // hub: strHub,
+    // typeOf: typeof,
+    // typeValue: typevalue,
+    // accNo: user.accNo,
+    // );
+    // return res;
   }
   
   Store<SysState> _getStore() {

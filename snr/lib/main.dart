@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/localization/FallbackCupertinoLocalisationsDelegate.dart';
 import 'package:snr/common/redux/SysState.dart';
 import 'package:snr/common/model/User.dart';
+import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/page/WelcomePage.dart';
 import 'package:snr/page/LoginPage.dart';
@@ -32,7 +34,7 @@ class SnrReduxApp extends StatelessWidget {
     ///初始化數據
     initialState: new SysState(
       userInfo: User.empty(),
-      themeData: CommonUtils.getThemeData(Colors.blue),
+      themeData: CommonUtils.getThemeData(MyColors.primarySwatch),
       locale: Locale('zh','CH'),
       
     )
@@ -42,6 +44,10 @@ class SnrReduxApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ///設定手機畫面固定直立上方
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp
+    ]);
     return new StoreProvider(
       store: store,
       child: new StoreBuilder<SysState>(builder: (context, store){

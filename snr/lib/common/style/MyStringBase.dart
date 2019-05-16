@@ -296,4 +296,6 @@ abstract class MyStringBase {
   String text_finalFinished;
 
   String text_spendTime;
+
+  String text_addMan;
 }

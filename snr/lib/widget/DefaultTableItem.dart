@@ -16,11 +16,12 @@ class DefaultTableItem extends StatelessWidget {
   final Function addTransform;
   final Function callPing;
   final Function assignManFunc;
+  final Function maintainAssignFunc;
   final List<String> addTransformArray;
   final int currentCellTag;
   final String netType;
   final String fromFunc;
-  DefaultTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing, this.assignManFunc, this.currentCellTag, this.netType, this.fromFunc});
+  DefaultTableItem({this.defaultViewModel, this.configData, this.addTransform, this.addTransformArray, this.callPing, this.assignManFunc, this.maintainAssignFunc, this.currentCellTag, this.netType, this.fromFunc});
   ///分隔線
   _buildLine() {
     return new Container(
@@ -133,6 +134,7 @@ class DefaultTableItem extends StatelessWidget {
   Future _openAssignManDialog(custNo, currentCellTag) async {
     assignManFunc(custNo, currentCellTag);
   }
+ 
   Widget _maintainLogDialog(custCode, custName) {
     return Material(
       type: MaterialType.transparency,
@@ -140,7 +142,7 @@ class DefaultTableItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Card(
-            child: MaintainLogDialog(custNo: custCode, custName: custName, from: fromFunc,),
+            child: MaintainLogDialog(custNo: custCode, custName: custName, from: fromFunc, currentCellTag: currentCellTag, maintainAssignFunc: maintainAssignFunc,),
           )
         ],
       ),
