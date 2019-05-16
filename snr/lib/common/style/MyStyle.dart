@@ -348,7 +348,7 @@ class MyScreen {
     final deviceHeight = MediaQuery.of(context).size.height;
     double fontSize = 0.0;
     if (deviceHeight < 570) {
-      fontSize = MyConstant.tinyTextSize;
+      fontSize = MyConstant.minTextSize;
     } else if (deviceHeight > 800) {
       fontSize = MyConstant.normalTextSize;
     } else {
@@ -416,7 +416,7 @@ class MyScreen {
     final deviceHeight = MediaQuery.of(context).size.height;
     double fontSize = 0.0;
     if (deviceHeight < 570) {
-      fontSize = MyConstant.tinyTextSize;
+      fontSize = MyConstant.miniTextSize;
     } else if (deviceHeight > 800) {
       fontSize = MyConstant.middleTextWhiteSize;
     } else if (deviceHeight > 600 && deviceHeight < 720) {
@@ -432,7 +432,7 @@ class MyScreen {
     final deviceHeight = MediaQuery.of(context).size.height;
     double fontSize = 0.0;
     if (deviceHeight < 570) {
-      fontSize = MyConstant.tinyTextSize - 2;
+      fontSize = MyConstant.tinyTextSize ;
     } else if (deviceHeight > 800) {
       fontSize = MyConstant.smallTextSize;
     } else if (deviceHeight > 600 && deviceHeight < 720) {
@@ -480,7 +480,7 @@ class MyScreen {
     final deviceHeight = MediaQuery.of(context).size.height;
     double fontSize = 0.0;
     if (deviceHeight < 570) {
-      fontSize = MyConstant.tinyTextSize - 1;
+      fontSize = MyConstant.tinyTextSize ;
     } else if (deviceHeight > 800) {
       fontSize = MyConstant.bigTextSize;
     } else if (deviceHeight > 600 && deviceHeight < 720) {

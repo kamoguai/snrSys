@@ -534,7 +534,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
 
     return isLoading ? Container(width: 150, child: showLoadingAnime(context)) :
      Container(
-      height: deviceHeight4(context) * 4,
+      height: deviceHeight4(context) * 3.5,
       child: Column(
         children: <Widget>[
           Container(

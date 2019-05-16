@@ -126,7 +126,7 @@ class _JumpSettingPageState extends State<JumpSettingPage> with AutomaticKeepAli
       alignment: Alignment.center,
       decoration: BoxDecoration( color: color,border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey, style: BorderStyle.solid))),
       width: width,
-      // height: height,
+      height: height,
       child: child,
     );
   }
@@ -500,7 +500,7 @@ class _JumpSettingPageState extends State<JumpSettingPage> with AutomaticKeepAli
     return Column(
       children: <Widget>[
         _container(
-          height: deviceHeight4(context),
+          height: deviceHeight4(context) * 1.25,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[

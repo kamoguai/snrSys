@@ -341,16 +341,16 @@ class DefaultTableItem extends StatelessWidget {
                               _buildHeightLine(),
                               Container(
                                 width: _deviceWidth925(context) - 1,
-                                child: _autoTextSize_s(defaultViewModel.restartCount,TextStyle(color: Colors.black), context),
+                                child: _autoTextSize(defaultViewModel.restartCount,TextStyle(color: Colors.black), context),
                               ),
                             ],
                           ),
                         ),
                         _buildLine(),
                         Container(
-                          // decoration: BoxDecoration(border: Border()),
+                          alignment: Alignment.center,
                           height: 25.0,
-                          child: _autoTextSize_s(defaultViewModel.restartTime,TextStyle(color: Colors.black), context),
+                          child: _autoTextSize(defaultViewModel.restartTime,TextStyle(color: Colors.black), context),
                         ),
               
                       ],

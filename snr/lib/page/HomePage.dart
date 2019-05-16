@@ -216,7 +216,7 @@ class _HomePageState extends State<HomePage>
   _buildCmtsTable() {
     var miniFontSize = MyScreen.homePageFontSize(context);
     if (miniFontSize < 11.0) {
-      miniFontSize = miniFontSize - 2;
+      miniFontSize = miniFontSize ;
     }
 
     return Table(
