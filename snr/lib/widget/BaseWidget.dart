@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 基本widget，供重複使用的widget
  * Date: 2019-05-09
@@ -35,7 +36,7 @@ mixin BaseWidget{
             children: <Widget>[
               new Container(child: SpinKitCubeGrid(color: Colors.white)),
               new Container(height: 10.0),
-              new Container(child: new Text(CommonUtils.getLocale(context).loading_text, style: MyConstant.normalTextWhite)),
+              new Container(child: new Text(CommonUtils.getLocale(context).loading_text, style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(20.0)))),
             ],
           ),
         )
@@ -63,7 +64,7 @@ mixin BaseWidget{
           children: <Widget>[
             new Container(child: SpinKitCubeGrid(color: Colors.white)),
             new Container(height: 10.0),
-            new Container(child: new Text(CommonUtils.getLocale(context).loading_text, style: MyConstant.normalTextWhite)),
+            new Container(child: new Text(CommonUtils.getLocale(context).loading_text, style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(20.0)))),
           ],
         ),
       )

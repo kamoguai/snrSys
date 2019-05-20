@@ -23,7 +23,7 @@ import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
 import 'package:snr/widget/dialog/SmallPingTableItem.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class FinishedDetailPage extends StatefulWidget {
 
 
@@ -527,6 +527,7 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                     borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(color: Colors.grey, style: BorderStyle.solid)
                   ),
+                  style: TextStyle(fontSize: ScreenUtil().setSp(20)),
                   placeholder: '備註為必填',
                   onChanged: (String value){
                     setState(() {
@@ -543,13 +544,13 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                     postTransferInputTextAPI(to, memoText);
                     Navigator.pop(context);
                   },
-                  child: Text('確定', style: TextStyle(color: Colors.blue),),
+                  child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
                 ),
                 CupertinoButton(
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  child: Text('取消', style: TextStyle(color: Colors.red),),
+                  child: Text('取消', style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(20)),),
                 ),
                 
               ],
@@ -576,14 +577,14 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  child: Text('取消', style: TextStyle(color: Colors.red),),
+                  child: Text('取消', style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(20)),),
                 ),
                 CupertinoButton(
                   onPressed: (){
                     postTransferAPI(to);
                     Navigator.pop(context);
                   },
-                  child: Text('確定', style: TextStyle(color: Colors.blue),),
+                  child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
                 ),
               ],
             );
@@ -808,6 +809,7 @@ class _FinishedDetailPageState extends State<FinishedDetailPage> with AutomaticK
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     super.build(context);
     return SafeArea(
       top: false,

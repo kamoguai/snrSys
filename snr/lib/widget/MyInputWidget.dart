@@ -30,6 +30,7 @@ class _MyInputWidgetState extends State<MyInputWidget> {
       controller: widget.controller,
       onChanged: widget.onChanged,
       obscureText: widget.obscureText,
+      style: widget.textStyle,
       decoration: new InputDecoration(
         hintText: widget.hintText,
         filled: true,

@@ -15,7 +15,7 @@ import 'package:snr/common/style/MyStringBase.dart';
 import 'package:snr/common/localization/DefaultLocalizations.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/widget/MyFlexButton.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 通用邏輯
  * Date: 2019-03-11
@@ -157,7 +157,7 @@ class CommonUtils {
                       children: <Widget>[
                         new Container(child: SpinKitCubeGrid(color: Color(MyColors.white))),
                         new Container(height: 10.0),
-                        new Container(child: new Text(CommonUtils.getLocale(context).loading_text, style: MyConstant.normalTextWhite)),
+                        new Container(child: new Text(CommonUtils.getLocale(context).loading_text, style: TextStyle(color: Colors.white,fontSize: ScreenUtil().setSp(20.0)))),
                       ],
                     ),
                   ),
@@ -189,7 +189,7 @@ class CommonUtils {
                       children: <Widget>[
                         new Container(child: SpinKitCubeGrid(color: Color(MyColors.white))),
                         new Container(height: 10.0),
-                        new Container(child: new Text(CommonUtils.getLocale(context).loading_text, style: MyConstant.normalTextWhite)),
+                        new Container(child: new Text(CommonUtils.getLocale(context).loading_text, style: TextStyle(fontSize: ScreenUtil().setSp(20.0)))),
                       ],
                     ),
                   ),
@@ -298,14 +298,14 @@ class CommonUtils {
       context: context,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: new Text(titleStr),
+          title: new Text(titleStr, style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
           content: new Text(contentStr),
           actions: <Widget>[
             CupertinoButton(
                 onPressed: (){
                   Navigator.pop(context);
                 },
-                child: Text('確定', style: TextStyle(color: Colors.red),),
+                child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
             ),
           ],
         );

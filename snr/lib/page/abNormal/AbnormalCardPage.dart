@@ -7,7 +7,7 @@ import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/MyListState.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 卡板列表頁面
  * Date: 2019-03-28
@@ -219,7 +219,7 @@ Widget _buildCmtsHeader2() {
     var dic = dataArray2[index];
     return GestureDetector(
       child: Container(
-        height: listHeight(),
+        height: listHeight() * 1.2,
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(
             color: Colors.grey,
@@ -266,8 +266,7 @@ Widget _buildCmtsHeader2() {
   Widget _buildCmtsList2() {
     Widget cmtsList2;
     if(dataArray2 != null && dataArray2.length > 0) {
-      cmtsList2 = Container(
-        height: deviceHeight4(),
+      cmtsList2 = Expanded(
         child: ListView.builder(
           itemBuilder: _buildCmtsListItem2,
           itemCount: dataArray2.length,
@@ -300,6 +299,7 @@ Widget _buildCmtsHeader2() {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return SafeArea(
         top: false,
         child: Scaffold(

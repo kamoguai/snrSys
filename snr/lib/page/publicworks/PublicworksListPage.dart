@@ -7,7 +7,7 @@ import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/MyListState.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PublicworksListPage extends StatefulWidget {
   @override
   _PublicworksListPageState createState() => _PublicworksListPageState();
@@ -365,6 +365,7 @@ class _PublicworksListPageState extends State<PublicworksListPage>
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return SafeArea(
         top: false,
         child: Scaffold(

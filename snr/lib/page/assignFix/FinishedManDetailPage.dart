@@ -21,7 +21,7 @@ import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class FinishedManDetailPage extends StatefulWidget {
 
   
@@ -339,6 +339,7 @@ class _FinishedManDetailPageState extends State<FinishedManDetailPage> with Auto
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     super.build(context);
     return SafeArea(
       top: false,

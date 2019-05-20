@@ -14,7 +14,7 @@ class Address {
   static const String getVersion = "ValidataVersion/json/index!checkVersion.action?";
   static const String loginAPI = "WorkOrder/json/wok!login.action?";
   static final String bundleID = "com.dctv.snrSys";
-  static final String verNo = "3.0.0515";
+  static final String verNo = "3.0.0516";
 
   ///檢查是否有更新app
   static getValidateVersionAPI() {
@@ -170,11 +170,11 @@ class Address {
 
   ///關閉CM
   static postResetCM(cmts, custNo, accName) {
-    return "${kSNRHostPingName}/SNRping.php?Action=ResetCM&Custno=$custNo&CMTS=$cmts&AccName=$accName";
+    return "${kSNRHostPingName}/CMTSProcess.php?Action=ResetCM&Custno=$custNo&CMTS=$cmts&AccName=$accName";
   }
   ///重啟CM
   static postReStartCM(cmts,custNo,accName) {
-    return "${kSNRHostPingName}/SNRping.php?Action=RestartCM&Custno=$custNo&CMTS=$cmts&AccName=$accName";
+    return "${kSNRHostPingName}/CMTSProcess.php?Action=RestartCM&Custno=$custNo&CMTS=$cmts&AccName=$accName";
   }
   ///abnormal card
   static getSNRSignalByCMTSAPI(cmtsCode){

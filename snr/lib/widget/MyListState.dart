@@ -9,7 +9,7 @@ import 'package:snr/common/model/DefaultTableCell.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 上下拉刷新列表的通用State
  *
@@ -59,7 +59,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
           children: <Widget>[
             new Container(child: SpinKitCubeGrid(color: Colors.blue[200])),
             new Container(height: 10.0),
-            new Container(child: new Text(CommonUtils.getLocale(context).loading_text, style: TextStyle(color: Colors.black))),
+            new Container(child: new Text(CommonUtils.getLocale(context).loading_text, style: TextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(20)))),
           ],
         ),
       )
@@ -83,7 +83,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
             child: new Image(image: new AssetImage(MyICons.DEFAULT_USER_ICON), width: 70.0, height: 70.0),
           ),
           Container(
-            child: Text(CommonUtils.getLocale(context).app_empty, style: MyConstant.normalText),
+            child: Text(CommonUtils.getLocale(context).app_empty, style: TextStyle(fontSize: ScreenUtil().setSp(20))),
           ),
         ],
       ),
@@ -95,12 +95,12 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
         context: context,
         builder: (context) {
           var dialog = CupertinoActionSheet(
-            title: Text(CommonUtils.getLocale(context).text_sort),
+            title: Text(CommonUtils.getLocale(context).text_sort, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
             cancelButton: CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.pop(context, 'cancel');
               },
-              child: Text('取消'),
+              child: Text('取消', style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
             ),
             actions: <Widget>[
               CupertinoActionSheetAction(
@@ -111,7 +111,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_time),
+                child: Text(CommonUtils.getLocale(context).text_time, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -121,7 +121,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_address),
+                child: Text(CommonUtils.getLocale(context).text_address, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -131,7 +131,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_building),
+                child: Text(CommonUtils.getLocale(context).text_building, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
             ],
           );
@@ -147,12 +147,12 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
         context: context,
         builder: (context) {
           var dialog = CupertinoActionSheet(
-            title: Text(CommonUtils.getLocale(context).text_sort),
+            title: Text(CommonUtils.getLocale(context).text_search, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
             cancelButton: CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.pop(context, 'cancel');
               },
-              child: Text('取消'),
+              child: Text('取消', style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
             ),
             actions: <Widget>[
               // CupertinoActionSheetAction(
@@ -176,7 +176,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text('CH'),
+                child: Text('CH', style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -192,7 +192,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text('SNR'),
+                child: Text('SNR', style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -208,7 +208,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_extranet),
+                child: Text(CommonUtils.getLocale(context).text_extranet, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -224,7 +224,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_intranet),
+                child: Text(CommonUtils.getLocale(context).text_intranet, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -240,7 +240,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_online),
+                child: Text(CommonUtils.getLocale(context).text_online, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -256,7 +256,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_offline),
+                child: Text(CommonUtils.getLocale(context).text_offline, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
             ],
           );
@@ -272,12 +272,12 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
         context: context,
         builder: (context) {
           var dialog = CupertinoActionSheet(
-            title: Text(CommonUtils.getLocale(context).text_sort),
+            title: Text(CommonUtils.getLocale(context).text_sort, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
             cancelButton: CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.pop(context, 'cancel');
               },
-              child: Text('取消'),
+              child: Text('取消', style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
             ),
             actions: <Widget>[
               CupertinoActionSheetAction(
@@ -288,7 +288,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_all),
+                child: Text(CommonUtils.getLocale(context).text_all, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -298,7 +298,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_bq),
+                child: Text(CommonUtils.getLocale(context).text_bq, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -308,7 +308,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_sc),
+                child: Text(CommonUtils.getLocale(context).text_sc, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -318,7 +318,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_xz),
+                child: Text(CommonUtils.getLocale(context).text_xz, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -328,7 +328,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_tc),
+                child: Text(CommonUtils.getLocale(context).text_tc, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -338,7 +338,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_lu),
+                child: Text(CommonUtils.getLocale(context).text_lu, style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
             ],
           );

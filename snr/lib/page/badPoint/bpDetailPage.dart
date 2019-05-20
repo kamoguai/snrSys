@@ -25,7 +25,7 @@ import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 點數詳情頁面
  * Date: 2019-04-29
@@ -281,9 +281,9 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
       context: context,
       builder: (context){
         var dialog = CupertinoActionSheet(
-          title: Text('選擇日期'),
+          title: Text('選擇日期', style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
           cancelButton: CupertinoActionSheetAction(
-            child: Text('取消'),
+            child: Text('取消', style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
             onPressed: (){
               Navigator.pop(context);
             },
@@ -305,7 +305,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
       }
       wList.add(
         CupertinoActionSheetAction(
-          child: Text(formatD),
+          child: Text(formatD, style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
           onPressed: (){
             setState(() {
              if (i == 0) {
@@ -609,6 +609,7 @@ class _BpDetailPageState extends State<BpDetailPage> with AutomaticKeepAliveClie
   }
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     super.build(context);
     return SafeArea(
       top: false,

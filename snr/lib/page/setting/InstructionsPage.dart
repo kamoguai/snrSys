@@ -8,7 +8,7 @@ import 'package:snr/page/setting/JumpSettingPage.dart';
 import 'package:snr/page/setting/ParamSettingPage.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/SettingTabBarWidget.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 操作說明頁面
  * Date: 2019-05-02
@@ -36,28 +36,19 @@ class _InstructionsPageState extends State<InstructionsPage> {
             child: Text(CommonUtils.getLocale(context).text_settingPage, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: MyScreen.appBarFontSize(context)),),
           ),
           Container(
-            alignment: Alignment.center,
-            width: deviceWidth3(context),
+            height: 30,
+            width: deviceWidth3(context) * 1.1,
             child: FlatButton.icon(
-              icon: Image.asset(
-                MyICons.DEFAULT_USER_ICON,
-                width: 30,
-                height: 30,
-              ),
-              textColor: Colors.white,
+              icon: Image.asset('static/images/24.png'),
               color: Colors.transparent,
-              label: Text(
-                'DCTV',
-                style: TextStyle(
-                    fontSize: MyScreen.normalPageFontSize_s(context)),
-              ),
-              onPressed: () {
-                print(123);
+              label: Text(''),
+              onPressed: (){
+
               },
-            )
+            ),
           ),
           Container(
-            width: deviceWidth3(context),
+            width: deviceWidth3(context) - 15,
             child: MyToolButton(
               text: '',
               textColor: Colors.white,
@@ -159,6 +150,7 @@ class _InstructionsPageState extends State<InstructionsPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     List<Widget> tabs = [
       _renderTab(CommonUtils.getLocale(context).text_intructions, '#e8fcff',context),
       _renderTab(CommonUtils.getLocale(context).text_jumpSetting, '#fef0ed',context),

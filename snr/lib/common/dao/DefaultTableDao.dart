@@ -103,17 +103,17 @@ class DefaultTableDao {
   }
   ///執行關電
   static postResetCM(context, {cmts, custNo, accName}) async{
-    var res = HttpManager.netFetch(Address.postResetCM(cmts, custNo, accName), null, null, new Options(method: "post"));
+    var res = await HttpManager.netFetch(Address.postResetCM(cmts, custNo, accName), null, null, new Options(method: "post"));
     if (res != null && res.result) {
       if (Config.DEBUG) {
         print("postResetCM resp => " + res.data.toString());
       }
       if (res.data['Response']['ReturnCode'] == "0") {
-        CommonUtils.showMessageDialog(context, "", res.data['Response']['MSG']);
+         Fluttertoast.showToast(msg: res.data['Response']['MSG']);
         // return new DataResult(null, false);
       }
       else {
-        CommonUtils.showMessageDialog(context, "", res.data['Response']['MSG']);
+        Fluttertoast.showToast(msg: res.data['Response']['MSG']);
         // return new DataResult(null, false);
       }
     }
@@ -123,17 +123,17 @@ class DefaultTableDao {
   }
   ///執行重啟
   static postRestartCM(context, {cmts, custNo, accName}) async{
-    var res = HttpManager.netFetch(Address.postReStartCM(cmts, custNo, accName), null, null, new Options(method: "post"));
+    var res = await HttpManager.netFetch(Address.postReStartCM(cmts, custNo, accName), null, null, new Options(method: "post"));
     if (res != null && res.result) {
       if (Config.DEBUG) {
         print("postRestartCM resp => " + res.data.toString());
       }
       if (res.data['Response']['ReturnCode'] == "0") {
-        CommonUtils.showMessageDialog(context, "", res.data['Response']['MSG']);
+         Fluttertoast.showToast(msg: res.data['Response']['MSG']);
         // return new DataResult(null, false);
       }
       else {
-        CommonUtils.showMessageDialog(context, "", res.data['Response']['MSG']);
+         Fluttertoast.showToast(msg: res.data['Response']['MSG']);
         // return new DataResult(null, false);
       }
     }

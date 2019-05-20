@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 ///通用下上刷新控件
 class MyPullLoadWidget extends StatefulWidget {
   ///item渲染
@@ -128,7 +129,7 @@ class _MyPullLoadWidgetState extends State<MyPullLoadWidget> {
             child: new Image(image: new AssetImage(MyICons.DEFAULT_USER_ICON), width: 70.0, height: 70.0),
           ),
           Container(
-            child: Text(CommonUtils.getLocale(context).app_empty, style: MyConstant.normalText),
+            child: Text(CommonUtils.getLocale(context).app_empty, style: TextStyle(fontSize: ScreenUtil().setSp(MyConstant.normalTextSize))),
           ),
         ],
       ),

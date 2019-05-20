@@ -8,6 +8,7 @@ import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/model/User.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 大ping資料
  * Date: 2019-05-08
@@ -131,14 +132,14 @@ class BigPingTableItem extends StatelessWidget {
               onPressed: (){
                 Navigator.pop(context);
               },
-              child: Text('取消', style: TextStyle(color: Colors.red),),
+              child: Text('取消', style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(20)),),
             ),
             CupertinoButton(
               onPressed: (){
                 _postResetAPI(context, accName);
                 Navigator.pop(context);
               },
-              child: Text('確定', style: TextStyle(color: Colors.blue),),
+              child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
             ),
           ],
         );
@@ -168,14 +169,14 @@ class BigPingTableItem extends StatelessWidget {
               onPressed: (){
                 Navigator.pop(context);
               },
-              child: Text('取消', style: TextStyle(color: Colors.red),),
+              child: Text('取消', style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(20)),),
             ),
             CupertinoButton(
               onPressed: (){
                 _postRestartAPI(context, accName);
                 Navigator.pop(context);
               },
-              child: Text('確定', style: TextStyle(color: Colors.blue),),
+              child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
             ),
           ],
         );

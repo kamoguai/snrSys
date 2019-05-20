@@ -14,6 +14,7 @@ import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/BaseWidget.dart';
 import 'package:snr/widget/dialog/AddDescriptionDialog.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 維修紀錄dialog
  * Date: 2019-05-09
@@ -247,7 +248,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
               onPressed: (){
                 Navigator.pop(context);
               },
-              child: Text('取消', style: TextStyle(color: Colors.red),),
+              child: Text('取消', style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(20)),),
             ),
             CupertinoButton(
               onPressed: (){
@@ -255,7 +256,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
                 deleteData();
                 Navigator.pop(context);
               },
-              child: Text('確定', style: TextStyle(color: Colors.blue),),
+              child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
             ),
           ],
         );
@@ -318,13 +319,13 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
                   _setAssignMan(accNo: accNo, empName: empName, assignMan: assignMan);
                   Navigator.pop(context);
                 },
-                child: Text('確定', style: TextStyle(color: Colors.blue),),
+                child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
               ),
               CupertinoButton(
                 onPressed: (){
                   Navigator.pop(context);
                 },
-                child: Text('取消', style: TextStyle(color: Colors.red),),
+                child: Text('取消', style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(20)),),
               ),
               
             ],
@@ -433,6 +434,7 @@ class _MaintainLogDialogState extends State<MaintainLogDialog> with BaseWidget{
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     Widget btnAction;
     Widget btnType;
     if(user == null) {

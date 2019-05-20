@@ -19,6 +19,7 @@ import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/dialog/CPEDialog.dart';
 import 'package:snr/widget/dialog/FLAPDialog.dart';
 import 'package:snr/widget/BaseWidget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 大PING頁面
  * Date: 2019-05-07
@@ -242,28 +243,19 @@ class _BigPingPageState extends State<BigPingPage> with BaseWidget {
             child: Text('大PING', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: MyScreen.appBarFontSize(context)),),
           ),
           Container(
-            alignment: Alignment.center,
-            width: deviceWidth3(context),
+            height: 30,
+            width: deviceWidth3(context) * 1.1,
             child: FlatButton.icon(
-              icon: Image.asset(
-                MyICons.DEFAULT_USER_ICON,
-                width: 30,
-                height: 30,
-              ),
-              textColor: Colors.white,
+              icon: Image.asset('static/images/24.png'),
               color: Colors.transparent,
-              label: Text(
-                'DCTV',
-                style: TextStyle(
-                    fontSize: MyScreen.normalPageFontSize_s(context)),
-              ),
-              onPressed: () {
-                print(123);
+              label: Text(''),
+              onPressed: (){
+
               },
-            )
+            ),
           ),
           Container(
-            width: deviceWidth3(context),
+            width: deviceWidth3(context) - 20,
             child: MyToolButton(
               text: '',
               textColor: Colors.white,
@@ -510,6 +502,7 @@ class _BigPingPageState extends State<BigPingPage> with BaseWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return SafeArea(
       top: false,
       child: Scaffold(

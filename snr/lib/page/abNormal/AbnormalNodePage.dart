@@ -7,7 +7,7 @@ import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/MyListState.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AbnormalNodePage extends StatefulWidget {
   
   static final String sName = "abnormalNode";
@@ -188,6 +188,7 @@ class _AbnormalNodePageState extends State<AbnormalNodePage> with AutomaticKeepA
   }
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return SafeArea(
       top: false,
       child: Scaffold(

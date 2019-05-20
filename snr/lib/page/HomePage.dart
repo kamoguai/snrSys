@@ -14,7 +14,7 @@ import 'package:snr/common/model/HomeSignal.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/common/dao/BigBadDao.dart';
 import 'package:snr/common/model/BigBad.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 主頁
  * Date: 2018-03-14
@@ -215,9 +215,6 @@ class _HomePageState extends State<HomePage>
   /// cmts talbe
   _buildCmtsTable() {
     var miniFontSize = MyScreen.homePageFontSize(context);
-    if (miniFontSize < 11.0) {
-      miniFontSize = miniFontSize ;
-    }
 
     return Table(
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -239,21 +236,21 @@ class _HomePageState extends State<HomePage>
                   : CommonUtils.getLocale(context).home_cmtsTitle_lhp +
                       ': ${ctInfo.LHP}',
               style: TextStyle(fontSize: miniFontSize),
-              minFontSize: 8.0,
+              minFontSize: 5.0,
             ),
             new AutoSizeText(
               ctInfo == null
                   ? CommonUtils.getLocale(context).home_cmtsTitle_dowP
                   : CommonUtils.getLocale(context).home_cmtsTitle_dowP + ': ',
               style: TextStyle(fontSize: miniFontSize, color: Colors.purple),
-              minFontSize: 1.0,
+              minFontSize: 5.0,
             ),
             new AutoSizeText(
               ctInfo == null
                   ? CommonUtils.getLocale(context).home_cmtsTitle_cut
                   : CommonUtils.getLocale(context).home_cmtsTitle_cut + ': ',
               style: TextStyle(fontSize: miniFontSize),
-              minFontSize: 1.0,
+              minFontSize: 5.0,
             ),
             new AutoSizeText(
               ctInfo == null
@@ -261,7 +258,7 @@ class _HomePageState extends State<HomePage>
                   : CommonUtils.getLocale(context).home_cmtsTitle_major +
                       ': ${ctInfo.MAJOR}',
               style: TextStyle(fontSize: miniFontSize, color: Colors.red),
-              minFontSize: 1.0,
+              minFontSize: 5.0,
             ),
           ],
         ),
@@ -273,21 +270,21 @@ class _HomePageState extends State<HomePage>
                   : CommonUtils.getLocale(context).home_cmtsTitle_hp +
                       ': ${ctInfo.HP}',
               style: TextStyle(fontSize: miniFontSize, color: Colors.orange),
-              minFontSize: 1.0,
+              minFontSize: 5.0,
             ),
             new AutoSizeText(
               ctInfo == null
                   ? CommonUtils.getLocale(context).home_cmtsTitle_watch
                   : CommonUtils.getLocale(context).home_cmtsTitle_watch + ': ',
               style: TextStyle(fontSize: miniFontSize, color: Colors.blue),
-              minFontSize: 1.0,
+              minFontSize: 5.0,
             ),
             new AutoSizeText(
               ctInfo == null
                   ? CommonUtils.getLocale(context).home_cmtsTitle_fix2
                   : CommonUtils.getLocale(context).home_cmtsTitle_fix2 + ': ',
               style: TextStyle(fontSize: miniFontSize, color: Colors.pink),
-              minFontSize: 1.0,
+              minFontSize: 5.0,
             ),
             new AutoSizeText(
               ctInfo == null
@@ -295,7 +292,7 @@ class _HomePageState extends State<HomePage>
                   : CommonUtils.getLocale(context).home_cmtsTitle_fix +
                       ': ${ctInfo.FIX}',
               style: TextStyle(fontSize: miniFontSize, color: Colors.red),
-              minFontSize: 1.0,
+              minFontSize: 5.0,
             ),
           ],
         ),
@@ -607,6 +604,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return new StoreBuilder<SysState>(builder: (context, store) {
       return WillPopScope(
           onWillPop: () {

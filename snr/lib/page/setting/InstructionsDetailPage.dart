@@ -2,6 +2,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:snr/common/style/MyStyle.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 操作說明頁面
  * Date: 2019-05-02
@@ -97,6 +98,7 @@ class InstructionsDetailPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     List<Widget> list = new List<Widget>();
     
     ///迴圈跑內文

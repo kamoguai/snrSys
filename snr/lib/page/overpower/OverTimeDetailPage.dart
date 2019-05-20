@@ -24,7 +24,7 @@ import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
 import 'package:snr/widget/dialog/SmallPingTableItem.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 超時詳情頁面
  * Date: 2019-04-23
@@ -307,12 +307,12 @@ class _OverTimeDetailPageState extends State<OverTimeDetailPage> with AutomaticK
         context: context,
         builder: (context) {
           var dialog = CupertinoActionSheet(
-            title: Text('將選取的資轉'),
+            title: Text('將選取的資料轉',style: TextStyle( fontSize: ScreenUtil().setSp(20)),),
             cancelButton: CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.pop(context, 'cancel');
               },
-              child: Text('取消'),
+              child: Text('取消',style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
             ),
             actions: _transSort()
           );
@@ -358,7 +358,7 @@ class _OverTimeDetailPageState extends State<OverTimeDetailPage> with AutomaticK
               Navigator.pop(context);
               _transformDialog(context, to: typeStr, sortStr: sortStr);
             },
-            child: Text(sortStr),
+            child: Text(sortStr, style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
           )
         );
       }
@@ -388,6 +388,7 @@ class _OverTimeDetailPageState extends State<OverTimeDetailPage> with AutomaticK
                     borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(color: Colors.grey, style: BorderStyle.solid)
                   ),
+                  style: TextStyle(fontSize: ScreenUtil().setSp(20)),
                   placeholder: '備註為必填',
                   onChanged: (String value){
                     setState(() {
@@ -404,13 +405,13 @@ class _OverTimeDetailPageState extends State<OverTimeDetailPage> with AutomaticK
                     postTransferInputTextAPI(to, memoText);
                     Navigator.pop(context);
                   },
-                  child: Text('確定', style: TextStyle(color: Colors.blue),),
+                  child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
                 ),
                 CupertinoButton(
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  child: Text('取消', style: TextStyle(color: Colors.red),),
+                  child: Text('取消', style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(20)),),
                 ),
                 
               ],
@@ -437,14 +438,14 @@ class _OverTimeDetailPageState extends State<OverTimeDetailPage> with AutomaticK
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  child: Text('取消', style: TextStyle(color: Colors.red),),
+                  child: Text('取消', style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(20)),),
                 ),
                 CupertinoButton(
                   onPressed: (){
                     postTransferAPI(to);
                     Navigator.pop(context);
                   },
-                  child: Text('確定', style: TextStyle(color: Colors.blue),),
+                  child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
                 ),
               ],
             );
@@ -735,6 +736,7 @@ class _OverTimeDetailPageState extends State<OverTimeDetailPage> with AutomaticK
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     super.build(context);
     return SafeArea(
       top: false,

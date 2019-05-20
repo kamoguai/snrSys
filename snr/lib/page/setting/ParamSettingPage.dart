@@ -3,6 +3,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:snr/common/style/MyStyle.dart';
 
 class ParamSettingPage extends StatefulWidget {
@@ -976,6 +977,7 @@ class _ParamSettingPageState extends State<ParamSettingPage> with AutomaticKeepA
   bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());

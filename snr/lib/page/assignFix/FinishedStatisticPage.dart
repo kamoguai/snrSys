@@ -10,6 +10,7 @@ import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 完工列表頁面
  * Date: 2019-04-19
@@ -320,9 +321,9 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
       context: context,
       builder: (context){
         var dialog = CupertinoActionSheet(
-          title: Text('選擇日期'),
+          title: Text('選擇日期', style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
           cancelButton: CupertinoActionSheetAction(
-            child: Text('取消'),
+            child: Text('取消', style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
             onPressed: (){
               Navigator.pop(context);
             },
@@ -344,7 +345,7 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
       }
       wList.add(
         CupertinoActionSheetAction(
-          child: Text(formatD),
+          child: Text(formatD, style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
           onPressed: (){
             setState(() {
              if (i == 0) {
@@ -390,6 +391,7 @@ class _FinishedStatisticPageState extends State<FinishedStatisticPage> with Auto
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return SafeArea(
       top: false,
       child: Scaffold(

@@ -10,7 +10,7 @@ import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/dialog/BigbadHistoryDialog.dart';
 import 'package:snr/widget/dialog/BigbadResultDialog.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 重大異常詳情頁面
  * Date: 2019-04-24
@@ -663,6 +663,7 @@ class _BigBadDetailPageState extends State<BigBadDetailPage> with AutomaticKeepA
   }
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return SafeArea(
       top: false,
       child: Scaffold(

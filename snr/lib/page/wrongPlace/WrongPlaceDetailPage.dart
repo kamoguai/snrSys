@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 import 'package:snr/common/config/Config.dart';
@@ -549,12 +550,12 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
         context: context,
         builder: (context) {
           var dialog = CupertinoActionSheet(
-            title: Text('將選取的資轉'),
+            title: Text('將選取的資轉', style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
             cancelButton: CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.pop(context, 'cancel');
               },
-              child: Text('取消'),
+              child: Text('取消', style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
             ),
             actions: _transSort()
           );
@@ -678,7 +679,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
             Navigator.pop(context);
             _transformDialog(context, to: typeStr, sortStr: sortStr);
           },
-          child: Text(sortStr),
+          child: Text(sortStr, style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
         )
       );
     }
@@ -713,14 +714,14 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  child: Text('取消', style: TextStyle(color: Colors.red),),
+                  child: Text('取消', style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(20)),),
                 ),
                 CupertinoButton(
                   onPressed: (){
                     postTransferAPI(to);
                     Navigator.pop(context);
                   },
-                  child: Text('確定', style: TextStyle(color: Colors.blue),),
+                  child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
                 ),
               ],
             );
@@ -1030,6 +1031,7 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return SafeArea(
       top: false,
       child: StoreBuilder<SysState>(

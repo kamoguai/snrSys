@@ -25,7 +25,7 @@ import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/common/model/SsoLogin.dart';
 import 'package:snr/widget/PublicworksTableItem.dart';
 import 'package:snr/widget/dialog/SmallPingTableItem.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PublicworksDetailPage extends StatefulWidget {
   @override
   _PublicworksDetailPageState createState() => _PublicworksDetailPageState();
@@ -373,12 +373,12 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
         context: context,
         builder: (context) {
           var dialog = CupertinoActionSheet(
-            title: Text('將選取的資轉'),
+            title: Text('將選取的資轉', style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
             cancelButton: CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.pop(context, 'cancel');
               },
-              child: Text('取消'),
+              child: Text('取消',style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
             ),
             actions: _transSort()
           );
@@ -441,7 +441,7 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
               Navigator.pop(context);
               _transformDialog(context, to: typeStr, sortStr: sortStr);
             },
-            child: Text(sortStr),
+            child: Text(sortStr, style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
           )
         );
       }
@@ -473,6 +473,7 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
                     borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(color: Colors.grey, style: BorderStyle.solid)
                   ),
+                  style: TextStyle(fontSize: ScreenUtil().setSp(20), color: Colors.blue),
                   placeholder: '目標人員必填',
                   onChanged: (String value){
                     setState(() {
@@ -492,6 +493,7 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
                     borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(color: Colors.grey, style: BorderStyle.solid)
                   ),
+                  style: TextStyle(fontSize: ScreenUtil().setSp(20), color: Colors.blue),
                   placeholder: '備註為必填',
                   prefix: Text('備註: ', style: TextStyle(color: Colors.black, fontSize: MyScreen.normalListPageFontSize(context))),
                   onChanged: (String value){
@@ -529,13 +531,13 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
                     postTransferPublicworksAPI(to, memoText, targetMan, jsonCustCD);
                     Navigator.pop(context);
                   },
-                  child: Text('確定', style: TextStyle(color: Colors.blue),),
+                  child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
                 ),
                 CupertinoButton(
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  child: Text('取消', style: TextStyle(color: Colors.red),),
+                  child: Text('取消', style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(20)),),
                 ),
                 
               ],
@@ -562,7 +564,7 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  child: Text('取消', style: TextStyle(color: Colors.red),),
+                  child: Text('取消', style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(20)),),
                 ),
                 CupertinoButton(
                   onPressed: (){
@@ -586,7 +588,7 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
                     }
                     
                   },
-                  child: Text('確定', style: TextStyle(color: Colors.blue),),
+                  child: Text('確定', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(20)),),
                 ),
               ],
             );
@@ -966,6 +968,7 @@ class _PublicworksDetailPageState extends State<PublicworksDetailPage> with Auto
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return SafeArea(
       top: false,
       child: StoreBuilder<SysState>(

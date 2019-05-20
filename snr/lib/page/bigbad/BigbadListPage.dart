@@ -13,6 +13,7 @@ import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/MyListState.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 /**
  * 重大 列表頁
  * Date: 2019-04-24
@@ -449,12 +450,12 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
         context: context,
         builder: (context) {
           var dialog = CupertinoActionSheet(
-            title: Text(CommonUtils.getLocale(context).text_sort),
+            title: Text(CommonUtils.getLocale(context).text_sort, style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
             cancelButton: CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.pop(context, 'cancel');
               },
-              child: Text('取消'),
+              child: Text('取消', style: TextStyle(fontSize: ScreenUtil().setSp(20))),
             ),
             actions: <Widget>[
               CupertinoActionSheetAction(
@@ -466,18 +467,18 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_all),
+                child: Text(CommonUtils.getLocale(context).text_all, style: TextStyle(fontSize: ScreenUtil().setSp(20))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strCity = CommonUtils.getLocale(context).text_bq;;
+                    strCity = CommonUtils.getLocale(context).text_bq;
                     isLoading = true;
                     getApiDataList();
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_bq),
+                child: Text(CommonUtils.getLocale(context).text_bq, style: TextStyle(fontSize: ScreenUtil().setSp(20))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -488,7 +489,7 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_sc),
+                child: Text(CommonUtils.getLocale(context).text_sc, style: TextStyle(fontSize: ScreenUtil().setSp(20))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -499,7 +500,7 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_xz),
+                child: Text(CommonUtils.getLocale(context).text_xz, style: TextStyle(fontSize: ScreenUtil().setSp(20))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -510,7 +511,7 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_tc),
+                child: Text(CommonUtils.getLocale(context).text_tc, style: TextStyle(fontSize: ScreenUtil().setSp(20))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -521,7 +522,7 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
                   });
                   Navigator.pop(context);
                 },
-                child: Text(CommonUtils.getLocale(context).text_lu),
+                child: Text(CommonUtils.getLocale(context).text_lu, style: TextStyle(fontSize: ScreenUtil().setSp(20))),
               ),
             ],
           );
@@ -532,6 +533,7 @@ class _BigBadListPageState extends State<BigBadListPage> with AutomaticKeepAlive
   }
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return SafeArea(
         top: false,
         child: Scaffold(

@@ -18,7 +18,7 @@ import 'package:snr/widget/MyPullLoadWidget.dart';
 import 'package:snr/widget/MyListState.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
 import 'package:snr/widget/dialog/SmallPingTableItem.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AbnormalDetailPage extends StatefulWidget {
   static final String sName = "abnormalDetial";
   final String cmtsCodeStr;
@@ -257,6 +257,7 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return SafeArea(
         top: false,
         child: new StoreBuilder<SysState>(

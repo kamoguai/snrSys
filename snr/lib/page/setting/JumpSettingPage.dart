@@ -12,7 +12,7 @@ import 'package:snr/common/model/User.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/widget/MyToolBarButton.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class JumpSettingPage extends StatefulWidget {
   JumpSettingPage({Key key}) : super(key: key);
   @override
@@ -497,6 +497,7 @@ class _JumpSettingPageState extends State<JumpSettingPage> with AutomaticKeepAli
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
     return Column(
       children: <Widget>[
         _container(
@@ -511,7 +512,7 @@ class _JumpSettingPageState extends State<JumpSettingPage> with AutomaticKeepAli
                   children: <Widget>[
                     Container(
                       // width: deviceWidth4(context),
-                      child: Text('CMTS', style: TextStyle(color: Colors.black)),
+                      child: Text('CMTS', style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context))),
                     ),
                     Container(
                       width: deviceWidth4(context),
@@ -528,7 +529,7 @@ class _JumpSettingPageState extends State<JumpSettingPage> with AutomaticKeepAli
                     ),
                     Container(
                       // width: deviceWidth4(context),
-                      child: Text('卡板', style: TextStyle(color: Colors.black)),
+                      child: Text('卡板', style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context))),
                     ),
                     Container(
                       width: deviceWidth4(context),
@@ -552,7 +553,7 @@ class _JumpSettingPageState extends State<JumpSettingPage> with AutomaticKeepAli
                   children: <Widget>[
                     SizedBox(width: 15.0,),
                     Container(
-                      child: Text('跳回原頻段時間', style: TextStyle(color: Colors.black)),
+                      child: Text('跳回原頻段時間', style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context))),
                     ),
                     Container(
                       width: deviceWidth4(context) * 0.7,
@@ -569,7 +570,7 @@ class _JumpSettingPageState extends State<JumpSettingPage> with AutomaticKeepAli
                     ),
                     Container(
                       padding: EdgeInsets.only(left: 3.0),
-                      child: Text('分鐘。', style: TextStyle(color: Colors.black)),
+                      child: Text('分鐘。', style: TextStyle(color: Colors.black, fontSize: MyScreen.normalPageFontSize(context))),
                     ),
                   ],
                 ),
