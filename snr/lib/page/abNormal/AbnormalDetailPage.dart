@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -268,16 +269,18 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
                 actions: <Widget>[
                   Expanded(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        ButtonTheme(
-                          child: MyToolButton(
+                        GestureDetector(
+                          child: Container(
                             padding: EdgeInsets.all(1.0),
-                            text: '異常',
-                            textColor: nowType == switchType.big ? Colors.yellow : Colors.white,
-                            fontSize: MyScreen.normalPageFontSize(context),
-                            onPress: () {
-                              if (isLoading) {
+                            child: AutoSizeText(
+                              '異常',
+                              style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: nowType == switchType.big ? Colors.yellow : Colors.white),
+                            ),
+                          ),
+                          onTap: (){
+                            if (isLoading) {
                                 Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                                 return;
                               }
@@ -285,17 +288,17 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
                                 nowType = switchType.big;
                                 showRefreshLoading();
                               });
-                            },
-                          ),
+                          },
                         ),
-                        ButtonTheme(
-                          child: MyToolButton(
-                            padding: EdgeInsets.all(1.0),
-                            text: '上P',
-                            textColor: nowType == switchType.power ? Colors.yellow : Colors.white,
-                            fontSize: MyScreen.normalPageFontSize(context),
-                            onPress: () {
-                              if (isLoading) {
+                        GestureDetector(
+                          child: Container(
+                            child: AutoSizeText(
+                              '上P',
+                              style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: nowType == switchType.power ? Colors.yellow : Colors.white),
+                            ),
+                          ),
+                          onTap: (){
+                             if (isLoading) {
                                 Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                                 return;
                               }
@@ -303,17 +306,17 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
                                 nowType = switchType.power;
                                 showRefreshLoading();
                               });
-                            },
-                          ),
+                          },
                         ),
-                        ButtonTheme(
-                          child: MyToolButton(
-                            padding: EdgeInsets.all(1.0),
-                            text: '問題',
-                            textColor: nowType == switchType.problem ? Colors.yellow : Colors.white,
-                            fontSize: MyScreen.normalPageFontSize(context),
-                            onPress: () {
-                              if (isLoading) {
+                        GestureDetector(
+                          child: Container(
+                            child: AutoSizeText(
+                              '問題',
+                              style: TextStyle(fontSize: MyScreen.normalPageFontSize(context), color: nowType == switchType.problem ? Colors.yellow : Colors.white),
+                            ),
+                          ),
+                          onTap: (){
+                             if (isLoading) {
                                 Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
                                 return;
                               }
@@ -321,9 +324,8 @@ class _AbnormalDetailPageState extends State<AbnormalDetailPage> with AutomaticK
                                 nowType = switchType.problem;
                                 showRefreshLoading();
                               });
-                            },
-                          ),
-                        ),
+                          },
+                        ),                       
                         Text('資料:${widget.timeStr}',
                             style: TextStyle(
                                 fontSize: MyScreen.normalPageFontSize(context))),

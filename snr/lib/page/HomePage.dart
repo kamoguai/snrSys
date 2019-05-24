@@ -83,6 +83,12 @@ class _HomePageState extends State<HomePage>
   _snrConfig() async {
     await HomeDao.getQueryConfigAPI();
   }
+
+  // @override
+  // listHeight() {
+  //   return super.listHeight() * 0.8;
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -117,7 +123,8 @@ class _HomePageState extends State<HomePage>
                     },
                     child: new Text(CommonUtils.getLocale(context).app_ok))
               ],
-            ));
+        )
+    );
   }
 
   ///區域dialog, ios樣式
@@ -158,41 +165,6 @@ class _HomePageState extends State<HomePage>
         });
   }
 
-  ///分隔線
-  _buildLine() {
-    return new Container(
-      height: 1.0,
-      color: Colors.grey,
-    );
-  }
-  
-  ///取得裝置width並切6份
-  _deviceWidth5() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 5;
-  }
-
-  ///取得裝置width並切6份
-  _deviceWidth6() {
-    var width = MediaQuery.of(context).size.width;
-    return width / 6;
-  }
- 
-  ///取得裝置height切4分
-  _deviceHeight4() {
-    AppBar appBar = AppBar();
-    var appBarHeight = appBar.preferredSize.height;
-    var deviceHeight = MediaQuery.of(context).size.height;
-    var height = deviceHeight - appBarHeight;
-
-    return height / 4;
-  }
-  ///lsit height
-  _listHeight() {
-    var height = _deviceHeight4();
-    return height / 5;
-  }
-
   ///自動縮放text
   _buildTextFontColor(String text, Color color) {
     return AutoSizeText(
@@ -214,7 +186,7 @@ class _HomePageState extends State<HomePage>
 
   /// cmts talbe
   _buildCmtsTable() {
-    var miniFontSize = MyScreen.homePageFontSize(context);
+    var miniFontSize = MyScreen.homePageCmtsTableSize(context);
 
     return Table(
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -223,7 +195,7 @@ class _HomePageState extends State<HomePage>
         // 0: FractionColumnWidth(1),
         1: FractionColumnWidth(.2),
         2: FractionColumnWidth(.2),
-        3: FractionColumnWidth(.2),
+        // 3: FractionColumnWidth(.2),
       },
       border: TableBorder.all(
           color: Colors.grey, width: 1.0, style: BorderStyle.solid),
@@ -303,33 +275,33 @@ class _HomePageState extends State<HomePage>
   ///信號表頭
   _buildSignalHead() {
     return new Container(
-      height: _listHeight(),
+      height: listHeight(),
       color: Color(MyColors.hexFromStr('#f5ffe9')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_area, Colors.black),
           ),
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_online, Colors.blue),
           ),
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor(CommonUtils.getLocale(context).home_sinal_bad, Colors.red),
           ),
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_upP, Colors.black),
           ),
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_problem, Colors.pink),
           ),
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_percent, Colors.blue[300]),
           ),
         ],
@@ -341,7 +313,7 @@ class _HomePageState extends State<HomePage>
     var dic = sdList[index];
     return GestureDetector(
       child: Container(
-        height: _listHeight(),
+        height: listHeight(),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
@@ -355,27 +327,27 @@ class _HomePageState extends State<HomePage>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
-              width: _deviceWidth6(),
+              width: deviceWidth6(),
               child: _buildTextFontColor(dic.Name, Colors.black)
             ),
              Container(
-              width: _deviceWidth6(),
+              width: deviceWidth6(),
               child: _buildTextFontColor_s(dic.OnLine, Colors.blue)
             ),
              Container(
-              width: _deviceWidth6(),
+              width: deviceWidth6(),
               child: _buildTextFontColor_s(dic.Bad, Colors.red)
             ),
              Container(
-              width: _deviceWidth6(),
+              width: deviceWidth6(),
               child: _buildTextFontColor_s(dic.OverPower, Colors.black)
             ),
              Container(
-              width: _deviceWidth6(),
+              width: deviceWidth6(),
               child: _buildTextFontColor_s(dic.Problem, Colors.pink)
             ),
              Container(
-              width: _deviceWidth6(),
+              width: deviceWidth6(),
               child: _buildTextFontColor_s('${((dic.BadRate * 1000) / 10).toStringAsFixed(1)}%', Colors.blue[300])
             ),
           ],
@@ -395,7 +367,7 @@ class _HomePageState extends State<HomePage>
     Widget signalList;
     if(sdList.length > 0) {
       signalList = Container(
-        height: _deviceHeight4(),
+        height: listHeight() * 5,
         child: ListView.builder(
           itemBuilder: _buildSignalItem,
           itemCount: sdList.length,
@@ -431,33 +403,33 @@ class _HomePageState extends State<HomePage>
       }
     }
     return new Container(
-      height: _listHeight(),
+      height: listHeight(),
       color: Color(MyColors.hexFromStr('#f0fcff')),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor(CommonUtils.getLocale(context).home_signal_total, Colors.black),
           ),
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor_s("${intOnline}", Colors.blue),
           ),
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor_s("${intBad}", Colors.red),
           ),
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor_s("${intOverPower}", Colors.black),
           ),
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor_s("${intProblem}", Colors.pink),
           ),
           Container(
-            width: _deviceWidth6(),
+            width: deviceWidth6(),
             child: _buildTextFontColor_s("${(((doubleRate * 1000) / 10) / sdList.length).toStringAsFixed(1)}%", Colors.blue[300]),
           ),
         ],
@@ -467,10 +439,7 @@ class _HomePageState extends State<HomePage>
 
   ///位置錯誤
   _buildWrongPlace() {
-    var miniFontSize = MyScreen.homePageFontSize(context);
-    // if (miniFontSize < 11) {
-    //   miniFontSize = miniFontSize - 2;
-    // }
+    var miniFontSize = MyScreen.homePageCmtsTableSize(context);
     var y = 0;
     var str = "";
     if (noSdList.length > 0) {
@@ -487,10 +456,11 @@ class _HomePageState extends State<HomePage>
         child: ListView(
           scrollDirection: Axis.vertical,
           children: <Widget>[
-            Text(
-              str,
+            AutoSizeText(str,
               style: TextStyle(fontSize: miniFontSize),
-            )
+              minFontSize: 5.0,
+            ),
+           
           ],
         ),
         onTap: () {
@@ -506,7 +476,7 @@ class _HomePageState extends State<HomePage>
 
     return GestureDetector(
       child: Container(
-        height: titleHeight(),
+        height: listHeight(),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
@@ -520,47 +490,52 @@ class _HomePageState extends State<HomePage>
                 new Container(
                   padding: EdgeInsets.all(5.0),
                   alignment: Alignment.center,
-                  child: Text(
-                    "${dic.Name}-${dic.CIF}",
+                  child: AutoSizeText("${dic.Name}-${dic.CIF}",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: miniFontSize),
-                  )),
+                        fontSize: miniFontSize),minFontSize: 5.0,
+                  )
+                ),
                 new Container(
                   padding: EdgeInsets.all(5.0),
-                  child: new Text(
-                    dic.DATE,
+                  child: AutoSizeText(dic.DATE,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: miniFontSize),
-                  )),
+                        fontSize: miniFontSize), 
+                    minFontSize: 5.0,
+                  )
+                ),
+                  
                 new Container(
                   padding: EdgeInsets.all(5.0),
-                  child: new Text(
-                    dic.Time,
+                  child: AutoSizeText(dic.Time,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.red, fontSize: miniFontSize),
-                  )),
+                    minFontSize: 5.0,
+                  ),
+                ),
                 new Container(
-                  child: new Text(
-                  "~",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.black, fontSize: miniFontSize),
-                )),
+                  child: AutoSizeText("~",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black, fontSize: miniFontSize),
+                    minFontSize: 5.0,
+                  ),
+                ),              
                 new Container(
                   padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    dic.RTIME == null
+                  child: AutoSizeText(dic.RTIME == null
                         ? "--:--"
                         : dic.RTIME,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.blue, fontSize: miniFontSize),
-                ))
+                    minFontSize: 5.0,
+                  )
+                ),                  
               ],
             ),
           ],
@@ -583,7 +558,7 @@ class _HomePageState extends State<HomePage>
     if(bigbadList.length > 0) {
       list = Container(
         color: Color(MyColors.hexFromStr('#fafff9')),
-        height: (listHeight() * 3) + 30,
+        height: (listHeight() * 3),
         child: ListView.builder(
           itemBuilder: _buildBigbadItem,
           itemCount: bigbadList.length,
@@ -601,7 +576,22 @@ class _HomePageState extends State<HomePage>
     }
     return list;
   }
-
+  ///訊息
+  Widget _buildMessage() {
+    return GestureDetector(
+      onTap: (){},
+      child: Container(
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.only(left: 5.0),
+        decoration: BoxDecoration(border: Border()),                            
+        child: AutoSizeText(
+          '訊息通知',
+          style: TextStyle(color: Colors.grey[400], fontSize: MyScreen.homePageCmtsTableSize(context)),
+          minFontSize: 5.0,
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height)..init(context);
@@ -624,7 +614,7 @@ class _HomePageState extends State<HomePage>
                       children: <Widget>[
                         GestureDetector(
                           child: Container(
-                            width: _deviceWidth5(),
+                            width: deviceWidth5(),
                             child: _buildTextFontColor(selectArea, Colors.white),
                           ),
                           onTap: (){
@@ -633,7 +623,7 @@ class _HomePageState extends State<HomePage>
                         ),
                         GestureDetector(
                           child: Container(
-                            width: _deviceWidth5(),
+                            width: deviceWidth5(),
                             child: _buildTextFontColor(CommonUtils.getLocale(context).text_wp2, Colors.white),
                           ),
                           onTap: (){
@@ -642,7 +632,7 @@ class _HomePageState extends State<HomePage>
                         ),                    
                         GestureDetector(
                           child: Container(
-                            width: _deviceWidth5(),
+                            width: deviceWidth5(),
                             child: _buildTextFontColor(CommonUtils.getLocale(context).text_point, Colors.white),
                           ),
                           onTap: (){
@@ -651,7 +641,7 @@ class _HomePageState extends State<HomePage>
                         ),                    
                         GestureDetector(
                           child: Container(
-                            width: _deviceWidth5(),
+                            width: deviceWidth5(),
                             child: _buildTextFontColor(CommonUtils.getLocale(context).text_hp, Colors.white),
                           ),
                           onTap: (){
@@ -660,7 +650,7 @@ class _HomePageState extends State<HomePage>
                         ), 
                         GestureDetector(
                           child: Container(
-                            width: _deviceWidth5(),
+                            width: deviceWidth5(),
                             child: _buildTextFontColor(sdList.length == 0 ? "資料" : sdList[0].Time, Colors.white),
                           ),
                           onTap: (){
@@ -785,59 +775,49 @@ class _HomePageState extends State<HomePage>
                               ),
                             ],
                           ),
-                          // SizedBox(
-                          //   height: 5,
-                          // ),
                           new Card(
-                              color: Colors.white, child: _buildCmtsTable()),
-
+                              color: Colors.white, child: _buildCmtsTable()
+                          ),
                           /// 高度1的分隔線
-                          _buildLine(),
-
+                          buildLine(),
                           /// signal table head
                           _buildSignalHead(),
-
                           /// 高度1的分隔線
-                          _buildLine(),
-
+                          buildLine(),
                           ///signal table body
                           _buildSignalBody(),
-
-
+                          /// signal table底
+                          _buildSignalFooter(),
+                          /// 高度1的分隔線
+                          buildLine(),
                           new Container(
                             alignment: Alignment(0, 0),
                             padding: EdgeInsets.only(left: 5.0),
                             // padding: EdgeInsets.all(10.0),
-                            height: _listHeight() * 1.2,
+                            height: listHeight() * 1.4,
                             child: _buildWrongPlace(),
                           ),
-
                           /// 高度1的分隔線
-                          _buildLine(),
-
-                          /// signal table底
-                          _buildSignalFooter(),
-
-                          /// 高度1的分隔線
-                          _buildLine(),
+                          buildLine(),
+                          ///重大title
                           new Container(
-                            height: titleHeight() * 0.8,
+                            height: listHeight() * 0.8,
                             alignment: Alignment.center,
                             color: Color(MyColors.hexFromStr('#fafff9')),
-                            padding: EdgeInsets.only(bottom: 1.0),
-                            child: Text(
-                              CommonUtils.getLocale(context)
+                            child: AutoSizeText(CommonUtils.getLocale(context)
                                   .home_cmtsTitle_major,
                               style: TextStyle(
                                   color: Colors.red,
                                   fontSize: MyScreen.homePageFontSize(context)),
-                            ),
+                                  minFontSize: 5.0,), 
                           ),
-
                           /// 高度1的分隔線
-                          _buildLine(),
+                          buildLine(),
+                          ///重大list
                           _buildBigbadListView(),
-                          _buildLine(),
+                          buildLine(),
+                          ///訊息
+                          _buildMessage(),
                         ],
                       ),
                     ),

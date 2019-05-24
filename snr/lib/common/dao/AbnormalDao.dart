@@ -79,7 +79,7 @@ class AbnormalDao {
   static getSNRDetailByCMTSAndCIF(Store store, {cmts, cif, node, type, sort}) async {
     Map<String, dynamic> mainDataArray = {};
     List<dynamic> dataArray = [];
-    var res = await HttpManager.netFetch(Address.getSNRDetailByCMTSAndCIFAPI(cmts, cif, node, type, sort), null, null, new Options(method: "post"));
+    var res = await HttpManager.netFetch(Address.getSNRDetailByCMTSAndCIFAPI(cmts, cif, node, type, sort), null, null, new Options(method: "post", responseType: ResponseType.plain));
     if (res != null && res.result) {
       if (Config.DEBUG) {
         print("getSNRDetailByCMTSAndCIF resp => " + res.data.toString());

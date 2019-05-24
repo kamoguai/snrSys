@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:date_format/date_format.dart';
-
+import 'package:snr/common/utils/AesUtils.dart';
 ///地址數據
 class Address {
   static const String ssoDomain = "http://nsso.dctv.net.tw:8081/";
+  static const String aesDomain = "http://asg.dctv.net.tw:8082/EncEDI/interfaceAES?data=";
   static const String ssoDomainName = "http://wos.dctv.net.tw:8081/";
   static const String testDomainName = "http://wos.dctv.net.tw:8081/";
   static const String kSNRHostName = "http://snr.dctv.tw:25888/";
@@ -14,7 +15,11 @@ class Address {
   static const String getVersion = "ValidataVersion/json/index!checkVersion.action?";
   static const String loginAPI = "WorkOrder/json/wok!login.action?";
   static final String bundleID = "com.dctv.snrSys";
-  static final String verNo = "3.0.0516";
+  static final String verNo = "3.0.0522";
+  static final String AESKEY_en = "dctv2952dctv2952";
+  static final String AESKEY_de = "dctv1688dctv1688";
+  static final String AESKEY = "dctv1688dctv1688";
+  static final int IV_SIZE = 16;
 
   ///檢查是否有更新app
   static getValidateVersionAPI() {
@@ -55,89 +60,123 @@ class Address {
 
   ///取得snr設定檔
   static getQueryConfigureAPI() {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryConfigure";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryConfigure");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///snr首頁api
   static getQueryCMTSMainTitleInfoAPI() {
-    return "${kSNRHostName}SNRProcess?FunctionName=query_cmts_main_title_info";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=query_cmts_main_title_info");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///snr首頁api
   static getSNRProblemsSignal() {
     var nowTime = formatDate(DateTime.now(), [yyyy,'-',mm,'-',dd]);
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryAllSNRSignal&Date=$nowTime";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryAllSNRSignal&Date=$nowTime");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///snr首頁api
   static getQueryCmtsTotal() {
-    return "${kSNRHostName}SNRProcess?FunctionName=query_cmts_total";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=query_cmts_total");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///重大資料api
   static getQueryBigBad() {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryBigBad";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryBigBad");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///重大歷史api
   static getQueryBigBadHistory(area) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryBigBadHistory&City=$area";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryBigBadHistory&City=$area");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///重大log api
   static getQueryFixRHiLowLogDetail(strContent) {
-    return "${kSNRHostName}SNRProcess?FunctionName=query_hilowpass_from_info_ex&content=$strContent";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=query_hilowpass_from_info_ex&content=$strContent");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///回報記錄
   static getQueryFixReportLog(area) {
-    return "${kSNRHostName}SNRProcess?FunctionName=query_hilowpass_from_info_ex&City=$area";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=query_hilowpass_from_info_ex&City=$area");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
 
   ///可異統計表
   static getQueryVBADList() {
-    return "${kSNRHostName}SNRProcess?FunctionName=query_vbad_list";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=query_vbad_list");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///可異詳情
   static getQuerySNRAllBigBad(area,sort,hub,accNo) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRAllBigBad&City=$area&Sort=$sort&Hub=$hub&accNo=$accNo";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QuerySNRAllBigBad&City=$area&Sort=$sort&Hub=$hub&accNo=$accNo");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///可異(離線,問題,其他)
   static getQuerySNRAllBigBadOther(area, sort, hub, typeValue, typeOf, accNo) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRAllBigBad&City=$area&Sort=$sort&Hub=$hub&$typeOf=$typeValue&accNo=$accNo";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QuerySNRAllBigBad&City=$area&Sort=$sort&Hub=$hub&$typeOf=$typeValue&accNo=$accNo");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///派修統計
   static getQueryAssignFixList() {
-    return "${kSNRHostName}SNRProcess?FunctionName=query_assign_fix_list";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=query_assign_fix_list");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///派修大樓統計
   static getBuildAnalyse(type) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryBuildingAnalyse&Type=${type}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryBuildingAnalyse&Type=${type}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///派修詳情
   static getAssignFix(area, sort, hub, accNo) {
-    return "${kSNRHostName}SNRProcess?FunctionName=AssignFix&City=$area&Sort=$sort&Hub=$hub&accNo=$accNo";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=AssignFix&City=$area&Sort=$sort&Hub=$hub&accNo=$accNo");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///派修(拆改,NG,觀察)
   static getAssignFixOther(area, sort, hub, typeValue, typeOf, accNo) {
-    return "${kSNRHostName}SNRProcess?FunctionName=AssignFix&City=$area&Sort=$sort&Hub=$hub&$typeOf=$typeValue&accNo=$accNo";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=AssignFix&City=$area&Sort=$sort&Hub=$hub&$typeOf=$typeValue&accNo=$accNo");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///派修(完工)
   static getAssignFixFinished(area, sort, hub, day, accNo) {
-    return "${kSNRHostName}SNRProcess?FunctionName=AssignFix&City=$area&Sort=$sort&Hub=$hub&FINISH=1&accNo=$accNo&Day=$day";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=AssignFix&City=$area&Sort=$sort&Hub=$hub&FINISH=1&accNo=$accNo&Day=$day");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///低hp詳情
   static getQueryHiPASS(strHipass,area,sort,hub, accNo) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryHiPass&City=$area&Sort=$sort&Hub=$hub&FINISH=1&accNo=$accNo&HiPass=$strHipass";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryHiPass&City=$area&Sort=$sort&Hub=$hub&FINISH=1&accNo=$accNo&HiPass=$strHipass");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///小ping資料
@@ -165,38 +204,54 @@ class Address {
         break;
 
     }
-    return "${kSNRHostPingName}/SNRping.php?Action=getSNR&$paraType=$str";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostPingName}/SNRping.php?Action=getSNR&$paraType=$str");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
 
   ///關閉CM
   static postResetCM(cmts, custNo, accName) {
-    return "${kSNRHostPingName}/CMTSProcess.php?Action=ResetCM&Custno=$custNo&CMTS=$cmts&AccName=$accName";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostPingName}/CMTSProcess.php?Action=ResetCM&Custno=$custNo&CMTS=$cmts&AccName=$accName");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///重啟CM
   static postReStartCM(cmts,custNo,accName) {
-    return "${kSNRHostPingName}/CMTSProcess.php?Action=RestartCM&Custno=$custNo&CMTS=$cmts&AccName=$accName";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostPingName}/CMTSProcess.php?Action=RestartCM&Custno=$custNo&CMTS=$cmts&AccName=$accName");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///abnormal card
   static getSNRSignalByCMTSAPI(cmtsCode){
     var date = formatDate(DateTime.now(), [yyyy,'-',mm,'-',dd]);
-    return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRSignalByCMTS&CMTSCode=${cmtsCode}&Date=${date}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QuerySNRSignalByCMTS&CMTSCode=${cmtsCode}&Date=${date}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///abnormal node
   static getSNRSignalByCmtsAndCifAPI(cmtsCode, cif){
     var date = formatDate(DateTime.now(), [yyyy,'-',mm,'-',dd]);
-    return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRNodeSignalByCMTS_CIF&CMTSCode=${cmtsCode}&CIF=${cif}&Date=${date}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QuerySNRNodeSignalByCMTS_CIF&CMTSCode=${cmtsCode}&CIF=${cif}&Date=${date}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///abnormal detail
   static getSNRDetailByCMTSAndCIFAPI(cmts, cif, node, type, sort) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRDetailByCMTSAndCIF&CMTSCode=${cmts}&CIF=${cif}&NODE=${node}&Type=${type}&Sort=${sort}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QuerySNRDetailByCMTSAndCIF&CMTSCode=${cmts}&CIF=${cif}&NODE=${node}&Type=${type}&Sort=${sort}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///problem，overpower
   static getQueryListAPI(type, city, sort, hub) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryList&Type=${type}&city=${city}&Sort=${sort}&hub=${hub}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryList&Type=${type}&city=${city}&Sort=${sort}&hub=${hub}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///可異裡面的問題
   static getSNRProblemsAllBadSignalAPI(city, sort, hub, typeValue, typeOf, accNo) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QuerySNRAllBigBad&City=${city}&Sort=${sort}&Hub=${hub}&${typeOf}=${typeValue}&accNo=${accNo}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QuerySNRAllBigBad&City=${city}&Sort=${sort}&Hub=${hub}&${typeOf}=${typeValue}&accNo=${accNo}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///普通跳轉
   static didTransferAPI(to, from, accNo, accName, custCDList, {fromFunc}) {
@@ -214,7 +269,9 @@ class Address {
     else {
       custCDStr = custCDList;
     }
-    return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///包含輸入匡跳轉
   static didTransferInputTextAPI(to, from, memo, accNo, accName, custCDList) {
@@ -227,7 +284,9 @@ class Address {
         custCDStr = "${custCDStr},${str}";
       }
     }
-    return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&Memo=${memo}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&Memo=${memo}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///工異跳轉
   static didTransferPublicworksAPI(to, from, memo, accNo, accName, custCDList, {fromFunc}) {
@@ -245,71 +304,105 @@ class Address {
     else {
       custCDStr = custCDList;
     }
-    return "${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&Memo=${memo}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=Transfer&To=${to}&From=${from}&Memo=${memo}&CustCD=${custCDStr}&SenderID=${accNo}&SenderName=${accName}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///完工統計
   static getQueryFinishAnalyseAPI(date) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryFinishAnalyse&QueryDate=$date";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryFinishAnalyse&QueryDate=$date");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///工務list & 超時list
   static getPublicworksAnalyseAPI() {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryOverTimeAnalyse";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryOverTimeAnalyse");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///工務詳情
   static getQueryWorkWarningAPI(type, city, sort, hub) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryWorkWarning&type=${type}&City=${city}&Sort=${sort}&Hub=${hub}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryWorkWarning&type=${type}&City=${city}&Sort=${sort}&Hub=${hub}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///無對應
   static getQueryNoNodeAPI() {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryNoNode";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryNoNode");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///無對應刷新
   static getRefreshDataAPI(type, custNo) {
-    return "${kSNRHostPingName}/SNRping.php?Action=Refresh&Custno=$custNo&Type=$type";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostPingName}/SNRping.php?Action=Refresh&Custno=$custNo&Type=$type");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///位置錯誤 - 詳情頁
   static getQueryWrongPlaceDetailAPI(page) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryWrongPlaceDetail&Page=$page";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryWrongPlaceDetail&Page=$page");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///位置錯誤 - Node列表
   static getQueryWrongPlaceListAPI() {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryWrongPlaceList&Level2=&PageCode=ALL";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryWrongPlaceList&Level2=&PageCode=ALL");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///待確認，扣點
   static getQueryDeductDetailAPI(yeaMonth, page) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryDeductDetail&YearMonth=$yeaMonth&Page=$page";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryDeductDetail&YearMonth=$yeaMonth&Page=$page");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///扣點統計
   static getQueryDeductAnalyseAPI(yeaMonth) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryDeductAnalyse&YearMonth=$yeaMonth";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryDeductAnalyse&YearMonth=$yeaMonth");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///鎖HP統計
   static getQueryHiPassAnalyseAPI() {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryHiPassAnalyse";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryHiPassAnalyse");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///鎖HP詳情頁面
   static getQueryHiPASSAPI(strHiPass, area, sort, hub) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryHiPass&HiPass=${strHiPass}&City=${area}&Sort=${sort}&Hub=${hub}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryHiPass&HiPass=${strHiPass}&City=${area}&Sort=${sort}&Hub=${hub}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///跳頻-cmts
   static getQueryJumpFreqCMTSAPI() {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryJumpFreqCMTS";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryJumpFreqCMTS");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///跳頻-時段時間
   static getQuerySwitchDelayTimeAPI() {
-    return "${kSNRHostName}SNRProcess?FunctionName=QuerySwitchDelayTime";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QuerySwitchDelayTime");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///跳頻-四個區段
   static getQueryAutoFrequenceTimeAPI() {
-    return "${kSNRHostName}SNRProcess?FunctionName=query_auto_freq_time";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=query_auto_freq_time");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///跳頻-卡板
   static getQueryJumpFreqCIFAPI(cType) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryJumpFreqCIF&CType=${cType}";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryJumpFreqCIF&CType=${cType}");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///跳頻-log
   static getQueryJumpFreqLOGAPI() {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryJumpFreqLOG";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryJumpFreqLOG");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///跳頻-移頻
   static postUploadSwitchFreqAPI(cmts, cif, accName, delay) {
@@ -317,27 +410,39 @@ class Address {
     if (delay != "") {
       str += "&Delay=${delay}";
     }
-    return str;
+    var aesUri = AesUtils.aes128Encrypt(str);
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///跳頻-自動跳頻時段
   static setAutoFrequenceTimeAPI(time1, time2, time3, time4,) {
-    return "${kSNRHostName}SNRProcess?FunctionName=set_auto_freq_time&TIME1=$time1&TIME2=$time2&TIME3=$time3&TIME4=$time4";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=set_auto_freq_time&TIME1=$time1&TIME2=$time2&TIME3=$time3&TIME4=$time4");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///大ping-cpe
   static getCPEDataAPI(cmts, cmmac) {
-    return "${kSNRHostPingName}SNRping.php?Action=getCPE&CMTS=$cmts&CMMAC=$cmmac";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostPingName}SNRping.php?Action=getCPE&CMTS=$cmts&CMMAC=$cmmac");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///大ping-flap
   static getFLAPDataAPI(cmts, cmmac) {
-    return "${kSNRHostPingName}SNRping.php?Action=getFLAP&CMTS=$cmts&CMMAC=$cmmac";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostPingName}SNRping.php?Action=getFLAP&CMTS=$cmts&CMMAC=$cmmac");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///大ping-清除flap
   static clearFLAPDataAPI(cmts, cmmac) {
-    return "${kSNRHostPingName}SNRping.php?Action=ClearFLAP&CMTS=$cmts&CMMAC=$cmmac";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostPingName}SNRping.php?Action=ClearFLAP&CMTS=$cmts&CMMAC=$cmmac");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///操作維修紀錄
   static getHipassLogDataAPI(custNo) {
-    return "${kSNRHostName}SNRProcess?FunctionName=query_hilowpass_log&custNo=$custNo";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=query_hilowpass_log&custNo=$custNo");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///清除維修記錄
   static delReportLog(senderId, senderName, logIdList, custId, from) {
@@ -366,30 +471,45 @@ class Address {
         }
       }
     }
-    return "${kSNRHostName}SNRProcess?FunctionName=DeleteReportLog&SenderID=$senderId&SenderName=$senderName&LogID=$logidStr&CustCD=$custId&From=$from";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=DeleteReportLog&SenderID=$senderId&SenderName=$senderName&LogID=$logidStr&CustCD=$custId&From=$from");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///操作維修紀錄-添加log
   static addDescriptionAPI(custId, inputText, senderId, senderName, from) {
-    return "${kSNRHostName}SNRProcess?FunctionName=AddReportLog&SenderID=$senderId&SenderName=$senderName&InputText=$inputText&CustCD=$custId&From=$from";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=AddReportLog&SenderID=$senderId&SenderName=$senderName&InputText=$inputText&CustCD=$custId&From=$from");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///操作維修紀錄-添加log-扣點
   static addDescription_deductAPI(custId, wkNo, inputText, senderId, senderName, from) {
-    return "${kSNRHostName}SNRProcess?FunctionName=AddReportLog&SenderID=$senderId&SenderName=$senderName&InputText=$inputText&CustCD=$custId&From=$from&WorkNo=$wkNo";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=AddReportLog&SenderID=$senderId&SenderName=$senderName&InputText=$inputText&CustCD=$custId&From=$from&WorkNo=$wkNo");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///扣點log
   static getQueryDeductLogAPI(custCD, wkNo) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryDeductLog&CustCD=$custCD&WorkNo=$wkNo";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryDeductLog&CustCD=$custCD&WorkNo=$wkNo");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///位置錯誤log
   static getQueryWrongPlaceHistoryAPI(node) {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryWrongPlaceHistory&Node=$node";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryWrongPlaceHistory&Node=$node");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///取得指派人員
   static getQueryAssignManListAPI() {
-    return "${kSNRHostName}SNRProcess?FunctionName=QueryAssignManList";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryAssignManList");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
   ///post指派人員
   static setAssignManAPI(custCD, accNo, empName, assignMan, senderID, senderName, from) {
-    return "${kSNRHostName}SNRProcess?FunctionName=SetAssignMan&CustCD=$custCD&accNo=$accNo&empName=$empName&AssignMan=$assignMan&SenderID=$senderID&SenderName=$senderName";
+    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=SetAssignMan&CustCD=$custCD&accNo=$accNo&empName=$empName&AssignMan=$assignMan&SenderID=$senderID&SenderName=$senderName");
+    var appendUrl = aesDomain + aesUri;
+    return appendUrl;
   }
+
 }

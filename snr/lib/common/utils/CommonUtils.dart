@@ -251,15 +251,15 @@ class CommonUtils {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text(CommonUtils.getLocale(context).app_version_title),
-            content: new Text(contentMsg),
+            title: new Text(CommonUtils.getLocale(context).app_version_title, style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
+            content: new Text(contentMsg, style: TextStyle(fontSize: ScreenUtil().setSp(18)),),
             actions: <Widget>[
               new FlatButton(
                   onPressed: () {
                     launch(updateUrl);
                     Navigator.pop(context);
                   },
-                  child: new Text(CommonUtils.getLocale(context).app_ok)),
+                  child: new Text(CommonUtils.getLocale(context).app_ok, style: TextStyle(fontSize: ScreenUtil().setSp(20)),)),
             ],
           );
         }
@@ -272,20 +272,20 @@ class CommonUtils {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text(CommonUtils.getLocale(context).app_version_title),
+            title: new Text(CommonUtils.getLocale(context).app_version_title, style: TextStyle(fontSize: ScreenUtil().setSp(20)),),
             content: new Text(contentMsg),
             actions: <Widget>[
               new FlatButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: new Text(CommonUtils.getLocale(context).app_cancel)),
+                  child: new Text(CommonUtils.getLocale(context).app_cancel, style: TextStyle(fontSize: ScreenUtil().setSp(20)),)),
               new FlatButton(
                   onPressed: () {
                     launch(updateUrl);
                     Navigator.pop(context);
                   },
-                  child: new Text(CommonUtils.getLocale(context).app_ok)),
+                  child: new Text(CommonUtils.getLocale(context).app_ok, style: TextStyle(fontSize: ScreenUtil().setSp(20)),)),
             ],
           );
         }

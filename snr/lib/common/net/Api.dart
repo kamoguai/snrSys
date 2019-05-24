@@ -7,6 +7,7 @@ import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/net/ResultData.dart';
 import 'package:snr/common/config/Config.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:snr/common/utils/AesUtils.dart';
 
 ///http請求
 class HttpManager {
@@ -41,6 +42,9 @@ class HttpManager {
     headers["Authorization"] = optionParams["authorizationCode"];
 
     if (option != null) {
+      if(url.toString().contains("http://asg.dctv.net.tw:8082")) {
+        option = new Options(method: "post", responseType: ResponseType.plain);
+      }
       option.headers = headers;
     } else{
       option = new Options(method: "get");
@@ -89,18 +93,14 @@ class HttpManager {
       }
     }
     try {
-      // if (option.contentType != null && option.contentType.primaryType == "text") {
-      //   Map<String, dynamic> jsonStr = jsonDecode(response.data);
-      //   return new ResultData(jsonStr, true, Code.SUCCESS);
-      // } else {
-      //   Map<String, dynamic> jsonStr = jsonDecode(response.data);
-      //   var responseJson = jsonStr;
-      //   if (response.statusCode == 201 && responseJson["token"] != null) {
-      //     optionParams["authorizationCode"] = 'token ' + responseJson["token"];
-      //     await LocalStorage.save(Config.TOKEN_KEY, optionParams["authorizationCode"]);
-      //   }
-      // }
+     
       if (response.statusCode == 200 || response.statusCode == 201) {
+        if (response.request.path.contains("http://asg.dctv.net.tw:8082")) {
+          var result = AesUtils.aes128Decrypt(response.toString());
+          var jsonStr = jsonDecode(result);
+          Map<String, dynamic> map = jsonStr;
+          return new ResultData(map, true, Code.SUCCESS, headers: response.headers);
+        }
         var jsonStr = jsonDecode(response.toString());
         Map<String, dynamic> map = jsonStr;
         return new ResultData(map, true, Code.SUCCESS, headers: response.headers);

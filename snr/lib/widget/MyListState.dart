@@ -395,7 +395,11 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
     var width = MediaQuery.of(context).size.width;
     return width / 4;
   }
-
+  ///取得裝置width並切5份
+  deviceWidth5() {
+    var width = MediaQuery.of(context).size.width;
+    return width / 5;
+  }
   ///取得裝置width並切6份
   deviceWidth6() {
     var width = MediaQuery.of(context).size.width;

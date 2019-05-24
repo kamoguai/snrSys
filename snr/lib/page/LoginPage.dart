@@ -50,14 +50,7 @@ class _LoginPageState extends State<LoginPage> {
 
   ///版號顯示
   Widget _buildAppVerNo() {
-    final double deviceHeight = MediaQuery.of(context).size.height;
-    double verFontSize = 10.0;
-    if (deviceHeight < 600) {
-      verFontSize = 10.0;
-    }
-    else {
-      verFontSize = 16.0;
-    }
+    double verFontSize = 20.0;
     return new AutoSizeText(
       CommonUtils.getLocale(context).appVerNo_text + Address.verNo,
       style: TextStyle(fontSize: ScreenUtil().setSp(verFontSize)),
