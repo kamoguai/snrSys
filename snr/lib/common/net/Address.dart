@@ -15,7 +15,7 @@ class Address {
   static const String getVersion = "ValidataVersion/json/index!checkVersion.action?";
   static const String loginAPI = "WorkOrder/json/wok!login.action?";
   static final String bundleID = "com.dctv.snrSys";
-  static final String verNo = "3.0.0522";
+  static final String verNo = "3.0.0713";
   static final String AESKEY_en = "dctv2952dctv2952";
   static final String AESKEY_de = "dctv1688dctv1688";
   static final String AESKEY = "dctv1688dctv1688";
@@ -50,7 +50,7 @@ class Address {
     } on PlatformException {
       
     }
-    return "${ssoDomain}${getSsoKey}function=login&accNo=$account&passWord=$password&uniqueCode=12343234&sysName=SNR&tokenType=$deviceType&tokenID=slg;ksl;dc123&packageName=com.dc.SNR&type=$deviceType";
+    return "${ssoDomain}${getSsoKey}function=login&accNo=$account&passWord=$password&uniqueCode=12343234&sysName=snrSys&tokenType=$deviceType&tokenID=slg;ksl;dc123&packageName=com.dctv.snrSys&type=$deviceType";
   }
 
   ///snr登入

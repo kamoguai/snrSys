@@ -146,7 +146,12 @@ class SNRLocalizations extends StatefulWidget {
         Fluttertoast.showToast(msg: CommonUtils.getLocale(context).network_error_timeout);
         break;
       default:
-        Fluttertoast.showToast(msg: CommonUtils.getLocale(context).network_error_unknown + " " + message);
+        if (message.toString().contains('Socket')) {
+          Fluttertoast.showToast(msg: '網路請求異常，請更換網路試試。' + " " + message);
+        }
+        else {
+          Fluttertoast.showToast(msg: CommonUtils.getLocale(context).network_error_unknown + " " + message);
+        }
         break;
     }
   }

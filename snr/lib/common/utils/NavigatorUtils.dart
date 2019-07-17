@@ -152,4 +152,8 @@ class NavigatorUtils {
   static goBigPing(BuildContext context, {String custNo}) {
     NavigatorRouter(context, new BigPingPage(custNo: custNo,));
   }
+  ///go dummyPage
+  static goDummyPage(BuildContext context) {
+     NavigatorRouter(context, new DummyPage());
+  }
 }
