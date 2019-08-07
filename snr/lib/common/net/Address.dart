@@ -15,7 +15,7 @@ class Address {
   static const String getVersion = "ValidataVersion/json/index!checkVersion.action?";
   static const String loginAPI = "WorkOrder/json/wok!login.action?";
   static final String bundleID = "com.dctv.snrSys";
-  static final String verNo = "3.0.0713";
+  static final String verNo = "3.0.0712";
   static final String AESKEY_en = "dctv2952dctv2952";
   static final String AESKEY_de = "dctv1688dctv1688";
   static final String AESKEY = "dctv1688dctv1688";
@@ -153,14 +153,18 @@ class Address {
 
   ///派修詳情
   static getAssignFix(area, sort, hub, accNo) {
-    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=AssignFix&City=$area&Sort=$sort&Hub=$hub&accNo=$accNo");
+    var str = "${kSNRHostName}SNRProcess?FunctionName=AssignFix&City=$area&Sort=$sort&Hub=$hub&accNo=$accNo";
+    print(str);
+    var aesUri = AesUtils.aes128Encrypt(str);
     var appendUrl = aesDomain + aesUri;
     return appendUrl;
   }
 
   ///派修(拆改,NG,觀察)
   static getAssignFixOther(area, sort, hub, typeValue, typeOf, accNo) {
-    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=AssignFix&City=$area&Sort=$sort&Hub=$hub&$typeOf=$typeValue&accNo=$accNo");
+    var str = "${kSNRHostName}SNRProcess?FunctionName=AssignFix&City=$area&Sort=$sort&Hub=$hub&$typeOf=$typeValue&accNo=$accNo";
+    print(str);
+    var aesUri = AesUtils.aes128Encrypt(str);
     var appendUrl = aesDomain + aesUri;
     return appendUrl;
   }

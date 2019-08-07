@@ -122,16 +122,18 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
               textColor: nowAppBarType == appBarBtnType.noplace ? Colors.yellow : Colors.white,
               padding: EdgeInsets.only(left: 5.0, right: 5.0),
               onPress: (){
-                setState(() {
-                  clearData();
-                  isEnableHeadBtns = false;
-                  nowAppBarType = appBarBtnType.noplace;
-                  var list = _getStore().state.wrongPlaceList;
-                  pullLoadWidgetControl.dataList = list;
-                  if (pullLoadWidgetControl.dataList.length == 0) {
-                    showRefreshLoading();
-                  }
-                });
+                if(mounted) {
+                  setState(() {
+                    clearData();
+                    isEnableHeadBtns = false;
+                    nowAppBarType = appBarBtnType.noplace;
+                    var list = _getStore().state.wrongPlaceList;
+                    pullLoadWidgetControl.dataList = list;
+                    if (pullLoadWidgetControl.dataList.length == 0) {
+                      showRefreshLoading();
+                    }
+                  });
+                }
               },
             ),
           ),
@@ -143,58 +145,64 @@ class _WrongPlaceDetailPageState extends State<WrongPlaceDetailPage> with Automa
               textColor: nowAppBarType == appBarBtnType.wp2 ? Colors.yellow : Colors.white,
               padding: EdgeInsets.only(left: 5.0, right: 5.0),
               onPress: (){
-                setState(() {
-                  clearData();
-                  isEnableHeadBtns = true;
-                  nowAppBarType = appBarBtnType.wp2;
-                  var list = _getStore().state.defaultList;
-                  pullLoadWidgetControl.dataList = list;
-                  if (pullLoadWidgetControl.dataList.length == 0) {
-                    showRefreshLoading();
-                  }
-                });
+                if(mounted) {
+                  setState(() {
+                    clearData();
+                    isEnableHeadBtns = true;
+                    nowAppBarType = appBarBtnType.wp2;
+                    var list = _getStore().state.defaultList;
+                    pullLoadWidgetControl.dataList = list;
+                    if (pullLoadWidgetControl.dataList.length == 0) {
+                      showRefreshLoading();
+                    }
+                  });
+                }
               },
             ),
           ),
           Container(
             width: deviceWidth4(),
               child: MyToolButton(
-              text: 'CM-NG',
+              text: '',
               textColor: nowAppBarType == appBarBtnType.cm ? Colors.yellow : Colors.white,
               fontSize: MyScreen.appBarFontSize(context),
               padding: EdgeInsets.only(left: 5.0, right: 5.0),
               onPress: (){
-                setState(() {
-                  clearData();
-                  isEnableHeadBtns = false;
-                  nowAppBarType = appBarBtnType.cm;
-                  var list = _getStore().state.wrongPlaceList;
-                  pullLoadWidgetControl.dataList = list;
-                  if (pullLoadWidgetControl.dataList.length == 0) {
-                    showRefreshLoading();
-                  }
-                });
+                // if(mounted) {
+                //   setState(() {
+                //     clearData();
+                //     isEnableHeadBtns = false;
+                //     nowAppBarType = appBarBtnType.cm;
+                //     var list = _getStore().state.wrongPlaceList;
+                //     pullLoadWidgetControl.dataList = list;
+                //     if (pullLoadWidgetControl.dataList.length == 0) {
+                //       showRefreshLoading();
+                //     }
+                //   });
+                // }
               },
             ),
           ),
           Container(
             width: deviceWidth4(),
               child: MyToolButton(
-              text: 'STB-NG',
+              text: '',
               textColor: nowAppBarType == appBarBtnType.stb ? Colors.yellow : Colors.white,
               fontSize: MyScreen.appBarFontSize(context),
               padding: EdgeInsets.only(left: 5.0, right: 5.0),
               onPress: (){
-                setState(() {
-                  clearData();
-                  isEnableHeadBtns = false;
-                  nowAppBarType = appBarBtnType.stb;
-                  var list = _getStore().state.wrongPlaceList;
-                  pullLoadWidgetControl.dataList = list;
-                  if (pullLoadWidgetControl.dataList.length == 0) {
-                    showRefreshLoading();
-                  }
-                });
+                // if(mounted) {
+                //   setState(() {
+                //     clearData();
+                //     isEnableHeadBtns = false;
+                //     nowAppBarType = appBarBtnType.stb;
+                //     var list = _getStore().state.wrongPlaceList;
+                //     pullLoadWidgetControl.dataList = list;
+                //     if (pullLoadWidgetControl.dataList.length == 0) {
+                //       showRefreshLoading();
+                //     }
+                //   });
+                // }
               },
             ),
           ),

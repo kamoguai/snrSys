@@ -1,8 +1,12 @@
 
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:snr/common/config/Config.dart';
 import 'package:snr/common/dao/PublicworksDao.dart';
+import 'package:snr/common/local/LocalStorage.dart';
 import 'package:snr/common/style/MyStyle.dart';
 import 'package:snr/common/utils/CommonUtils.dart';
 import 'package:snr/common/utils/NavigatorUtils.dart';
@@ -41,7 +45,12 @@ class _OverPowerListPageState extends State<OverPowerListPage> with AutomaticKee
   var oneCount_i = 0;
   var toCount_o = 0;
   var toCount_i = 0;
-
+  ///外網
+  var fEXT = 0.0;
+  ///內網
+  var fINT = 0.0;
+  ///snr設定檔
+  var config;
   @override
   bool get isRefreshFirst => false;
 
@@ -49,12 +58,21 @@ class _OverPowerListPageState extends State<OverPowerListPage> with AutomaticKee
   void initState() {
     super.initState();
     isLoading = true;
+    initParam();
     getApiDataList();
+    
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+  initParam() async {
+    final configData = await LocalStorage.get(Config.SNR_CONFIG);
+    final dic = json.decode(configData);
+    config = dic;
+    fEXT = double.parse(config["USDB_MAX_EXT"]);
+    fINT = double.parse(config["USDB_MAX_INT"]);
   }
   ///初始化數據
   initData() {
@@ -148,7 +166,7 @@ class _OverPowerListPageState extends State<OverPowerListPage> with AutomaticKee
           Container(
             width: (deviceWidth8() * 2) - 1,
             child: autoTextSize(
-                '>51', Colors.black),
+                '>$fEXT', Colors.red),
           ),
           buildLineHeight(),
           Container(
@@ -533,9 +551,11 @@ class _OverPowerListPageState extends State<OverPowerListPage> with AutomaticKee
                         fontSize: MyScreen.normalPageFontSize(context),
                         onPress: () {
                           isLoading = true;
-                          setState(() {
-                            getApiDataList();
-                          });
+                          if(mounted) {
+                            setState(() {
+                              getApiDataList();
+                            });
+                          }
                         },
                       ),
                     ),
@@ -548,6 +568,10 @@ class _OverPowerListPageState extends State<OverPowerListPage> with AutomaticKee
                         color: Colors.transparent,
                         fontSize: MyScreen.normalPageFontSize(context),
                         onPress: () {
+                          if (isLoading) {
+                            Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                            return;
+                          }
                           NavigatorUtils.goOverTimeDetail(context, dataType: 'OverTime');
                         },
                       ),
@@ -561,6 +585,10 @@ class _OverPowerListPageState extends State<OverPowerListPage> with AutomaticKee
                         color: Colors.transparent,
                         fontSize: MyScreen.normalPageFontSize(context),
                         onPress: () {
+                          if (isLoading) {
+                            Fluttertoast.showToast(msg: CommonUtils.getLocale(context).loading_text);
+                            return;
+                          }
                           NavigatorUtils.goOverTimeDetail(context, dataType: 'NoTime');
                         },
                       ),

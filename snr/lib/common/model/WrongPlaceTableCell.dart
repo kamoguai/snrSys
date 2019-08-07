@@ -22,7 +22,7 @@ class WrongPlaceTableCell {
     this.InstallDate,//裝機時間
     this.Name,//客名
     this.note6,//雙分:單分
-    int Status,//狀態
+    this.Status,//狀態
     this.InstallMan,//裝機人
     this.BB,//網速
     this.CustClass,//大樓

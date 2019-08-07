@@ -515,7 +515,7 @@ class SmallPingTableItem extends StatelessWidget {
               children: <Widget>[
                 Container(
                   width: (_deviceWidth9(context) * 1.5) - 1,
-                  child: _autoTextSize(defaultViewModel.status == "1" ? "上線" : "離線", TextStyle(color: defaultViewModel.status == "1" ? Colors.blue : Colors.red), context),
+                  child: _autoTextSize(defaultViewModel.status == "online" ? "上線" : "離線", TextStyle(color: defaultViewModel.status == "online" ? Colors.blue : Colors.red), context),
                 ),
                 _buildHeightLine(),
                 Container(

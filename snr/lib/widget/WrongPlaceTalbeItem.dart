@@ -161,7 +161,7 @@ final WrongPlaceViewModel defaultViewModel;
                           children: <Widget>[
                             Container(
                               width: _deviceWidth9(context) * 0.5 - 1,
-                              child: _autoTextSize('NG', TextStyle(color: Colors.red,), context),
+                              child: _autoTextSize('', TextStyle(color: Colors.red,), context),
                             ),
                             _buildHeightLine(),
                             Container(
