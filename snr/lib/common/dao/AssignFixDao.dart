@@ -135,6 +135,9 @@ class AssignFixDao {
       }
       if (mainDataArray.length > 0) {
         dataArray = mainDataArray["Data"];
+        if (dataArray == null) {
+          return new DataResult(null, false);
+        }
 
         return new DataResult(dataArray, true);
       } else {
