@@ -52,11 +52,12 @@ class HttpManager {
     }
 
     ///超時
-    option.connectTimeout = 15000;
-
+    // option.connectTimeout = 15000;
+    
     Dio dio = new Dio();
     Response response;
     try {
+      dio.options.connectTimeout = 60000;
       response = await dio.request(url, data: params, options: option);
     } on DioError catch (e) {
       Response errorResponse;

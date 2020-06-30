@@ -119,6 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                               new MyInputWidget(
                                 textStyle: TextStyle(fontSize: ScreenUtil().setSp(20.0)),
                                 hintText: CommonUtils.getLocale(context).login_password_hint_text,
+                                obscureText: true,
                                 onChanged: (String value) {
                                   _password = value;
                                 },
